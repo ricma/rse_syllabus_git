@@ -1,2 +1,3 @@
-# rse_syllabus_git
-Notes for using GIT as a researcher
+* Notes on How to use GIT in Academia
+
+  A short course with examples on how and why to use ~git~.

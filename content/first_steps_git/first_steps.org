@@ -3,454 +3,456 @@
   In order to keep the examples programming language agnostic, we will
   mimic writing a small text / collection of quotes.
 
-** Preliminary: Setup Local Configuration
+** First Steps
 
-   Either edit your global [[file:../../../.gitconfig][.gitconfig]] file to at least contain
-   #+begin_src conf
-     [user]
-             name = Martin Richter
-             email = martin.richter@nottingham.ac.uk
-   #+end_src
+*** Preliminary: Setup Local Configuration
 
-   Or use ~git~ to create this configuration for you
-
-   #+begin_src shell-script
-     git config --global --add user.name "Martin Richter"
-     git config --global --add user.email "martin.richter@nottingham.ac.uk"
-   #+end_src
-
-   While we are at it, we might set up a few more bits which can come
-   handy later:
-   #+begin_src conf
-     [color]
-             ui = true
-   #+end_src
-
-** Creating a Local Repository
-
-   Create some description of what we want to do
-   #+begin_src shell-script
-     mkdir letter_collection
-     cd letter_collection
-     cat << EOF > README.md
-     Repository contains drafts of letters
-     EOF
-   #+end_src
-
-   #+begin_src shell-script
-     # create the repository
-     git init
-     # Initialised empty Git repository in /home/.../letter_collection/.git/
-     git add README.md
-     git commit -m 'initial commit, add README.md'
-     # [master (root-commit) 24bfc05] initial commit, add README.md
-     #  1 file changed, 1 insertion(+)
-     #  create mode 100644 README.md
-     # If you want, you can rename the branch to something else
-     git branch -M main
-   #+end_src
-
-   Now what did this do? Let's have a look around!
-   /Note git is nothing scary - just a folder!/
-   #+begin_src shell-script
-     tree -aCI '*sample'
-     # .
-     # ├── .git
-     # │   ├── branches
-     # │   ├── COMMIT_EDITMSG
-     # │   ├── config
-     # │   ├── description
-     # │   ├── HEAD
-     # │   ├── hooks
-     # │   ├── index
-     # │   ├── info
-     # │   │   └── exclude
-     # │   ├── logs
-     # │   │   ├── HEAD
-     # │   │   └── refs
-     # │   │       └── heads
-     # │   │           └── main
-     # │   ├── objects
-     # │   │   ├── 1f
-     # │   │   │   └── e5b7bc904e286e2740d8b40e9cd0b18309c743
-     # │   │   ├── 20
-     # │   │   │   └── 273694fcbe9537e321143b6427f07e5f0aad68
-     # │   │   ├── 22
-     # │   │   │   └── 8933b64e66dbbca9adb5e8e17810381eca6c5b
-     # │   │   ├── info
-     # │   │   └── pack
-     # │   └── refs
-     # │       ├── heads
-     # │       │   └── main
-     # │       └── tags
-     # └── README.md
-   #+end_src
-   So besides our file ~README.md~ there is a folder ~.git~ with
-   various bits in it. All information will be stored here.
-   Usually no need to enter it.
-
-   Somewhat important: Configuration relevant for this repository only
-   is in ~.git/config~. Either edit directly or via
-   #+begin_src shell-script
-      git config --local --add user.name "Martin M. Richter"
-      git config --local --add user.email "martin.richter@nottingham.ac.uk"
-   #+end_src
-
-** Finding out About the State of the Repository
-
-   What is the status of the repository like?
-   #+begin_src shell-script
-     git status
-   #+end_src
-
-   What happened so far?
-   #+begin_src shell-script
-     git log
-   #+end_src
-
-   And to see last commit
-   #+begin_src shell-script
-     git show
-   #+end_src
-
-   We will use these later.
-
-*** Customizations to Help Your Daily Use
-
-    #+begin_src shell-script
-      git diff --color-words
-      # or
-      git show --color-words
-      # or
-      git log --graph --all --pretty=format:'%Cred%h%Creset - %Cgreen(%cr)%Creset %s%C(yellow)%d%Creset' --abbrev-commit --date=relative --decorate
-    #+end_src
-
-    Use ~.gitconfig~ to define an /alias/
+    Either edit your global [[file:../../../.gitconfig][.gitconfig]] file to at least contain
     #+begin_src conf
-     [alias]
-             wdiff = diff --color-words
-             wshow = show --color-words
-             graph = log --graph --all --pretty=format:'%Cred%h%Creset - %Cgreen(%cr)%Creset %s%C(yellow)%d%Creset' --abbrev-commit --date=relative --decorate
-
-     [init]
-             defaultBranch = main
+      [user]
+              name = Martin Richter
+              email = martin.richter@nottingham.ac.uk
     #+end_src
 
-** Adding new Files
+    Or use ~git~ to create this configuration for you
 
-   To add new files, two steps are necessary:
-
-   1. Create a new file
-      #+begin_src shell-script
-        mkdir content
-        echo "# Chapter 1" > content/chapter1.md
-        echo "# Chapter 2" > content/chapter2.md
-      #+end_src
-
-      What does git think about this new file lying around?
-      #+begin_src shell-script
-        git status
-        # On branch main
-        # Untracked files:
-        #   (use "git add <file>..." to include in what will be committed)
-        #
-        #       content/
-        #
-        # nothing added to commit but untracked files present (use "git add" to track)
-      #+end_src
-
-   2. Add the file to the staging are (/index/)
-      #+begin_src shell-script
-        git add content/chapter1.md
-      #+end_src
-
-   3. Check the staging area
-      #+begin_src shell-script
-        git status
-        # On branch main
-        # Changes to be committed:
-        #   (use "git reset HEAD <file>..." to unstage)
-        #
-        #       new file:   content/chapter1.md
-        #
-        # Untracked files:
-        #   (use "git add <file>..." to include in what will be committed)
-      #+end_src
-      One file is registered for the next commit, the other one is not.
-
-   4. Commit the file to repository
-      After all new files have been ~git add'ed~, commit. Add a descriptive message
-      #+begin_src shell-script
-        git commit -m 'add stub for chapter 1'
-        # [main 51fe4ad] add stub for chapter 1
-        #  1 file changed, 1 insertion(+)
-        #  create mode 100644 content/chapter1.md
-        git status
-        # On branch main
-        # Untracked files:
-        #   (use "git add <file>..." to include in what will be committed)
-        #
-        #       content/chapter2.md
-        #
-        # nothing added to commit but untracked files present (use "git add" to track)
-      #+end_src
-
-** Changing Existing Files
-
-   Let us assume we are adding text to chapter 1.
-   #+begin_src shell-script
-     echo '\nCognito ergo sum' >> content/chapter1.md
-     echo '\nIn dubio pro reo.' >> content/chapter1.md
-   #+end_src
-
-   To see local changes:
-   #+begin_src shell-script
-     git diff
-   #+end_src
-   yields the following diff:
-   #+begin_src diff
-diff --git a/content/chapter1.md b/content/chapter1.md
-index b743fda..ef9b254 100644
---- a/content/chapter1.md
-+++ b/content/chapter1.md
-@@ -1 +1,5 @@
- # Chapter 1
-+
-+Cognito ergo sum
-+
-+In dubio pro reo.
-   #+end_src
-
-   To register them, use the ~git add~ / ~git commit~ again
-   #+begin_src shell-script
-     git add content/chapter1.md
-     git commit -m 'add latin phrases to chapter 1'
-     # [main 53c71a5] add latin phrases to chapter 1
-     #  1 file changed, 4 insertions(+)
-     git log
-     # commit 53c71a5d2209d59d9d8fcd5bc43e428e49d6819a (HEAD -> main)
-     # Author: Martin Richter <martin.richter@nottingham.ac.uk>
-     # Date:   Fri Mar 26 15:43:59 2021 +0000
-     #
-     #     add latin phrases to chapter 1
-     #
-     # commit 51fe4ad4224e93846eddb56eab9648dc57e04dde
-     # Author: Martin Richter <martin.richter@nottingham.ac.uk>
-     # Date:   Fri Mar 26 15:33:12 2021 +0000
-     #
-     #     add stub for chapter 1
-     #
-     # commit db300197450d4c9f9f165b347f4ec4708876a284
-     # Author: Martin Richter <martin.richter@nottingham.ac.uk>
-     # Date:   Fri Mar 26 11:05:41 2021 +0000
-     #
-     #     initial commit, add README.md
-     #
-     git graph
-     # * 53c71a5 - (63 seconds ago) add latin phrases to chapter 1 (HEAD -> main)
-     # * 51fe4ad - (12 minutes ago) add stub for chapter 1
-     # * db30019 - (4 hours ago) initial commit, add README.md
-   #+end_src
-
-** Committing and Commit Messages
-
-   In order to get the most out of the history, try to make
-   - Commits small and on one mental subject
-   - Conform with a simple format rule:
-     1. First line not more than 50 characters
-     2. If more explanation needed, add an empty line and add more text
-        this time not more than 72 characters.
-     This will keep all messages in a format that is nicely displayed
-     by all tools.
-
-   Check by having a look at ~gitk~.
-   #+name: fig:gitk_example_commit_msgs
-   #+caption: Using ~gitk~ to display commit messages.
-   [[file:figures/gitk_example_010_commit_msg.png]]
-
-*** Amend the last Commit
-
-    Sometimes you realize that you missed something in the last commit
-    or commit message.
-
-    In this case
     #+begin_src shell-script
-      echo '\nQuidquid latine dictum sit altum videtur.' >> content/chapter1.md
+      git config --global --add user.name "Martin Richter"
+      git config --global --add user.email "martin.richter@nottingham.ac.uk"
+    #+end_src
+
+    While we are at it, we might set up a few more bits which can come
+    handy later:
+    #+begin_src conf
+      [color]
+              ui = true
+    #+end_src
+
+*** Creating a Local Repository
+
+    Create some description of what we want to do
+    #+begin_src shell-script
+      mkdir letter_collection
+      cd letter_collection
+      cat << EOF > README.md
+      Repository contains drafts of letters
+      EOF
+    #+end_src
+
+    #+begin_src shell-script
+      # create the repository
+      git init
+      # Initialised empty Git repository in /home/.../letter_collection/.git/
+      git add README.md
+      git commit -m 'initial commit, add README.md'
+      # [master (root-commit) 24bfc05] initial commit, add README.md
+      #  1 file changed, 1 insertion(+)
+      #  create mode 100644 README.md
+      # If you want, you can rename the branch to something else
+      git branch -M main
+    #+end_src
+
+    Now what did this do? Let's have a look around!
+    /Note git is nothing scary - just a folder!/
+    #+begin_src shell-script
+      tree -aCI '*sample'
+      # .
+      # ├── .git
+      # │   ├── branches
+      # │   ├── COMMIT_EDITMSG
+      # │   ├── config
+      # │   ├── description
+      # │   ├── HEAD
+      # │   ├── hooks
+      # │   ├── index
+      # │   ├── info
+      # │   │   └── exclude
+      # │   ├── logs
+      # │   │   ├── HEAD
+      # │   │   └── refs
+      # │   │       └── heads
+      # │   │           └── main
+      # │   ├── objects
+      # │   │   ├── 1f
+      # │   │   │   └── e5b7bc904e286e2740d8b40e9cd0b18309c743
+      # │   │   ├── 20
+      # │   │   │   └── 273694fcbe9537e321143b6427f07e5f0aad68
+      # │   │   ├── 22
+      # │   │   │   └── 8933b64e66dbbca9adb5e8e17810381eca6c5b
+      # │   │   ├── info
+      # │   │   └── pack
+      # │   └── refs
+      # │       ├── heads
+      # │       │   └── main
+      # │       └── tags
+      # └── README.md
+    #+end_src
+    So besides our file ~README.md~ there is a folder ~.git~ with
+    various bits in it. All information will be stored here.
+    Usually no need to enter it.
+
+    Somewhat important: Configuration relevant for this repository only
+    is in ~.git/config~. Either edit directly or via
+    #+begin_src shell-script
+       git config --local --add user.name "Martin M. Richter"
+       git config --local --add user.email "martin.richter@nottingham.ac.uk"
+    #+end_src
+
+*** Finding out About the State of the Repository
+
+    What is the status of the repository like?
+    #+begin_src shell-script
+      git status
+    #+end_src
+
+    What happened so far?
+    #+begin_src shell-script
+      git log
+    #+end_src
+
+    And to see last commit
+    #+begin_src shell-script
+      git show
+    #+end_src
+
+    We will use these later.
+
+**** Customizations to Help Your Daily Use
+
+     #+begin_src shell-script
+       git diff --color-words
+       # or
+       git show --color-words
+       # or
+       git log --graph --all --pretty=format:'%Cred%h%Creset - %Cgreen(%cr)%Creset %s%C(yellow)%d%Creset' --abbrev-commit --date=relative --decorate
+     #+end_src
+
+     Use ~.gitconfig~ to define an /alias/
+     #+begin_src conf
+      [alias]
+              wdiff = diff --color-words
+              wshow = show --color-words
+              graph = log --graph --all --pretty=format:'%Cred%h%Creset - %Cgreen(%cr)%Creset %s%C(yellow)%d%Creset' --abbrev-commit --date=relative --decorate
+
+      [init]
+              defaultBranch = main
+     #+end_src
+
+*** Adding new Files
+
+    To add new files, two steps are necessary:
+
+    1. Create a new file
+       #+begin_src shell-script
+         mkdir content
+         echo "# Chapter 1" > content/chapter1.md
+         echo "# Chapter 2" > content/chapter2.md
+       #+end_src
+
+       What does git think about this new file lying around?
+       #+begin_src shell-script
+         git status
+         # On branch main
+         # Untracked files:
+         #   (use "git add <file>..." to include in what will be committed)
+         #
+         #       content/
+         #
+         # nothing added to commit but untracked files present (use "git add" to track)
+       #+end_src
+
+    2. Add the file to the staging are (/index/)
+       #+begin_src shell-script
+         git add content/chapter1.md
+       #+end_src
+
+    3. Check the staging area
+       #+begin_src shell-script
+         git status
+         # On branch main
+         # Changes to be committed:
+         #   (use "git reset HEAD <file>..." to unstage)
+         #
+         #       new file:   content/chapter1.md
+         #
+         # Untracked files:
+         #   (use "git add <file>..." to include in what will be committed)
+       #+end_src
+       One file is registered for the next commit, the other one is not.
+
+    4. Commit the file to repository
+       After all new files have been ~git add'ed~, commit. Add a descriptive message
+       #+begin_src shell-script
+         git commit -m 'add stub for chapter 1'
+         # [main 51fe4ad] add stub for chapter 1
+         #  1 file changed, 1 insertion(+)
+         #  create mode 100644 content/chapter1.md
+         git status
+         # On branch main
+         # Untracked files:
+         #   (use "git add <file>..." to include in what will be committed)
+         #
+         #       content/chapter2.md
+         #
+         # nothing added to commit but untracked files present (use "git add" to track)
+       #+end_src
+
+*** Changing Existing Files
+
+    Let us assume we are adding text to chapter 1.
+    #+begin_src shell-script
+      echo '\nCognito ergo sum' >> content/chapter1.md
+      echo '\nIn dubio pro reo.' >> content/chapter1.md
+    #+end_src
+
+    To see local changes:
+    #+begin_src shell-script
+      git diff
+    #+end_src
+    yields the following diff:
+    #+begin_src diff
+ diff --git a/content/chapter1.md b/content/chapter1.md
+ index b743fda..ef9b254 100644
+ --- a/content/chapter1.md
+ +++ b/content/chapter1.md
+ @@ -1 +1,5 @@
+  # Chapter 1
+ +
+ +Cognito ergo sum
+ +
+ +In dubio pro reo.
+    #+end_src
+
+    To register them, use the ~git add~ / ~git commit~ again
+    #+begin_src shell-script
       git add content/chapter1.md
-      git commit --amend   # if you don't want to change message, you can add `-C HEAD`
-      # [main e5d7d2b] add latin phrases to chapter 1
-      #  Date: Fri Mar 26 15:43:59 2021 +0000
-      #  1 file changed, 6 insertions(+)
-    #+end_src
-    will allow you to change the last commit.
-
-    Note that this changed history:
-    #+begin_src shell-script
+      git commit -m 'add latin phrases to chapter 1'
+      # [main 53c71a5] add latin phrases to chapter 1
+      #  1 file changed, 4 insertions(+)
+      git log
+      # commit 53c71a5d2209d59d9d8fcd5bc43e428e49d6819a (HEAD -> main)
+      # Author: Martin Richter <martin.richter@nottingham.ac.uk>
+      # Date:   Fri Mar 26 15:43:59 2021 +0000
+      #
+      #     add latin phrases to chapter 1
+      #
+      # commit 51fe4ad4224e93846eddb56eab9648dc57e04dde
+      # Author: Martin Richter <martin.richter@nottingham.ac.uk>
+      # Date:   Fri Mar 26 15:33:12 2021 +0000
+      #
+      #     add stub for chapter 1
+      #
+      # commit db300197450d4c9f9f165b347f4ec4708876a284
+      # Author: Martin Richter <martin.richter@nottingham.ac.uk>
+      # Date:   Fri Mar 26 11:05:41 2021 +0000
+      #
+      #     initial commit, add README.md
+      #
       git graph
-      # * e5d7d2b - (2 minutes ago) add latin phrases to chapter 1 (HEAD -> main)
-      # * 51fe4ad - (28 minutes ago) add stub for chapter 1
-      # * db30019 - (5 hours ago) initial commit, add README.md
+      # * 53c71a5 - (63 seconds ago) add latin phrases to chapter 1 (HEAD -> main)
+      # * 51fe4ad - (12 minutes ago) add stub for chapter 1
+      # * db30019 - (4 hours ago) initial commit, add README.md
     #+end_src
 
-    Be aware: Do not do this if already published (pushed - see later)
+*** Committing and Commit Messages
 
-    This is again a good time to also check with ~gitk~.
+    In order to get the most out of the history, try to make
+    - Commits small and on one mental subject
+    - Conform with a simple format rule:
+      1. First line not more than 50 characters
+      2. If more explanation needed, add an empty line and add more text
+         this time not more than 72 characters.
+      This will keep all messages in a format that is nicely displayed
+      by all tools.
 
+    Check by having a look at ~gitk~.
     #+name: fig:gitk_example_commit_msgs
     #+caption: Using ~gitk~ to display commit messages.
     [[file:figures/gitk_example_010_commit_msg.png]]
 
-** Ignoring Files
+**** Amend the last Commit
 
-   Some files should not be part of the repository but also not
-   visible git ignore and ~.gitignore~, most prominently automatically
-   generated backup files.
+     Sometimes you realize that you missed something in the last commit
+     or commit message.
 
-   #+begin_src shell-script
-     touch content/chapter1.log     # assume this is automatically generated
-     git status
-     # On branch main
-     # Untracked files:
-     #   (use "git add <file>..." to include in what will be committed)
-     #
-     #  content/chapter1.log
-     #  content/chapter2.md
-     echo content/chapter1.log > .gitignore
-     git add .gitignore
-     git commit -m 'add gitignore file'
-     # [main 2218517] add gitignore file
-     #  1 file changed, 1 insertion(+)
-     #  create mode 100644 .gitignore
-     git status
-     # On branch main
-     # Untracked files:
-     #   (use "git add <file>..." to include in what will be committed)
-     #
-     #  content/chapter2.md
-     #
-     # nothing added to commit but untracked files present (use "git add" to track)
-     tree
-     # .
-     # ├── content
-     # │   ├── chapter1.log
-     # │   ├── chapter1.md
-     # │   └── chapter2.md
-     # └── README.md
-   #+end_src
+     In this case
+     #+begin_src shell-script
+       echo '\nQuidquid latine dictum sit altum videtur.' >> content/chapter1.md
+       git add content/chapter1.md
+       git commit --amend   # if you don't want to change message, you can add `-C HEAD`
+       # [main e5d7d2b] add latin phrases to chapter 1
+       #  Date: Fri Mar 26 15:43:59 2021 +0000
+       #  1 file changed, 6 insertions(+)
+     #+end_src
+     will allow you to change the last commit.
 
-** Creating and using a Branch
+     Note that this changed history:
+     #+begin_src shell-script
+       git graph
+       # * e5d7d2b - (2 minutes ago) add latin phrases to chapter 1 (HEAD -> main)
+       # * 51fe4ad - (28 minutes ago) add stub for chapter 1
+       # * db30019 - (5 hours ago) initial commit, add README.md
+     #+end_src
 
-   Allow for work on different aspects without interference
+     Be aware: Do not do this if already published (pushed - see later)
 
-   #+begin_src shell-script
-     git branch chapter2
-     git graph
-     # * 2218517 - (4 minutes ago) add gitignore file (HEAD -> main, chapter2)
-     # * e5d7d2b - (11 minutes ago) add latin phrases to chapter 1
-     # * 51fe4ad - (37 minutes ago) add stub for chapter 1
-     # * db30019 - (5 hours ago) initial commit, add README.md
-   #+end_src
+     This is again a good time to also check with ~gitk~.
 
-   Assume we would continue on chapter 1 now ...
-   #+begin_src shell-script
-     echo '\nPer aspera ad astra' >> content/chapter1.md
-     git add content/chapter1.md
-     git commit -m 'continue work on chapter 1'
-     # [main 11cf9a1] continue work on chapter 1
-     #  1 file changed, 2 insertions(+)
-     git graph
-     # * 11cf9a1 - (47 seconds ago) continue work on chapter 1 (HEAD -> main)
-     # * 2218517 - (6 minutes ago) add gitignore file (chapter2)
-     # * e5d7d2b - (13 minutes ago) add latin phrases to chapter 1
-     # * 51fe4ad - (39 minutes ago) add stub for chapter 1
-     # * db30019 - (5 hours ago) initial commit, add README.md
-   #+end_src
+     #+name: fig:gitk_example_commit_msgs
+     #+caption: Using ~gitk~ to display commit messages.
+     [[file:figures/gitk_example_010_commit_msg.png]]
 
-   The /chapter2/ marker stayed where we created it!
-   #+begin_src shell-script
-     git checkout chapter2
-     # Switched to branch 'chapter2'
-     tail -2 content/chapter1.md       # shows last two lines of file
-     #
-     # Quidquid latine dictum sit altum videtur.
-   #+end_src
+*** Ignoring Files
 
-   What happens if we start working here?
-   #+begin_src shell-script
-     git add content/chapter2.md
-     git commit -m 'add emtpy stub for chapter2'
-     # [chapter2 ddd7afd] add emtpy stub for chapter2
-     #  1 file changed, 1 insertion(+)
-     #  create mode 100644 content/chapter2.md
-     git graph
-     # * ddd7afd - (35 seconds ago) add emtpy stub for chapter2 (HEAD -> chapter2)
-     # | * 11cf9a1 - (4 minutes ago) continue work on chapter 1 (main)
-     # |/
-     # * 2218517 - (8 minutes ago) add gitignore file
-     # * e5d7d2b - (16 minutes ago) add latin phrases to chapter 1
-     # * 51fe4ad - (42 minutes ago) add stub for chapter 1
-     # * db30019 - (5 hours ago) initial commit, add README.md
-   #+end_src
+    Some files should not be part of the repository but also not
+    visible git ignore and ~.gitignore~, most prominently automatically
+    generated backup files.
 
-   See also with ~gitk --all~
+    #+begin_src shell-script
+      touch content/chapter1.log     # assume this is automatically generated
+      git status
+      # On branch main
+      # Untracked files:
+      #   (use "git add <file>..." to include in what will be committed)
+      #
+      #  content/chapter1.log
+      #  content/chapter2.md
+      echo content/chapter1.log > .gitignore
+      git add .gitignore
+      git commit -m 'add gitignore file'
+      # [main 2218517] add gitignore file
+      #  1 file changed, 1 insertion(+)
+      #  create mode 100644 .gitignore
+      git status
+      # On branch main
+      # Untracked files:
+      #   (use "git add <file>..." to include in what will be committed)
+      #
+      #  content/chapter2.md
+      #
+      # nothing added to commit but untracked files present (use "git add" to track)
+      tree
+      # .
+      # ├── content
+      # │   ├── chapter1.log
+      # │   ├── chapter1.md
+      # │   └── chapter2.md
+      # └── README.md
+    #+end_src
 
-   #+name: fig:gitk_branches
-   #+caption: Different branches shown in GUI of ~gitk --all~.
-   [[file:figures/gitk_example_020_two_branches.png]]
+*** Creating and using a Branch
 
-** How to Search for Things
+    Allow for work on different aspects without interference
 
-   Once you have done many commits, it might be hard to remember what
-   you did when. Especially after you removed content.
+    #+begin_src shell-script
+      git branch chapter2
+      git graph
+      # * 2218517 - (4 minutes ago) add gitignore file (HEAD -> main, chapter2)
+      # * e5d7d2b - (11 minutes ago) add latin phrases to chapter 1
+      # * 51fe4ad - (37 minutes ago) add stub for chapter 1
+      # * db30019 - (5 hours ago) initial commit, add README.md
+    #+end_src
 
-   Let us assume we want to remove something from Chapter 1 again
+    Assume we would continue on chapter 1 now ...
+    #+begin_src shell-script
+      echo '\nPer aspera ad astra' >> content/chapter1.md
+      git add content/chapter1.md
+      git commit -m 'continue work on chapter 1'
+      # [main 11cf9a1] continue work on chapter 1
+      #  1 file changed, 2 insertions(+)
+      git graph
+      # * 11cf9a1 - (47 seconds ago) continue work on chapter 1 (HEAD -> main)
+      # * 2218517 - (6 minutes ago) add gitignore file (chapter2)
+      # * e5d7d2b - (13 minutes ago) add latin phrases to chapter 1
+      # * 51fe4ad - (39 minutes ago) add stub for chapter 1
+      # * db30019 - (5 hours ago) initial commit, add README.md
+    #+end_src
 
-   #+begin_src shell-script
-     git branch chapter1 main   # create a new branch "chapter1" where "main" is
-     git checkout chapter1
-     # Switched to branch 'chapter1'
-   #+end_src
+    The /chapter2/ marker stayed where we created it!
+    #+begin_src shell-script
+      git checkout chapter2
+      # Switched to branch 'chapter2'
+      tail -2 content/chapter1.md       # shows last two lines of file
+      #
+      # Quidquid latine dictum sit altum videtur.
+    #+end_src
 
-   Let's replace one of the phrases with an alternative version
-   #+begin_src shell-script
-     sed -i 's/Cognito/Ludo/' content/chapter1.md
-     git diff
-   #+end_src
-   The ~diff~ yields:
-   #+begin_src diff
-diff --git a/content/chapter1.md b/content/chapter1.md
-index 674f79e..6017206 100644
---- a/content/chapter1.md
-+++ b/content/chapter1.md
-@@ -1,6 +1,6 @@
- # Chapter 1
+    What happens if we start working here?
+    #+begin_src shell-script
+      git add content/chapter2.md
+      git commit -m 'add emtpy stub for chapter2'
+      # [chapter2 ddd7afd] add emtpy stub for chapter2
+      #  1 file changed, 1 insertion(+)
+      #  create mode 100644 content/chapter2.md
+      git graph
+      # * ddd7afd - (35 seconds ago) add emtpy stub for chapter2 (HEAD -> chapter2)
+      # | * 11cf9a1 - (4 minutes ago) continue work on chapter 1 (main)
+      # |/
+      # * 2218517 - (8 minutes ago) add gitignore file
+      # * e5d7d2b - (16 minutes ago) add latin phrases to chapter 1
+      # * 51fe4ad - (42 minutes ago) add stub for chapter 1
+      # * db30019 - (5 hours ago) initial commit, add README.md
+    #+end_src
 
--Cognito ergo sum
-+Ludo ergo sum
+    See also with ~gitk --all~
 
- In dubio pro reo.
-   #+end_src
+    #+name: fig:gitk_branches
+    #+caption: Different branches shown in GUI of ~gitk --all~.
+    [[file:figures/gitk_example_020_two_branches.png]]
 
-   Let us add this to the repository ...
-   #+begin_src shell-script
-     git add content/chapter1.md
-     git commit -m 'change reason for being'
-     # [chapter1 dcf2ce3] change reason for being
-     #  1 file changed, 1 insertion(+), 1 deletion(-)
-   #+end_src
+*** How to Search for Things
 
-   At this point, none of the files in the repository contains the word /Cognito/ anymore!
-   #+begin_src shell-script
-     find -name '*.md' -exec grep --color=always -nHi 'cognito' {} \;
-     #  <no results>
-   #+end_src
+    Once you have done many commits, it might be hard to remember what
+    you did when. Especially after you removed content.
 
-   But we can search for all commits which did introduce or delete it!
-   #+begin_src shell-script
-     git log --oneline -i -G "cognito"   # -i : ignore case
-     # dcf2ce3 (HEAD -> chapter1) change reason for being
-     # e5d7d2b add latin phrases to chapter 1
-   #+end_src
+    Let us assume we want to remove something from Chapter 1 again
 
-   Take-home message: Trust ~git~, once you have given something into
-   its hands, it won't be lost!
+    #+begin_src shell-script
+      git branch chapter1 main   # create a new branch "chapter1" where "main" is
+      git checkout chapter1
+      # Switched to branch 'chapter1'
+    #+end_src
+
+    Let's replace one of the phrases with an alternative version
+    #+begin_src shell-script
+      sed -i 's/Cognito/Ludo/' content/chapter1.md
+      git diff
+    #+end_src
+    The ~diff~ yields:
+    #+begin_src diff
+ diff --git a/content/chapter1.md b/content/chapter1.md
+ index 674f79e..6017206 100644
+ --- a/content/chapter1.md
+ +++ b/content/chapter1.md
+ @@ -1,6 +1,6 @@
+  # Chapter 1
+
+ -Cognito ergo sum
+ +Ludo ergo sum
+
+  In dubio pro reo.
+    #+end_src
+
+    Let us add this to the repository ...
+    #+begin_src shell-script
+      git add content/chapter1.md
+      git commit -m 'change reason for being'
+      # [chapter1 dcf2ce3] change reason for being
+      #  1 file changed, 1 insertion(+), 1 deletion(-)
+    #+end_src
+
+    At this point, none of the files in the repository contains the word /Cognito/ anymore!
+    #+begin_src shell-script
+      find -name '*.md' -exec grep --color=always -nHi 'cognito' {} \;
+      #  <no results>
+    #+end_src
+
+    But we can search for all commits which did introduce or delete it!
+    #+begin_src shell-script
+      git log --oneline -i -G "cognito"   # -i : ignore case
+      # dcf2ce3 (HEAD -> chapter1) change reason for being
+      # e5d7d2b add latin phrases to chapter 1
+    #+end_src
+
+    Take-home message: Trust ~git~, once you have given something into
+    its hands, it won't be lost!

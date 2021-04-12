@@ -3,11 +3,10 @@
   In order to keep the examples programming language agnostic, we will
   mimic writing a small text / collection of quotes.
 
-** First Steps
-
+** Configuration and First Steps
 *** Preliminary: Setup Local Configuration
 
-    Either edit your global [[file:../../../.gitconfig][.gitconfig]] file to at least contain
+    Either edit [[file:~/.gitconfig]] to at least contain
     #+begin_src conf
       [user]
               name = Martin Richter
@@ -138,7 +137,7 @@
               defaultBranch = main
      #+end_src
 
-*** Adding new Files
+*** Adding New Files
 
     To add new files, two steps are necessary:
 
@@ -270,7 +269,7 @@
     #+caption: Using ~gitk~ to display commit messages.
     [[file:figures/gitk_example_010_commit_msg.png]]
 
-**** Amend the last Commit
+**** Amend the Last Commit
 
      Sometimes you realize that you missed something in the last commit
      or commit message.
@@ -445,6 +444,9 @@
     #+begin_src shell-script
       find -name '*.md' -exec grep --color=always -nHi 'cognito' {} \;
       #  <no results>
+      # Recommended on command line: if it is installed, use a tool like `ack` or `ripgrep`
+      ack -i cognito
+      #  <no results wither, of course>
     #+end_src
 
     But we can search for all commits which did introduce or delete it!
@@ -452,7 +454,8 @@
       git log --oneline -i -G "cognito"   # -i : ignore case
       # dcf2ce3 (HEAD -> chapter1) change reason for being
       # e5d7d2b add latin phrases to chapter 1
+      git log --patch -i -G "cognito"     # To see what changed were done
     #+end_src
 
-    Take-home message: Trust ~git~, once you have given something into
+    *Take-home message*: Trust ~git~, once you have given something into
     its hands, it won't be lost!

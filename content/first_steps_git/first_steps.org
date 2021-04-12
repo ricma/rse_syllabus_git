@@ -835,3 +835,134 @@
 
      Note how this version ~v0.1.0~ came about without any need to
      resolve conflicts.
+
+** Rebase Branches
+
+   As mentioned above, there is an alternative way of getting
+   information from separate branches together. While ~merge~ keeps
+   the two branches as they are and tries to bundle them together at
+   the top, ~rebase~ cuts off the second branch and places it on top
+   of the other one.
+
+   To see the difference, let's go back to our ~chapter1~ and
+   ~chapter1_alternative~ examples. Note that branches are just names,
+   think of them like variables. We can move them around without
+   actually changing the underlying history of the commited work:
+   #+begin_src shell-script
+     git branch rebase_example_chapter1 fd6aadd
+     git branch rebase_example_chapter1_alternative 5521dc4
+   #+end_src
+   This creates two new branches positioned at exactly the two points
+   at which we did the above ~git merge~. We can display only the
+   relevant bits with ~gitk rebase_example_chapter1
+   rebase_example_chapter1_alternative~.
+
+   #+name: fig:gitk_new_branches_before_rebase
+   #+caption: Initial situation for a ~git rebase~
+   [[file:figures/gitk_example_050_new_branches_for_rebase_example.png]]
+
+   Instead of the above ~git merge chapter1_alternative~, which would
+   bundle ~chapter1_alternative~ back into ~chapter1~, we detach
+   ~chapter1_alternative~ from its branching point and re-attach it at
+   ~chapter1~:
+
+   #+begin_src shell-script
+     # note that we checkout the "chapter1_alternaitve"
+     # in the ~merge~ case we were at "chapter1"
+     git checkout rebase_example_chapter1_alternative
+     git rebase rebase_example_chapter1
+     # First, rewinding head to replay your work on top of it...
+     # Applying: add phrase on how all glory of the world passes
+     # Using index info to reconstruct a base tree...
+     # M	content/chapter1.md
+     # Falling back to patching base and 3-way merge...
+     # Auto-merging content/chapter1.md
+     # CONFLICT (content): Merge conflict in content/chapter1.md
+     # error: Failed to merge in the changes.
+     # Patch failed at 0001 add phrase on how all glory of the world passes
+     # Use 'git am --show-current-patch' to see the failed patch
+     #
+     # Resolve all conflicts manually, mark them as resolved with
+     # "git add/rm <conflicted_files>", then run "git rebase --continue".
+     # You can instead skip this commit: run "git rebase --skip".
+     # To abort and get back to the state before "git rebase", run "git rebase --abort".
+   #+end_src
+
+   Like above with merge, you can abort this if you don't feel
+   confident enough to decide what the resolved state should be:
+   #+begin_src shell-script
+     git rebase --abort
+   #+end_src
+
+   If, on the other hand, you want to go ahead, then we can see what
+   is going on just like before: ~git diff~
+   #+begin_src diff
+diff --cc content/chapter1.md
+index fc5a306,0736795..0000000
+--- a/content/chapter1.md
++++ b/content/chapter1.md
+@@@ -7,5 -7,5 +7,11 @@@ In dubio pro reo
+  Quidquid latine dictum sit altum videtur.
+
+  Per aspera ad astra
+++<<<<<<< HEAD
+ +
+ +Pacta sunt servanda
+++||||||| merged common ancestors
+++=======
++
++ Sic transit gloria mundi
+++>>>>>>> add phrase on how all glory of the world passes
+   #+end_src
+
+   Note that the markers ~<<<<<<<~, ~|||||||~, ~=======~, and
+   ~>>>>>>>~ are the same as above.
+
+   Like above, we can simply edit the file and get both latin phrases
+   into the file. Once we have removed all the markers, we can
+   #+begin_src shell-script
+     git add content/chapter1.md
+     git status
+     # rebase in progress; onto fd6aadd
+     # You are currently rebasing branch 'rebase_example_chapter1_alternative' on 'fd6aadd'.
+     #   (all conflicts fixed: run "git rebase --continue")
+     #
+     # Changes to be committed:
+     #   (use "git reset HEAD <file>..." to unstage)
+     #
+     #  modified:   content/chapter1.md
+   #+end_src
+
+   As the message suggests, you then continue with
+   #+begin_src shell-script
+     git rebase --continue
+     # Applying: add phrase on how all glory of the world passes
+
+     # we can examine the situation using
+     gitk rebase_example_chapter1 rebase_example_chapter1_alternative
+   #+end_src
+
+   #+name: fig:gitk_new_branches_after_rebase
+   #+caption: Situation after successful rebase
+   [[file:figures/gitk_example_060_after_rebase_example.png]]
+
+   Note how now the history is linear and we can simply
+   #+begin_src shell-script
+     git checkout rebase_example_chapter1
+     # Switched to branch 'rebase_example_chapter1'
+     git rebase rebase_example_chapter1_alternative
+     # First, rewinding head to replay your work on top of it...
+     # Fast-forwarded rebase_example_chapter1 to rebase_example_chapter1_alternative.
+   #+end_src
+
+   The content of the files here is exactly the same as after a
+   ~merge~. But the underlying history is now linear instead of a
+   diamond.
+
+   There is a price to pay for this nice linearity: First, ~rebases~
+   can be more difficult if they cover many commits as you might have
+   to resolve conflicts for each of them while reabsing. Second, the
+   rebased branch has different checksums after the rebase. This can
+   break workflows if the state has already been published.
+
+   So it is a good idea to only rebase local work.

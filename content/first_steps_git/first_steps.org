@@ -1,3 +1,11 @@
+# -*- ispell-dictionary: "english" -*-
+#+AUTHOR: Martin Richter
+#+TITLE: Examples for Using git
+#+EMAIL: martin.richter@nottingham.ac.uk
+
+#+OPTIONS: <:nil d:nil timestamp:t ^:nil tags:nil toc:nil num:nil
+#+STARTUP: fninline overview inlineimages
+
 * Examples for Using ~git~
 
   In order to keep the examples programming language agnostic, we will
@@ -6,7 +14,7 @@
 ** Configuration and First Steps
 *** Preliminary: Setup Local Configuration
 
-    Either edit [[file:~/.gitconfig]] to at least contain
+    Either edit [[file:${HOME}/.gitconfig]] to at least contain
     #+begin_src conf
       [user]
               name = Martin Richter
@@ -31,6 +39,7 @@
 
     Create some description of what we want to do
     #+begin_src shell-script
+      cd ~/       # go to whereever you want to do your work
       mkdir letter_collection
       cd letter_collection
       cat << EOF > README.md
@@ -134,7 +143,10 @@
               graph = log --graph --all --pretty=format:'%Cred%h%Creset - %Cgreen(%cr)%Creset %s%C(yellow)%d%Creset' --abbrev-commit --date=relative --decorate
 
       [init]
-              defaultBranch = main
+              defaultBranch = main     # Introduced with git 2.28.0
+
+      [merge]
+              conflictstyle = diff3    # gives more context on conflicts
      #+end_src
 
 *** Adding New Files
@@ -451,7 +463,7 @@
 
     But we can search for all commits which did introduce or delete it!
     #+begin_src shell-script
-      git log --oneline -i -G "cognito"   # -i : ignore case
+      git log --oneline -i -G "cognito"   # -i : ignore case, --oneline for brevity here
       # dcf2ce3 (HEAD -> chapter1) change reason for being
       # e5d7d2b add latin phrases to chapter 1
       git log --patch -i -G "cognito"     # To see what changed were done
@@ -459,3 +471,257 @@
 
     *Take-home message*: Trust ~git~, once you have given something into
     its hands, it won't be lost!
+
+*** Keeping an Overview - Using Tags
+
+    While history evolves, you might want to remember specific states
+    of your work, for example the state of the software used for the
+    data submitted in a paper or when you went to a conference.
+
+    This is what /tags/ are for: They allow you to memorize states of
+    the repository more easily, maybe including a message:
+    #+begin_src shell-script
+      git tag -a -m 'First draft, a bit of content' v0.0.1
+      git log --oneline
+      # dcf2ce3 (HEAD -> chapter1, tag: v0.0.1) change reason for being
+      # 11cf9a1 (main) continue work on chapter 1
+    #+end_src
+    Note how the first line now also features a ~tag: v0.0.1~.
+    This will stay there, even if ~chapter1~ moves on:
+    #+begin_src shell-script
+      # add new content
+      echo '\nPacta sunt servanda' >> content/chapter1.md
+      # add the change to the index (-a) and commit
+      git commit -a -m 'add latin phrase on keeping contracts'
+      # check the log
+      git log --oneline
+      # fd6aadd (HEAD -> chapter1) add latin phrase on keeping contracts
+      # dcf2ce3 (tag: v0.0.1) change reason for being
+      # 11cf9a1 (main) continue work on chapter 1
+    #+end_src
+
+** Merging Conflicts
+
+   When working on projects, might lead to /conflicts/. This can happen if
+   - You work (alone or in teams) on separate branches to write / implement features
+   - You work alone on different computers all with their own local copy.
+     (E.g. one for your Laptop and one on the HPC / workstations)
+   - When you work collaboratively with colleagues on a project.
+
+   In order to make you familiar with /conflicts/ we will mimic the
+   above cases locally so that you can follow the steps on a local
+   installation. But for simplicity, we start with the first case
+   using separate branches. While this seems a less likely to happen,
+   it is the easier setup to explain conflicts and how to resolve
+   them.
+
+*** Conflicts Between Local Branches
+
+    We can go back to either our /branch/ ~main~ or to the /tag/
+    ~v0.0.1~ from above and start from there in order to create a
+    simple conflict:
+    #+begin_src shell-script
+      git checkout -b chapter1_alternative v0.0.1
+      # Switched to a new branch 'chapter1_alternative'
+      git log --all --oneline    # --all to see `chapter1` as well here
+      # fd6aadd (chapter1) add latin phrase on keeping contracts
+      # dcf2ce3 (HEAD -> chapter1_alternative, tag: v0.0.1) change reason for being
+      # ddd7afd (chapter2) add emtpy stub for chapter2
+      # 11cf9a1 (main) continue work on chapter 1
+    #+end_src
+    Note how ~HEAD~ (that is the currently checked out version) now
+    resides on ~chapter1_alternative~ which is at the position of our
+    /tag/.
+
+    Let us add some different content and commit this as well:
+    #+begin_src shell-script
+      echo '\nSic transit gloria mundi' >> content/chapter1.md
+      git commit -a -m 'add phrase on how all glory of the world passes'
+      git graph      # this uses the above alias for better readability
+      # * 5521dc4 - (48 seconds ago) add phrase on how all glory of the world passes (HEAD -> chapter1_alternative)
+      # | * fd6aadd - (6 minutes ago) add latin phrase on keeping contracts (chapter1)
+      # |/
+      # * dcf2ce3 - (2 weeks ago) change reason for being (tag: v0.0.1)
+      # * 11cf9a1 - (2 weeks ago) continue work on chapter 1 (main)
+      # | * ddd7afd - (2 weeks ago) add emtpy stub for chapter2 (chapter2)
+      # |/
+      # * 2218517 - (2 weeks ago) add gitignore file
+      # * e5d7d2b - (2 weeks ago) add latin phrases to chapter 1
+      # * 51fe4ad - (2 weeks ago) add stub for chapter 1
+      # * db30019 - (2 weeks ago) initial commit, add README.md
+    #+end_src
+
+    We see that the history diverged just like it did before with
+    ~chapter2~.
+
+    But this time, we want to get both versions together into a proper
+    ~chapter1~. This can be done using /merges/ or /rebases/.
+
+**** Merging Conflicts
+
+     When working with others, this is usually preferred as it keeps
+     the history consistent. It comes with the benefit of usually
+     being a bit simpler to do. The drawback is, that the resulting
+     history of the repository is not linear.
+
+      In order to update ~chapter1~ with the alternative version, we
+      can do:
+      #+begin_src shell-script
+        git checkout chapter1
+        # Switched to branch 'chapter1'
+        git merge chapter1_alternative
+        # Auto-merging content/chapter1.md
+        # CONFLICT (content): Merge conflict in content/chapter1.md
+        # Automatic merge failed; fix conflicts and then commit the result.
+      #+end_src
+      This tells us, that /git/ was not able to find a good way of
+      combining the two versions. Simply put, it does not know what the
+      combined, true story should be. Possibilities are
+
+      - We keep both but which should go first?
+      - Should one be removed? Which one?
+      - Should both be removed?
+      - Should something completely different go into the text?
+
+      These different possibilities emphasize one of the basic rules of version control:
+      #+begin_quote
+      No technical tool for version control removes the necessity of communication!
+      #+end_quote
+      In the end you will have to talk to your colleagues about which
+      of the solutions is the one you want!
+
+***** Aborting a Merge
+
+      Maybe you don't feel confident to merge the changes
+      (e.g. because you don't know what a good resolution would
+      be). You can abort a merge and go back to the state before you entered ~git merge ...~:
+      #+begin_src shell-script
+        git merge --abort     # you must not have altered content of files before that
+        git log --oneline     # and we are back to where we were
+        # fd6aadd (HEAD -> chapter1) add latin phrase on keeping contracts
+        # dcf2ce3 (tag: v0.0.1) change reason for being
+        # 11cf9a1 (main) continue work on chapter 1
+      #+end_src
+
+***** Resolving Conflicts using Merges
+
+      If we go back to the above conflict state, i.e. by calling ~git
+      merge chapter1_alternative~, then git will inform us about its
+      struggle. It shows the following ~git status~ report:
+      #+begin_src shell-script
+        git status
+        # On branch chapter1
+        # You have unmerged paths.
+        #   (fix conflicts and run "git commit")
+        #   (use "git merge --abort" to abort the merge)
+        #
+        # Unmerged paths:
+        #   (use "git add <file>..." to mark resolution)
+        #
+        #       both modified:   content/chapter1.md
+        #
+        # no changes added to commit (use "git add" and/or "git commit -a")
+      #+end_src
+      and it tells us what to do, namely to /fix conflicts/ and then to
+      /run/ ~git commit~.
+      Furthermore, ~git~ put some hints into the conflicting files:
+      Run ~git diff~ to get:
+      #+begin_src diff
+ git diff
+ diff --cc content/chapter1.md
+ index fc5a306,0736795..0000000
+ --- a/content/chapter1.md
+ +++ b/content/chapter1.md
+ @@@ -7,5 -7,5 +7,11 @@@ In dubio pro reo
+   Quidquid latine dictum sit altum videtur.
+
+   Per aspera ad astra
+ ++<<<<<<< HEAD
+  +
+  +Pacta sunt servanda
+ ++||||||| merged common ancestors
+ ++=======
+ +
+ + Sic transit gloria mundi
+ ++>>>>>>> chapter1_alternative
+      #+end_src
+
+      Let us go through these in a few steps.
+
+      - Merged Common Ancestors :: The lines between ~|||||||~ and
+        ~=======~ are where both versions came from - in this case
+        here, it is empty because none of the two versions deleted a
+        lines.
+
+      - HEAD :: The lines on the top between ~<<<<<<<~ and ~|||||||~
+        show the version of the branch we have currently checked out.
+        Sometimes this is also referred to as /ours/.
+
+      - other version :: The lines at the bottom between ~=======~ and
+        ~>>>>>>>~ show the other version (here the branch
+        ~chapter1_alternative~) we are trying to merge in, sometimes
+        called /theirs/.
+
+      To resolve the conflict, we have to edit the file and remove
+      these markers. Let us assume, we are happy with the content
+
+      #+begin_src shell-script
+        tail -n 5 content/chapter1.md
+        # Per aspera ad astra
+        #
+        # Pacta sunt servanda
+        #
+        # Sic transit gloria mundi
+      #+end_src
+
+      Note that the status still reads:
+      #+begin_src shell-script
+        git status
+        # On branch chapter1
+        # You have unmerged paths.
+        #   (fix conflicts and run "git commit")
+        #   (use "git merge --abort" to abort the merge)
+        #
+        # Unmerged paths:
+        #   (use "git add <file>..." to mark resolution)
+        #
+        #       both modified:   content/chapter1.md
+        #
+        # no changes added to commit (use "git add" and/or "git commit -a")
+      #+end_src
+      but now we have /fixed the conflicts/. The next is to commit
+      what we want the merge to be.
+
+      #+begin_src shell-script
+        git add content/chapter1.md
+        git commit     # opens an editor with a default commit message
+      #+end_src
+
+      This merges the two branches and leaves us with the following history:
+      #+begin_src shell-script
+        git graph
+        # *   57e9a39 - (32 seconds ago) Merge branch 'chapter1_alternative' into chapter1 (HEAD -> chapter1)
+        # |\
+        # | * 5521dc4 - (36 minutes ago) add phrase on how all glory of the world passes (chapter1_alternative)
+        # * | fd6aadd - (42 minutes ago) add latin phrase on keeping contracts
+        # |/
+        # * dcf2ce3 - (2 weeks ago) change reason for being (tag: v0.0.1)
+        # * 11cf9a1 - (2 weeks ago) continue work on chapter 1 (main)
+      #+end_src
+
+      Note how the history now makes a loop and is therefore not linear anymore.
+
+      We can also have a look at this history using ~gitk --all~:
+
+      #+name: fig:gitk_branches_after_merge
+      #+caption: A successful merge shown in GUI of ~gitk --all~.
+      [[file:figures/gitk_example_030_merge_two_branches.png]]
+
+      Note that at this point, we might delete the alternative branch
+      because we do not need it anymore:
+
+
+      #+begin_src shell-script
+        git branch -d chapter1_alternative
+        # Deleted branch chapter1_alternative (was 5521dc4).
+      #+end_src

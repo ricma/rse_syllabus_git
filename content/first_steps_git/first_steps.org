@@ -725,3 +725,113 @@
         git branch -d chapter1_alternative
         # Deleted branch chapter1_alternative (was 5521dc4).
       #+end_src
+
+***** A Comment on Mergetools
+
+      There are tools available helping you with these
+      conflicts. Personally, I only find them helpful in a limited set
+      of problems, namely when the resolved situation is _either_ on
+      _or_ the other branch (in our example: The resolved version
+      should have been only one of the latin quotes). Therefore, I
+      tend to resolve conflicts like above by manually going through
+      these files.
+
+      Should you want to have a look, then
+      #+begin_src shell-script
+        git merge ...
+        # Auto-merging ...
+        # CONFLICT (content): Merge conflict in ...
+        # Automatic merge failed; fix conflicts and then commit the result.
+        git mergetool --tool <toolname>   # Try TAB completion here
+      #+end_src
+      The corresponding tool will pop up and allow you to choose
+      between A and B.
+
+**** Trivial Merges / Rebases
+
+     The good news is, that the above conflict situations are not very
+     common.
+
+     For example, if we are working on our /chapter2/, then
+     #+begin_src shell-script
+       git checkout chapter2
+       echo '\nChapter 1 contained plenty of Latin quotes. Now we want to focus on something else' >> content/chapter2.md
+       git commit -a -m 'add first lines to chapter 2'
+       git graph
+       # * bdab4b7 - (43 seconds ago) add first lines to chapter 2 (HEAD -> chapter2)
+       # * ddd7afd - (2 weeks ago) add emtpy stub for chapter2
+       # | *   57e9a39 - (19 minutes ago) Merge branch 'chapter1_alternative' into chapter1 (chapter1)
+       # | |\
+       # | | * 5521dc4 - (55 minutes ago) add phrase on how all glory of the world passes
+       # | * | fd6aadd - (60 minutes ago) add latin phrase on keeping contracts
+       # | |/
+       # | * dcf2ce3 - (2 weeks ago) change reason for being (tag: v0.0.1)
+       # | * 11cf9a1 - (2 weeks ago) continue work on chapter 1 (main)
+       # |/
+       # * 2218517 - (2 weeks ago) add gitignore file
+     #+end_src
+
+     So we could go back to the ~main~ branch and take both chapters
+     into it:
+     #+begin_src shell-script
+       git checkout main
+       git merge chapter1
+       # Updating 11cf9a1..57e9a39
+       # Fast-forward
+       #  content/chapter1.md | 6 +++++-
+       #  1 file changed, 5 insertions(+), 1 deletion(-)
+     #+end_src
+     This merge was called /fast-forward/ because ~chapter1~ was a
+     direct descendant of ~main~ and git could just move it there:
+     #+begin_src shell-script
+       git graph
+       # * bdab4b7 - (3 minutes ago) add first lines to chapter 2 (chapter2)
+       # * ddd7afd - (2 weeks ago) add emtpy stub for chapter2
+       # | *   57e9a39 - (21 minutes ago) Merge branch 'chapter1_alternative' into chapter1 (HEAD -> main, chapter1)
+       # | |\
+       # | | * 5521dc4 - (57 minutes ago) add phrase on how all glory of the world passes
+     #+end_src
+
+     We can now also include ~chapter2~. This is not a fsat-forward
+     and we will be asked for a commit message:
+     #+begin_src shell-script
+       git merge chapter2       # asks for a commit message, we use the provided default
+       # Merge made by the 'recursive' strategy.
+       #  content/chapter2.md | 3 +++
+       #  1 file changed, 3 insertions(+)
+       #  create mode 100644 content/chapter2.md
+     #+end_src
+
+     For later reference, let us also set a new tag on this state:
+     #+begin_src shell-script
+       git tag -a -m 'Merge contents of chapter 1 and 2' v0.1.0
+     #+end_src
+
+     This leaves us with an even more non-linear history:
+     #+begin_src shell-script
+       git graph
+       # *   e212d4f - (55 seconds ago) Merge branch 'chapter2' into main (HEAD -> main, tag: v0.1.0)
+       # |\
+       # | * bdab4b7 - (5 minutes ago) add first lines to chapter 2 (chapter2)
+       # | * ddd7afd - (2 weeks ago) add emtpy stub for chapter2
+       # * |   57e9a39 - (23 minutes ago) Merge branch 'chapter1_alternative' into chapter1 (chapter1)
+       # |\ \
+       # | * | 5521dc4 - (58 minutes ago) add phrase on how all glory of the world passes
+       # * | | fd6aadd - (64 minutes ago) add latin phrase on keeping contracts
+       # |/ /
+       # * | dcf2ce3 - (2 weeks ago) change reason for being (tag: v0.0.1)
+       # * | 11cf9a1 - (2 weeks ago) continue work on chapter 1
+       # |/
+       # * 2218517 - (2 weeks ago) add gitignore file
+       # * e5d7d2b - (2 weeks ago) add latin phrases to chapter 1
+       # * 51fe4ad - (2 weeks ago) add stub for chapter 1
+       # * db30019 - (2 weeks ago) initial commit, add README.md
+     #+end_src
+     or in ~gitk --all~:
+
+     #+name: fig:gitk_branches_after_merges_all
+     #+caption: A successful no-conflict merge shown in GUI of ~gitk --all~.
+     [[file:figures/gitk_example_040_merge_no_conflicts.png]]
+
+     Note how this version ~v0.1.0~ came about without any need to
+     resolve conflicts.

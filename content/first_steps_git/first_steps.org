@@ -74,7 +74,7 @@
 
 *** Creating a Local Repository
 
-    Create some description of what we want to do
+  - Create some description of what we want to do
     #+begin_src shell-script
       cd ~/       # go to whereever you want to do your work
       mkdir letter_collection
@@ -84,7 +84,7 @@
       EOF
     #+end_src
 
-    Somewhat important: Configuration relevant for this repository only
+  - Somewhat important: Configuration relevant for this repository only
     is in ~.git/config~.
 
     #+begin_src shell-script
@@ -101,12 +101,14 @@
     #+end_src
 
 #+REVEAL: split:t
-    Now what did this do? Let's have a look around!
+  - Now what did this do? Let's have a look around!
+
     /Note git is nothing scary - just a folder!/
 
     Besides our file ~README.md~ there is a folder ~.git~ with
-    various bits in it. All information will be stored here.
-    Usually no need to enter it.
+    various bits in it.
+
+    All information will be stored here.  Usually no need to enter it.
 
     #+REVEAL_HTML: <div style="width: 100%">
     #+REVEAL_HTML: <div class="column" style="float:left; width: 50%">
@@ -260,32 +262,32 @@
 
 *** Changing Existing Files
 
-    Let us assume we are adding text to chapter 1.
+  - Let us assume we are adding text to chapter 1.
     #+begin_src shell-script
       echo '\nCognito ergo sum' >> content/chapter1.md
       echo '\nIn dubio pro reo.' >> content/chapter1.md
     #+end_src
 
-    To see local changes:
+  - To see local changes:
     #+begin_src shell-script
       git diff
     #+end_src
     yields the following diff:
     #+begin_src diff
- diff --git a/content/chapter1.md b/content/chapter1.md
- index b743fda..ef9b254 100644
- --- a/content/chapter1.md
- +++ b/content/chapter1.md
- @@ -1 +1,5 @@
-  # Chapter 1
- +
- +Cognito ergo sum
- +
- +In dubio pro reo.
+diff --git a/content/chapter1.md b/content/chapter1.md
+index b743fda..ef9b254 100644
+--- a/content/chapter1.md
++++ b/content/chapter1.md
+@@ -1 +1,5 @@
+ # Chapter 1
++
++Cognito ergo sum
++
++In dubio pro reo.
     #+end_src
 
 #+REVEAL: split:t
-    To register them, use the ~git add~ / ~git commit~ again
+  - To register them, use the ~git add~ / ~git commit~ again
     #+begin_src shell-script
       git add content/chapter1.md
       git commit -m 'add latin phrases to chapter 1'
@@ -318,7 +320,7 @@
 
 *** Committing and Commit Messages
 
-    In order to get the most out of the history, try to make
+  - In order to get the most out of the history, try to make
     - Commits small and on one mental subject
     - Conform with a simple format rule:
       1. First line not more than _50_ characters
@@ -330,7 +332,7 @@
       by all tools.
 
 #+REVEAL: split:t
-    Check by having a look at ~gitk~.
+  - Check by having a look at ~gitk~.
     #+name: fig:gitk_example_commit_msgs
     #+caption: Using ~gitk~ to display commit messages.
     [[file:figures/gitk_example_010_commit_msg.png]]
@@ -363,7 +365,7 @@
      Be aware: Do not do this if already published (pushed - see later)
 
 #+REVEAL: split:t
-     This is again a good time to also check with ~gitk~.
+**** This is again a good time to also check with ~gitk~.
 
      #+name: fig:gitk_example_commit_msgs
      #+caption: Using ~gitk~ to display commit messages.
@@ -371,8 +373,10 @@
 
 *** Ignoring Files
 
-    Some files should not be part of the repository but also not
-    visible git ignore and ~.gitignore~, most prominently automatically
+  - Some files should not be part of the repository but also not
+    visible to git
+
+  - Use ~.gitignore~, to ignore most prominently automatically
     generated backup files.
 
     #+begin_src shell-script
@@ -409,7 +413,7 @@
 
 *** Creating and using a Branch
 
-    Allow for work on different aspects without interference
+  - Allow for work on different aspects without interference
 
     #+begin_src shell-script
       git branch chapter2
@@ -420,7 +424,7 @@
       # * db30019 - (5 hours ago) initial commit, add README.md
     #+end_src
 
-    Assume we would continue on chapter 1 now ...
+  - Assume we would continue on chapter 1 now ...
     #+begin_src shell-script
       echo '\nPer aspera ad astra' >> content/chapter1.md
       git add content/chapter1.md
@@ -435,7 +439,7 @@
       # * db30019 - (5 hours ago) initial commit, add README.md
     #+end_src
 
-    The /chapter2/ marker stayed where we created it!
+  - The /chapter2/ marker stayed where we created it!
     #+begin_src shell-script
       git checkout chapter2
       # Switched to branch 'chapter2'
@@ -445,7 +449,7 @@
     #+end_src
 
 #+REVEAL: split:t
-    What happens if we start working here?
+  - What happens if we start working here?
     #+begin_src shell-script
       git add content/chapter2.md
       git commit -m 'add emtpy stub for chapter2'
@@ -462,7 +466,7 @@
       # * db30019 - (5 hours ago) initial commit, add README.md
     #+end_src
 
-    See also with ~gitk --all~
+  - See also with ~gitk --all~
 
     #+name: fig:gitk_branches
     #+caption: Different branches shown in GUI of ~gitk --all~.
@@ -470,18 +474,19 @@
 
 *** How to Search for Things
 
-    Once you have done many commits, it might be hard to remember what
-    you did when. Especially after you removed content.
+  - Once you have done many commits, it might be hard to remember what
+    you did when.
 
-    Let us assume we want to remove something from Chapter 1 again
+  - Especially after you removed content.
 
+  - Let us assume we want to remove something from Chapter 1 again
     #+begin_src shell-script
       git branch chapter1 main   # create a new branch "chapter1" where "main" is
       git checkout chapter1
       # Switched to branch 'chapter1'
     #+end_src
 
-    Let's replace one of the phrases with an alternative version
+  - Let's replace one of the phrases with an alternative version
     #+begin_src shell-script
       sed -i 's/Cognito/Ludo/' content/chapter1.md
       git diff
@@ -502,7 +507,7 @@
     #+end_src
 
 #+REVEAL: split:t
-    Let us add this to the repository ...
+  - Let us add this to the repository ...
     #+begin_src shell-script
       git add content/chapter1.md
       git commit -m 'change reason for being'
@@ -510,7 +515,7 @@
       #  1 file changed, 1 insertion(+), 1 deletion(-)
     #+end_src
 
-    At this point, none of the files in the repository contains the word /Cognito/ anymore!
+  - At this point, none of the files in the repository contains the word /Cognito/ anymore!
     #+begin_src shell-script
       find -name '*.md' -exec grep --color=always -nHi 'cognito' {} \;
       #  <no results>
@@ -519,7 +524,7 @@
       #  <no results wither, of course>
     #+end_src
 
-    But we can search for all commits which did introduce or delete it!
+  - But we can search for all commits which did introduce or delete it!
     #+begin_src shell-script
       git log --oneline -i -G "cognito"   # -i : ignore case, --oneline for brevity here
       # dcf2ce3 (HEAD -> chapter1) change reason for being
@@ -527,16 +532,16 @@
       git log --patch -i -G "cognito"     # To see what changed were done
     #+end_src
 
-    *Take-home message*: Trust ~git~, once you have given something into
+  - *Take-home message*: Trust ~git~, once you have given something into
     its hands, it won't be lost!
 
 *** Keeping an Overview - Using Tags
 
-    While history evolves, you might want to remember specific states
+  - While history evolves, you might want to remember specific states
     of your work, for example the state of the software used for the
     data submitted in a paper or when you went to a conference.
 
-    This is what /tags/ are for: They allow you to memorize states of
+  - This is what /tags/ are for: They allow you to memorize states of
     the repository more easily, maybe including a message:
     #+begin_src shell-script
       git tag -a -m 'First draft, a bit of content' v0.0.1
@@ -544,7 +549,8 @@
       # dcf2ce3 (HEAD -> chapter1, tag: v0.0.1) change reason for being
       # 11cf9a1 (main) continue work on chapter 1
     #+end_src
-    Note how the first line now also features a ~tag: v0.0.1~.
+
+  - Note how the first line now also features a ~tag: v0.0.1~.
     This will stay there, even if ~chapter1~ moves on:
     #+begin_src shell-script
       # add new content
@@ -561,22 +567,26 @@
 ** Merging Conflicts
 
 *** When Merges Occur
-    When working on projects, might lead to /conflicts/. This can happen if
+  - When working on projects, might lead to /conflicts/. This can happen if
     - You work (alone or in teams) on separate branches to write / implement features
     - You work alone on different computers all with their own local copy.
+
       (E.g. one for your Laptop and one on the HPC / workstations)
     - When you work collaboratively with colleagues on a project.
 
-    In order to make you familiar with /conflicts/ we will mimic the
+  - In order to make you familiar with /conflicts/ we will mimic the
     above cases locally so that you can follow the steps on a local
-    installation. But for simplicity, we start with the first case
-    using separate branches. While this seems a less likely to happen,
-    it is the easier setup to explain conflicts and how to resolve
-    them.
+    installation.
+
+  - For simplicity, we start with the first case
+    using separate branches.
+
+    While this seems a less likely to happen, it is the easier setup
+    to explain conflicts and how to resolve them.
 
 *** Conflicts Between Local Branches
 
-    We can go back to either our /branch/ ~main~ or to the /tag/
+  - We can go back to either our /branch/ ~main~ or to the /tag/
     ~v0.0.1~ from above and start from there in order to create a
     simple conflict:
     #+begin_src shell-script
@@ -588,12 +598,13 @@
       # ddd7afd (chapter2) add emtpy stub for chapter2
       # 11cf9a1 (main) continue work on chapter 1
     #+end_src
-    Note how ~HEAD~ (that is the currently checked out version) now
+
+  - Note how ~HEAD~ (that is the currently checked out version) now
     resides on ~chapter1_alternative~ which is at the position of our
     /tag/.
 
 #+REVEAL: split:t
-    Let us add some different content and commit this as well:
+  - Let us add some different content and commit this as well:
     #+begin_src shell-script
       echo '\nSic transit gloria mundi' >> content/chapter1.md
       git commit -a -m 'add phrase on how all glory of the world passes'
@@ -611,22 +622,30 @@
       # * db30019 - (2 weeks ago) initial commit, add README.md
     #+end_src
 
-    We see that the history diverged just like it did before with
+  - We see that the history diverged just like it did before with
     ~chapter2~.
 
-    But this time, we want to get both versions together into a proper
+  - But this time, we want to get both versions together into a proper
     ~chapter1~. This can be done using /merges/ or /rebases/.
 
 #+REVEAL: split:t
+
 **** Merging Conflicts
 
-     When working with others, this is usually preferred as it keeps
-     the history consistent. It comes with the benefit of usually
-     being a bit simpler to do. The drawback is, that the resulting
-     history of the repository is not linear.
+     When working with others, /merging/ is usually preferred as it keeps
+     the history consistent.
+
+     It comes with the benefit of usually
+     being a bit simpler to do.
+
+     The drawback is, that the resulting history of the repository is
+     /not linear/.
 
 #+REVEAL: split:t
-     In order to update ~chapter1~ with the alternative version, we
+
+**** Merging Conflicts (Example)
+
+   - In order to update ~chapter1~ with the alternative version, we
      can do:
      #+begin_src shell-script
        git checkout chapter1
@@ -637,12 +656,12 @@
        # Automatic merge failed; fix conflicts and then commit the result.
      #+end_src
 
-     This tells us, that /git/ was not able to find a good way of
+   - This tells us, that /git/ was not able to find a good way of
      combining the two versions. Simply put, it does not know what the
      combined, true story should be.
 
 #+REVEAL: split:t
-     Possibilities are
+   - Possibilities are
 
      - We keep both but which should go first?
      - Should one be removed? Which one?
@@ -651,7 +670,9 @@
 
      These different possibilities emphasize one of the basic rules of version control:
      #+begin_quote
-     No technical tool for version control removes the necessity of communication!
+     No technical tool for version control
+
+     removes the necessity of communication!
      #+end_quote
      In the end you will have to talk to your colleagues about which
      of the solutions is the one you want!
@@ -673,7 +694,7 @@
 #+REVEAL: split:t
 ***** Resolving Conflicts using Merges
 
-      If we go back to the above conflict state, i.e. by calling ~git
+    - If we go back to the above conflict state, i.e. by calling ~git
       merge chapter1_alternative~, then git will inform us about its
       struggle. It shows the following ~git status~ report:
       #+begin_src shell-script
@@ -690,11 +711,11 @@
         #
         # no changes added to commit (use "git add" and/or "git commit -a")
       #+end_src
-      and it tells us what to do, namely to /fix conflicts/ and then to
+    - ... and it tells us what to do, namely to /fix conflicts/ and then to
       /run/ ~git commit~.
 
 #+REVEAL: split:t
-      Furthermore, ~git~ put some hints into the conflicting files:
+    - Furthermore, ~git~ put some hints into the conflicting files:
       Run ~git diff~ to get:
       #+begin_src diff
  git diff
@@ -716,9 +737,9 @@
  ++>>>>>>> chapter1_alternative
       #+end_src
 
-      Let us go through these in a few steps.
-
+    - Let us go through these in a few steps:
 #+REVEAL: split:t
+
       - Merged Common Ancestors :: The lines between ~|||||||~ and
         ~=======~ are where both versions came from - in this case
         here, it is empty because none of the two versions deleted a
@@ -734,7 +755,7 @@
         called /theirs/.
 
 #+REVEAL: split:t
-      To resolve the conflict, we have to edit the file and remove
+    - To resolve the conflict, we have to edit the file and remove
       these markers. Let us assume, we are happy with the content
 
       #+begin_src shell-script
@@ -746,7 +767,7 @@
         # Sic transit gloria mundi
       #+end_src
 
-      Note that the status still reads:
+    - Note that the status still reads:
       #+begin_src shell-script
         git status
         # On branch chapter1
@@ -761,16 +782,17 @@
         #
         # no changes added to commit (use "git add" and/or "git commit -a")
       #+end_src
-      but now we have /fixed the conflicts/. The next is to commit
-      what we want the merge to be.
 
+    - Now we have /fixed the conflicts/.
+
+      The next is to commit what we want the merge to be.
       #+begin_src shell-script
         git add content/chapter1.md
         git commit     # opens an editor with a default commit message
       #+end_src
 
 #+REVEAL: split:t
-      This merges the two branches and leaves us with the following history:
+    - This merges the two branches and leaves us with the following history:
       #+begin_src shell-script
         git graph
         # *   57e9a39 - (32 seconds ago) Merge branch 'chapter1_alternative' into chapter1 (HEAD -> chapter1)
@@ -782,19 +804,17 @@
         # * 11cf9a1 - (2 weeks ago) continue work on chapter 1 (main)
       #+end_src
 
-      Note how the history now makes a loop and is therefore not linear anymore.
+    - Note how the history now makes a loop and is therefore not linear anymore.
 
 #+REVEAL: split:t
-      We can also have a look at this history using ~gitk --all~:
+    - We can also have a look at this history using ~gitk --all~:
 
       #+name: fig:gitk_branches_after_merge
       #+caption: A successful merge shown in GUI of ~gitk --all~.
       [[file:figures/gitk_example_030_merge_two_branches.png]]
 
-      Note that at this point, we might delete the alternative branch
+    - Note that at this point, we might delete the alternative branch
       because we do not need it anymore:
-
-
       #+begin_src shell-script
         git branch -d chapter1_alternative
         # Deleted branch chapter1_alternative (was 5521dc4).
@@ -803,15 +823,20 @@
 #+REVEAL: split:t
 ***** A Comment on Mergetools
 
-      There are tools available helping you with these
-      conflicts. Personally, I only find them helpful in a limited set
-      of problems, namely when the resolved situation is _either_ on
-      _or_ the other branch (in our example: The resolved version
-      should have been only one of the latin quotes). Therefore, I
-      tend to resolve conflicts like above by manually going through
-      these files.
+    - There are tools available helping you with these
+      conflicts.
 
-      Should you want to have a look, then
+      Personally, I only find them helpful in a limited set of
+      problems, namely when the resolved situation is _either_ on _or_
+      the other branch
+
+      (in our example: The resolved version should have been only one
+      of the latin quotes).
+
+      Therefore, I tend to resolve conflicts like above by manually
+      going through these files.
+
+    - Should you want to have a look, then
       #+begin_src shell-script
         git merge ...
         # Auto-merging ...
@@ -825,10 +850,10 @@
 #+REVEAL: split:t
 **** Trivial Merges / Rebases
 
-     The good news is, that the above conflict situations are not very
+   - The good news is, that the above conflict situations are not very
      common.
 
-     For example, if we are working on our /chapter2/, then
+   - For example, if we are working on our /chapter2/, then
      #+begin_src shell-script
        git checkout chapter2
        echo '\nChapter 1 contained plenty of Latin quotes. Now we want to focus on something else' >> content/chapter2.md
@@ -848,7 +873,7 @@
      #+end_src
 
 #+REVEAL: split:t
-     So we could go back to the ~main~ branch and take both chapters
+   - So we could go back to the ~main~ branch and take both chapters
      into it:
      #+begin_src shell-script
        git checkout main
@@ -858,7 +883,8 @@
        #  content/chapter1.md | 6 +++++-
        #  1 file changed, 5 insertions(+), 1 deletion(-)
      #+end_src
-     This merge was called /fast-forward/ because ~chapter1~ was a
+
+   - This merge was called /fast-forward/ because ~chapter1~ was a
      direct descendant of ~main~ and git could just move it there:
      #+begin_src shell-script
        git graph
@@ -870,7 +896,7 @@
      #+end_src
 
 #+REVEAL: split:t
-     We can now also include ~chapter2~. This is not a fsat-forward
+   - We can now also include ~chapter2~. This is not a fsat-forward
      and we will be asked for a commit message:
      #+begin_src shell-script
        git merge chapter2       # asks for a commit message, we use the provided default
@@ -880,13 +906,13 @@
        #  create mode 100644 content/chapter2.md
      #+end_src
 
-     For later reference, let us also set a new tag on this state:
+   - For later reference, let us also set a new tag on this state:
      #+begin_src shell-script
        git tag -a -m 'Merge contents of chapter 1 and 2' v0.1.0
      #+end_src
 
 #+REVEAL: split:t
-     This leaves us with an even more non-linear history:
+   - This leaves us with an even more non-linear history:
      #+begin_src shell-script
        git graph
        # *   e212d4f - (55 seconds ago) Merge branch 'chapter2' into main (HEAD -> main, tag: v0.1.0)
@@ -908,36 +934,40 @@
      #+end_src
 
 #+REVEAL: split:t
-     or in ~gitk --all~:
+   - or in ~gitk --all~:
 
      #+name: fig:gitk_branches_after_merges_all
      #+caption: A successful no-conflict merge shown in GUI of ~gitk --all~.
      [[file:figures/gitk_example_040_merge_no_conflicts.png]]
 
-     Note how this version ~v0.1.0~ came about without any need to
+   - Note how this version ~v0.1.0~ came about without any need to
      resolve conflicts.
 
 ** Rebase Branches
 
-   As mentioned above, there is an alternative way of getting
-   information from separate branches together. While ~merge~ keeps
-   the two branches as they are and tries to bundle them together at
-   the top, ~rebase~ cuts off the second branch and places it on top
-   of the other one.
+ - As mentioned above, there is an alternative way of getting
+   information from separate branches together.
 
-   To see the difference, let's go back to our ~chapter1~ and
+ - While ~merge~ keeps the two branches as they are and tries to
+   bundle them together at the top, ~rebase~ cuts off the second
+   branch and places it on top of the other one.
+
+ - To see the difference, let's go back to our ~chapter1~ and
    ~chapter1_alternative~ examples. Note that branches are just names,
-   think of them like variables. We can move them around without
-   actually changing the underlying history of the commited work:
+   think of them like variables.
+
+ - We can move them around without actually changing the underlying
+   history of the commited work:
    #+begin_src shell-script
      git branch rebase_example_chapter1 fd6aadd
      git branch rebase_example_chapter1_alternative 5521dc4
    #+end_src
-   This creates two new branches positioned at exactly the two points
+
+ - This creates two new branches positioned at exactly the two points
    at which we did the above ~git merge~.
 
 #+REVEAL: split:t
-   We can display only the relevant bits with
+ - We can display only the relevant bits with
    - ~gitk rebase_example_chapter1 rebase_example_chapter1_alternative~.
 
    #+name: fig:gitk_new_branches_before_rebase
@@ -946,7 +976,7 @@
 
 #+REVEAL: split:t
 
-   Instead of the above ~git merge chapter1_alternative~, which would
+ - Instead of the above ~git merge chapter1_alternative~, which would
    bundle ~chapter1_alternative~ back into ~chapter1~, we detach
    ~chapter1_alternative~ from its branching point and re-attach it at
    ~chapter1~:
@@ -975,13 +1005,13 @@
 
 #+REVEAL: split:t
 
-   Like above with merge, you can abort this if you don't feel
+ - Like above with merge, you can abort this if you don't feel
    confident enough to decide what the resolved state should be:
    #+begin_src shell-script
      git rebase --abort
    #+end_src
 
-   If, on the other hand, you want to go ahead, then we can see what
+ - If, on the other hand, you want to go ahead, then we can see what
    is going on just like before: ~git diff~
    #+begin_src diff
 diff --cc content/chapter1.md
@@ -1002,11 +1032,11 @@ index fc5a306,0736795..0000000
 ++>>>>>>> add phrase on how all glory of the world passes
    #+end_src
 
-   Note that the markers ~<<<<<<<~, ~|||||||~, ~=======~, and
+ - Note that the markers ~<<<<<<<~, ~|||||||~, ~=======~, and
    ~>>>>>>>~ are the same as above.
 
 #+REVEAL: split:t
-   Like above, we can simply edit the file and get both latin phrases
+ - Like above, we can simply edit the file and get both latin phrases
    into the file. Once we have removed all the markers, we can
    #+begin_src shell-script
      git add content/chapter1.md
@@ -1021,7 +1051,7 @@ index fc5a306,0736795..0000000
      #  modified:   content/chapter1.md
    #+end_src
 
-   As the message suggests, you then continue with
+ - As the message suggests, you then continue with
    #+begin_src shell-script
      git rebase --continue
      # Applying: add phrase on how all glory of the world passes
@@ -1035,7 +1065,7 @@ index fc5a306,0736795..0000000
    #+caption: Situation after successful rebase
    [[file:figures/gitk_example_060_after_rebase_example.png]]
 
-   Note how now the history is linear and we can simply
+ - Note how now the history is linear and we can simply
    #+begin_src shell-script
      git checkout rebase_example_chapter1
      # Switched to branch 'rebase_example_chapter1'
@@ -1045,14 +1075,19 @@ index fc5a306,0736795..0000000
    #+end_src
 
 #+REVEAL: split:t
-   The content of the files here is exactly the same as after a
+ - The content of the files here is exactly the same as after a
    ~merge~. But the underlying history is now linear instead of a
    diamond.
 
-   There is a price to pay for this nice linearity: First, ~rebases~
-   can be more difficult if they cover many commits as you might have
-   to resolve conflicts for each of them while reabsing. Second, the
-   rebased branch has different checksums after the rebase. This can
-   break workflows if the state has already been published.
+ - There is a price to pay for this nice linearity:
 
-   So it is a good idea to only rebase local work.
+   - First, ~rebases~ can be more difficult if they cover many commits
+     as you might have to resolve conflicts for each of them while
+     reabsing.
+
+   - Second, the rebased branch has different checksums after the
+     rebase.
+
+     This can break workflows if the state has already been published.
+
+   - So it is a good idea to only rebase local work.

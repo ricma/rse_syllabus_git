@@ -6,10 +6,34 @@
 #+OPTIONS: <:nil d:nil timestamp:t ^:nil tags:nil toc:nil num:nil
 #+STARTUP: fninline overview inlineimages
 
+#+SETUPFILE: "./reveal_config.org"
+
 * Examples for Using ~git~
 
   In order to keep the examples programming language agnostic, we will
   mimic writing a small text / collection of quotes.
+
+** COMMENT Technicalities for Exporting This Document
+
+   To export: ~C-e R R~ to export as reveal.js presentation.
+
+   From: [[https://stackoverflow.com/a/65428989/2959456]]
+   Drawback: No links between the files for navigation
+   #+begin_src emacs-lisp
+     (defun my-org-export-each-level-3-headline-to-html (&optional scope)
+       (interactive)
+       (org-map-entries
+        (lambda ()
+          (let* ((title (car (last (org-get-outline-path t))))
+                 (dir (file-name-directory buffer-file-name))
+                 (filename (concat dir title ".html")))
+            (org-narrow-to-subtree)
+            (org-html-export-as-html)
+            (write-file filename)
+            (kill-current-buffer)
+            (widen)))
+        "LEVEL=3" scope))
+   #+end_src
 
 ** Configuration and First Steps
 *** Preliminary: Setup Local Configuration

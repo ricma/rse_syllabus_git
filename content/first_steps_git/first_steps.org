@@ -7,11 +7,19 @@
 #+STARTUP: fninline overview inlineimages
 
 #+SETUPFILE: "./reveal_config.org"
+
 # Weird -- why do we have to repeat these here?
 # If they are not here, the style is not picked up correctly!
-#+html: <link rel="stylesheet" href="file:///usr/local/share/martin/reveal.js/plugin/highlight/solarized-light.css">
-#+html: <style type="text/css" media="screen"> .reveal pre code { max-height: 100%; font-size: 0.8em } </style>
 
+# Add highlight.js for the source code highlighting
+# See: [[https://highlightjs.org/static/demo/]]
+# The solarized version was taken from [[https://highlightjs.org]]
+
+# This is for the source highlight
+#+REVEAL_EXTRA_CSS: file:///usr/local/share/martin/reveal.js/plugin/highlight/styles/solarized-dark.css
+
+# allow for a bit more space on program listings
+#+html: <style type="text/css" media="screen"> .reveal pre code { max-height: 100%; font-size: 0.8em } </style>
 # This makes the inline code easier to read but messes with the color code in general
 # #+html: <style type="text/css" media="screen"> .reveal code { color: darkblue } </style>
 

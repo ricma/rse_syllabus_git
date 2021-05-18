@@ -7,6 +7,10 @@
 #+STARTUP: fninline overview inlineimages
 
 #+SETUPFILE: "./reveal_config.org"
+# Weird -- why do we have to repeat these here?
+# If they are not here, the style is not picked up correctly!
+#+html: <link rel="stylesheet" href="file:///usr/local/share/martin/reveal.js/plugin/highlight/solarized-light.css">
+#+html: <style type="text/css" media="screen"> .reveal pre code { max-height: 100%; font-size: 0.8em } </style>
 
 * Examples for Using ~git~
 

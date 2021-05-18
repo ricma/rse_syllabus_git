@@ -25,6 +25,11 @@
 ** COMMENT Technicalities for Exporting This Document
 
    To export: ~C-e R R~ to export as reveal.js presentation.
+   #+BEGIN_SRC emacs-lisp
+     (org-reveal-export-to-html)
+   #+END_SRC
+
+   Alternatively:
 
    From: [[https://stackoverflow.com/a/65428989/2959456]]
    Drawback: No links between the files for navigation
@@ -555,18 +560,19 @@
 
 ** Merging Conflicts
 
-   When working on projects, might lead to /conflicts/. This can happen if
-   - You work (alone or in teams) on separate branches to write / implement features
-   - You work alone on different computers all with their own local copy.
-     (E.g. one for your Laptop and one on the HPC / workstations)
-   - When you work collaboratively with colleagues on a project.
+*** When Merges Occur
+    When working on projects, might lead to /conflicts/. This can happen if
+    - You work (alone or in teams) on separate branches to write / implement features
+    - You work alone on different computers all with their own local copy.
+      (E.g. one for your Laptop and one on the HPC / workstations)
+    - When you work collaboratively with colleagues on a project.
 
-   In order to make you familiar with /conflicts/ we will mimic the
-   above cases locally so that you can follow the steps on a local
-   installation. But for simplicity, we start with the first case
-   using separate branches. While this seems a less likely to happen,
-   it is the easier setup to explain conflicts and how to resolve
-   them.
+    In order to make you familiar with /conflicts/ we will mimic the
+    above cases locally so that you can follow the steps on a local
+    installation. But for simplicity, we start with the first case
+    using separate branches. While this seems a less likely to happen,
+    it is the easier setup to explain conflicts and how to resolve
+    them.
 
 *** Conflicts Between Local Branches
 
@@ -611,6 +617,7 @@
     But this time, we want to get both versions together into a proper
     ~chapter1~. This can be done using /merges/ or /rebases/.
 
+#+REVEAL: split:t
 **** Merging Conflicts
 
      When working with others, this is usually preferred as it keeps
@@ -618,32 +625,38 @@
      being a bit simpler to do. The drawback is, that the resulting
      history of the repository is not linear.
 
-      In order to update ~chapter1~ with the alternative version, we
-      can do:
-      #+begin_src shell-script
-        git checkout chapter1
-        # Switched to branch 'chapter1'
-        git merge chapter1_alternative
-        # Auto-merging content/chapter1.md
-        # CONFLICT (content): Merge conflict in content/chapter1.md
-        # Automatic merge failed; fix conflicts and then commit the result.
-      #+end_src
-      This tells us, that /git/ was not able to find a good way of
-      combining the two versions. Simply put, it does not know what the
-      combined, true story should be. Possibilities are
+#+REVEAL: split:t
+     In order to update ~chapter1~ with the alternative version, we
+     can do:
+     #+begin_src shell-script
+       git checkout chapter1
+       # Switched to branch 'chapter1'
+       git merge chapter1_alternative
+       # Auto-merging content/chapter1.md
+       # CONFLICT (content): Merge conflict in content/chapter1.md
+       # Automatic merge failed; fix conflicts and then commit the result.
+     #+end_src
 
-      - We keep both but which should go first?
-      - Should one be removed? Which one?
-      - Should both be removed?
-      - Should something completely different go into the text?
+     This tells us, that /git/ was not able to find a good way of
+     combining the two versions. Simply put, it does not know what the
+     combined, true story should be.
 
-      These different possibilities emphasize one of the basic rules of version control:
-      #+begin_quote
-      No technical tool for version control removes the necessity of communication!
-      #+end_quote
-      In the end you will have to talk to your colleagues about which
-      of the solutions is the one you want!
+#+REVEAL: split:t
+     Possibilities are
 
+     - We keep both but which should go first?
+     - Should one be removed? Which one?
+     - Should both be removed?
+     - Should something completely different go into the text?
+
+     These different possibilities emphasize one of the basic rules of version control:
+     #+begin_quote
+     No technical tool for version control removes the necessity of communication!
+     #+end_quote
+     In the end you will have to talk to your colleagues about which
+     of the solutions is the one you want!
+
+#+REVEAL: split:t
 ***** Aborting a Merge
 
       Maybe you don't feel confident to merge the changes
@@ -657,6 +670,7 @@
         # 11cf9a1 (main) continue work on chapter 1
       #+end_src
 
+#+REVEAL: split:t
 ***** Resolving Conflicts using Merges
 
       If we go back to the above conflict state, i.e. by calling ~git
@@ -678,6 +692,8 @@
       #+end_src
       and it tells us what to do, namely to /fix conflicts/ and then to
       /run/ ~git commit~.
+
+#+REVEAL: split:t
       Furthermore, ~git~ put some hints into the conflicting files:
       Run ~git diff~ to get:
       #+begin_src diff
@@ -702,6 +718,7 @@
 
       Let us go through these in a few steps.
 
+#+REVEAL: split:t
       - Merged Common Ancestors :: The lines between ~|||||||~ and
         ~=======~ are where both versions came from - in this case
         here, it is empty because none of the two versions deleted a
@@ -716,6 +733,7 @@
         ~chapter1_alternative~) we are trying to merge in, sometimes
         called /theirs/.
 
+#+REVEAL: split:t
       To resolve the conflict, we have to edit the file and remove
       these markers. Let us assume, we are happy with the content
 
@@ -751,6 +769,7 @@
         git commit     # opens an editor with a default commit message
       #+end_src
 
+#+REVEAL: split:t
       This merges the two branches and leaves us with the following history:
       #+begin_src shell-script
         git graph
@@ -765,6 +784,7 @@
 
       Note how the history now makes a loop and is therefore not linear anymore.
 
+#+REVEAL: split:t
       We can also have a look at this history using ~gitk --all~:
 
       #+name: fig:gitk_branches_after_merge
@@ -780,6 +800,7 @@
         # Deleted branch chapter1_alternative (was 5521dc4).
       #+end_src
 
+#+REVEAL: split:t
 ***** A Comment on Mergetools
 
       There are tools available helping you with these
@@ -801,6 +822,7 @@
       The corresponding tool will pop up and allow you to choose
       between A and B.
 
+#+REVEAL: split:t
 **** Trivial Merges / Rebases
 
      The good news is, that the above conflict situations are not very
@@ -825,6 +847,7 @@
        # * 2218517 - (2 weeks ago) add gitignore file
      #+end_src
 
+#+REVEAL: split:t
      So we could go back to the ~main~ branch and take both chapters
      into it:
      #+begin_src shell-script
@@ -846,6 +869,7 @@
        # | | * 5521dc4 - (57 minutes ago) add phrase on how all glory of the world passes
      #+end_src
 
+#+REVEAL: split:t
      We can now also include ~chapter2~. This is not a fsat-forward
      and we will be asked for a commit message:
      #+begin_src shell-script
@@ -861,6 +885,7 @@
        git tag -a -m 'Merge contents of chapter 1 and 2' v0.1.0
      #+end_src
 
+#+REVEAL: split:t
      This leaves us with an even more non-linear history:
      #+begin_src shell-script
        git graph
@@ -881,6 +906,8 @@
        # * 51fe4ad - (2 weeks ago) add stub for chapter 1
        # * db30019 - (2 weeks ago) initial commit, add README.md
      #+end_src
+
+#+REVEAL: split:t
      or in ~gitk --all~:
 
      #+name: fig:gitk_branches_after_merges_all
@@ -946,6 +973,8 @@
      # To abort and get back to the state before "git rebase", run "git rebase --abort".
    #+end_src
 
+#+REVEAL: split:t
+
    Like above with merge, you can abort this if you don't feel
    confident enough to decide what the resolved state should be:
    #+begin_src shell-script
@@ -976,6 +1005,7 @@ index fc5a306,0736795..0000000
    Note that the markers ~<<<<<<<~, ~|||||||~, ~=======~, and
    ~>>>>>>>~ are the same as above.
 
+#+REVEAL: split:t
    Like above, we can simply edit the file and get both latin phrases
    into the file. Once we have removed all the markers, we can
    #+begin_src shell-script
@@ -1000,6 +1030,7 @@ index fc5a306,0736795..0000000
      gitk rebase_example_chapter1 rebase_example_chapter1_alternative
    #+end_src
 
+#+REVEAL: split:t
    #+name: fig:gitk_new_branches_after_rebase
    #+caption: Situation after successful rebase
    [[file:figures/gitk_example_060_after_rebase_example.png]]
@@ -1013,6 +1044,7 @@ index fc5a306,0736795..0000000
      # Fast-forwarded rebase_example_chapter1 to rebase_example_chapter1_alternative.
    #+end_src
 
+#+REVEAL: split:t
    The content of the files here is exactly the same as after a
    ~merge~. But the underlying history is now linear instead of a
    diamond.

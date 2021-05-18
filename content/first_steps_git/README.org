@@ -1,4 +1,4 @@
 This folder contains notes and examples for the first steps on how to
 use git.
 
-See the file [[first_steps.org]].
+See the file [[file:first_steps.org][first_steps.org]].

@@ -14,7 +14,7 @@
 ** Configuration and First Steps
 *** Preliminary: Setup Local Configuration
 
-    Either edit [[file:${HOME}/.gitconfig]] to at least contain
+    Either edit =~/.gitconfig= to at least contain
     #+begin_src conf
       [user]
               name = Martin Richter

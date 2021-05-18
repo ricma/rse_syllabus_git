@@ -12,10 +12,15 @@
 #+html: <link rel="stylesheet" href="file:///usr/local/share/martin/reveal.js/plugin/highlight/solarized-light.css">
 #+html: <style type="text/css" media="screen"> .reveal pre code { max-height: 100%; font-size: 0.8em } </style>
 
+# This makes the inline code easier to read but messes with the color code in general
+# #+html: <style type="text/css" media="screen"> .reveal code { color: darkblue } </style>
+
 * Examples for Using ~git~
 
+  #+begin_quote
   In order to keep the examples programming language agnostic, we will
   mimic writing a small text / collection of quotes.
+  #+end_quote
 
 ** COMMENT Technicalities for Exporting This Document
 
@@ -42,26 +47,25 @@
 ** Configuration and First Steps
 *** Preliminary: Setup Local Configuration
 
-    Either edit =~/.gitconfig= to at least contain
-    #+begin_src conf
-      [user]
-              name = Martin Richter
-              email = martin.richter@nottingham.ac.uk
-    #+end_src
+    - Either edit =~/.gitconfig= to at least contain
+      #+begin_src conf
+        [user]
+                name = Martin Richter
+                email = martin.richter@nottingham.ac.uk
+      #+end_src
 
-    Or use ~git~ to create this configuration for you
+    - Or use ~git~ to create this configuration for you
+      #+begin_src shell-script
+        git config --global --add user.name "Martin Richter"
+        git config --global --add user.email "martin.richter@nottingham.ac.uk"
+      #+end_src
 
-    #+begin_src shell-script
-      git config --global --add user.name "Martin Richter"
-      git config --global --add user.email "martin.richter@nottingham.ac.uk"
-    #+end_src
-
-    While we are at it, we might set up a few more bits which can come
-    handy later:
-    #+begin_src conf
-      [color]
-              ui = true
-    #+end_src
+    - While we are at it, we might set up a few more bits which can come
+      handy later:
+      #+begin_src conf
+        [color]
+                ui = true
+      #+end_src
 
 *** Creating a Local Repository
 
@@ -74,6 +78,9 @@
       Repository contains drafts of letters
       EOF
     #+end_src
+
+    Somewhat important: Configuration relevant for this repository only
+    is in ~.git/config~.
 
     #+begin_src shell-script
       # create the repository
@@ -88,8 +95,16 @@
       git branch -M main
     #+end_src
 
+#+REVEAL: split:t
     Now what did this do? Let's have a look around!
     /Note git is nothing scary - just a folder!/
+
+    Besides our file ~README.md~ there is a folder ~.git~ with
+    various bits in it. All information will be stored here.
+    Usually no need to enter it.
+
+    #+REVEAL_HTML: <div style="width: 100%">
+    #+REVEAL_HTML: <div class="column" style="float:left; width: 50%">
     #+begin_src shell-script
       tree -aCI '*sample'
       # .
@@ -108,6 +123,13 @@
       # │   │   └── refs
       # │   │       └── heads
       # │   │           └── main
+      # │   │
+    #+end_src
+    #+REVEAL_HTML: </div>
+
+    #+REVEAL_HTML: <div class="column" style="float:right; width: 50%">
+    #+begin_src shell-script
+      # │   │
       # │   ├── objects
       # │   │   ├── 1f
       # │   │   │   └── e5b7bc904e286e2740d8b40e9cd0b18309c743
@@ -123,36 +145,29 @@
       # │       └── tags
       # └── README.md
     #+end_src
-    So besides our file ~README.md~ there is a folder ~.git~ with
-    various bits in it. All information will be stored here.
-    Usually no need to enter it.
-
-    Somewhat important: Configuration relevant for this repository only
-    is in ~.git/config~. Either edit directly or via
-    #+begin_src shell-script
-       git config --local --add user.name "Martin M. Richter"
-       git config --local --add user.email "martin.richter@nottingham.ac.uk"
-    #+end_src
+    #+REVEAL_HTML: </div>
+    #+REVEAL_HTML: </div>
 
 *** Finding out About the State of the Repository
 
-    What is the status of the repository like?
-    #+begin_src shell-script
-      git status
-    #+end_src
+    We will use these later:
 
-    What happened so far?
-    #+begin_src shell-script
-      git log
-    #+end_src
+    - What is the status of the repository like?
+      #+begin_src shell-script
+        git status
+      #+end_src
 
-    And to see last commit
-    #+begin_src shell-script
-      git show
-    #+end_src
+    - What happened so far?
+      #+begin_src shell-script
+        git log
+      #+end_src
 
-    We will use these later.
+    - And to see last commit
+      #+begin_src shell-script
+        git show
+      #+end_src
 
+#+REVEAL: split:t
 **** Customizations to Help Your Daily Use
 
      #+begin_src shell-script
@@ -205,7 +220,8 @@
          git add content/chapter1.md
        #+end_src
 
-    3. Check the staging area
+#+REVEAL: split:t
+    3. [@3] Check the staging area
        #+begin_src shell-script
          git status
          # On branch main
@@ -220,6 +236,7 @@
        One file is registered for the next commit, the other one is not.
 
     4. Commit the file to repository
+
        After all new files have been ~git add'ed~, commit. Add a descriptive message
        #+begin_src shell-script
          git commit -m 'add stub for chapter 1'
@@ -262,6 +279,7 @@
  +In dubio pro reo.
     #+end_src
 
+#+REVEAL: split:t
     To register them, use the ~git add~ / ~git commit~ again
     #+begin_src shell-script
       git add content/chapter1.md
@@ -298,17 +316,21 @@
     In order to get the most out of the history, try to make
     - Commits small and on one mental subject
     - Conform with a simple format rule:
-      1. First line not more than 50 characters
-      2. If more explanation needed, add an empty line and add more text
-         this time not more than 72 characters.
+      1. First line not more than _50_ characters
+      2. If more explanation needed, add an _empty line_ and add more text
+
+         this time not more than _72_ characters.
+
       This will keep all messages in a format that is nicely displayed
       by all tools.
 
+#+REVEAL: split:t
     Check by having a look at ~gitk~.
     #+name: fig:gitk_example_commit_msgs
     #+caption: Using ~gitk~ to display commit messages.
     [[file:figures/gitk_example_010_commit_msg.png]]
 
+#+REVEAL: split:t
 **** Amend the Last Commit
 
      Sometimes you realize that you missed something in the last commit
@@ -335,6 +357,7 @@
 
      Be aware: Do not do this if already published (pushed - see later)
 
+#+REVEAL: split:t
      This is again a good time to also check with ~gitk~.
 
      #+name: fig:gitk_example_commit_msgs
@@ -416,6 +439,7 @@
       # Quidquid latine dictum sit altum videtur.
     #+end_src
 
+#+REVEAL: split:t
     What happens if we start working here?
     #+begin_src shell-script
       git add content/chapter2.md
@@ -472,6 +496,7 @@
   In dubio pro reo.
     #+end_src
 
+#+REVEAL: split:t
     Let us add this to the repository ...
     #+begin_src shell-script
       git add content/chapter1.md
@@ -561,6 +586,7 @@
     resides on ~chapter1_alternative~ which is at the position of our
     /tag/.
 
+#+REVEAL: split:t
     Let us add some different content and commit this as well:
     #+begin_src shell-script
       echo '\nSic transit gloria mundi' >> content/chapter1.md
@@ -881,13 +907,17 @@
      git branch rebase_example_chapter1_alternative 5521dc4
    #+end_src
    This creates two new branches positioned at exactly the two points
-   at which we did the above ~git merge~. We can display only the
-   relevant bits with ~gitk rebase_example_chapter1
-   rebase_example_chapter1_alternative~.
+   at which we did the above ~git merge~.
+
+#+REVEAL: split:t
+   We can display only the relevant bits with
+   - ~gitk rebase_example_chapter1 rebase_example_chapter1_alternative~.
 
    #+name: fig:gitk_new_branches_before_rebase
    #+caption: Initial situation for a ~git rebase~
    [[file:figures/gitk_example_050_new_branches_for_rebase_example.png]]
+
+#+REVEAL: split:t
 
    Instead of the above ~git merge chapter1_alternative~, which would
    bundle ~chapter1_alternative~ back into ~chapter1~, we detach

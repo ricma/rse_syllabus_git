@@ -15,8 +15,13 @@
 # See: [[https://highlightjs.org/static/demo/]]
 # The solarized version was taken from [[https://highlightjs.org]]
 
-# This is for the source highlight
-#+REVEAL_EXTRA_CSS: file:///usr/local/share/martin/reveal.js/plugin/highlight/styles/solarized-dark.css
+# This is for the source highlight when different from the current emacs theme:
+# Note: These do not work well with shell-script blocks!
+# They choose random (!) languages
+# However, if we use `htmlize` then the ~diff~ blocks might have the wrong color!
+# Workaround: Set emacs to color theme solarized-light
+# #+REVEAL_PLUGINS: (highlight)
+# #+REVEAL_HIGHLIGHT_CSS: file:///usr/local/share/martin/reveal.js/plugin/highlight/styles/solarized-light.css
 
 # allow for a bit more space on program listings
 #+html: <style type="text/css" media="screen"> .reveal pre code { max-height: 100%; font-size: 0.8em } </style>

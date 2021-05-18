@@ -14,22 +14,9 @@
 #+REVEAL_HLEVEL: 3
 #+REVEAL_HEAD_PREAMBLE: <meta name="description" content="Pecolation Introduction">
 #+REVEAL_POSTAMBLE: <p> Created by Martin Richter. </p>
-#+REVEAL_PLUGINS: (highlight markdown notes)
+#+REVEAL_PLUGINS: (markdown notes)
 #+OPTIONS: reveal_single_file:nil     # set to `t` to include figures and js into html export for portability
 #+OPTIONS: timestamp:nil
-
-# Add highlight.js for the source code highlighting
-# See: [[https://highlightjs.org/static/demo/]]
-# The solarized version was taken from [[https://highlightjs.org]]
-
-# This is for the source highlight
-# See: [[file:/usr/local/share/martin/reveal.js/plugin/highlight/zenburn.css]]
-# # #+html: <link rel="stylesheet" href="file:///usr/local/share/martin/reveal.js/plugin/highlight/zenburn.css">
-# # #+html: <link rel="stylesheet" href="file:///usr/local/share/martin/reveal.js/plugin/highlight/solarized-dark.css">
-#+html: <link rel="stylesheet" href="file:///usr/local/share/martin/reveal.js/plugin/highlight/solarized-light.css">
-
-# allow for a bit more space on program listings
-#+html: <style type="text/css" media="screen"> .reveal pre code { max-height: 100%; font-size: 0.8em } </style>
 
 # To compile: C-c C-e R R
 # In the browser:

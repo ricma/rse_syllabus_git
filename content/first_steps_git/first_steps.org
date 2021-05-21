@@ -24,7 +24,7 @@
 # #+REVEAL_HIGHLIGHT_CSS: file:///usr/local/share/martin/reveal.js/plugin/highlight/styles/solarized-light.css
 
 # allow for a bit more space on program listings
-#+html: <style type="text/css" media="screen"> .reveal pre code { max-height: 100%; font-size: 0.8em } </style>
+#+html: <style type="text/css" media="screen"> .reveal pre code { max-height: 100%; font-size: 0.7em } </style>
 # This makes the inline code easier to read but messes with the color code in general
 # #+html: <style type="text/css" media="screen"> .reveal code { color: darkblue } </style>
 
@@ -78,13 +78,6 @@
         git config --global --add user.email "martin.richter@nottingham.ac.uk"
       #+end_src
 
-    - While we are at it, we might set up a few more bits which can come
-      handy later:
-      #+begin_src conf
-        [color]
-                ui = true
-      #+end_src
-
 *** Creating a Local Repository
 
   - Create some description of what we want to do
@@ -92,13 +85,12 @@
       cd ~/       # go to whereever you want to do your work
       mkdir letter_collection
       cd letter_collection
-      cat << EOF > README.md
-      Repository contains drafts of letters
-      EOF
-    #+end_src
 
-  - Somewhat important: Configuration relevant for this repository only
-    is in ~.git/config~.
+      # Create an empty file ...
+      touch README.md
+      # ... and add line of text to this file
+      echo "Repository contains drafts of letters" >> README.md
+    #+end_src
 
     #+begin_src shell-script
       # create the repository
@@ -112,61 +104,6 @@
       # If you want, you can rename the branch to something else
       git branch -M main
     #+end_src
-
-#+REVEAL: split:t
-  - Now what did this do? Let's have a look around!
-
-    /Note git is nothing scary - just a folder!/
-
-    Besides our file ~README.md~ there is a folder ~.git~ with
-    various bits in it.
-
-    All information will be stored here.  Usually no need to enter it.
-
-    #+REVEAL_HTML: <div style="width: 100%">
-    #+REVEAL_HTML: <div class="column" style="float:left; width: 50%">
-    #+begin_src shell-script
-      tree -aCI '*sample'
-      # .
-      # ├── .git
-      # │   ├── branches
-      # │   ├── COMMIT_EDITMSG
-      # │   ├── config
-      # │   ├── description
-      # │   ├── HEAD
-      # │   ├── hooks
-      # │   ├── index
-      # │   ├── info
-      # │   │   └── exclude
-      # │   ├── logs
-      # │   │   ├── HEAD
-      # │   │   └── refs
-      # │   │       └── heads
-      # │   │           └── main
-      # │   │
-    #+end_src
-    #+REVEAL_HTML: </div>
-
-    #+REVEAL_HTML: <div class="column" style="float:right; width: 50%">
-    #+begin_src shell-script
-      # │   │
-      # │   ├── objects
-      # │   │   ├── 1f
-      # │   │   │   └── e5b7bc904e286e2740d8b40e9cd0b18309c743
-      # │   │   ├── 20
-      # │   │   │   └── 273694fcbe9537e321143b6427f07e5f0aad68
-      # │   │   ├── 22
-      # │   │   │   └── 8933b64e66dbbca9adb5e8e17810381eca6c5b
-      # │   │   ├── info
-      # │   │   └── pack
-      # │   └── refs
-      # │       ├── heads
-      # │       │   └── main
-      # │       └── tags
-      # └── README.md
-    #+end_src
-    #+REVEAL_HTML: </div>
-    #+REVEAL_HTML: </div>
 
 *** Finding out About the State of the Repository
 
@@ -186,31 +123,6 @@
       #+begin_src shell-script
         git show
       #+end_src
-
-#+REVEAL: split:t
-**** Customizations to Help Your Daily Use
-
-     #+begin_src shell-script
-       git diff --color-words
-       # or
-       git show --color-words
-       # or
-       git log --graph --all --pretty=format:'%Cred%h%Creset - %Cgreen(%cr)%Creset %s%C(yellow)%d%Creset' --abbrev-commit --date=relative --decorate
-     #+end_src
-
-     Use ~.gitconfig~ to define an /alias/
-     #+begin_src conf
-      [alias]
-              wdiff = diff --color-words
-              wshow = show --color-words
-              graph = log --graph --all --pretty=format:'%Cred%h%Creset - %Cgreen(%cr)%Creset %s%C(yellow)%d%Creset' --abbrev-commit --date=relative --decorate
-
-      [init]
-              defaultBranch = main     # Introduced with git 2.28.0
-
-      [merge]
-              conflictstyle = diff3    # gives more context on conflicts
-     #+end_src
 
 *** Adding New Files
 
@@ -330,6 +242,89 @@ index b743fda..ef9b254 100644
       # * 51fe4ad - (12 minutes ago) add stub for chapter 1
       # * db30019 - (4 hours ago) initial commit, add README.md
     #+end_src
+
+#+REVEAL: split:t
+**** Customizations to Help Your Daily Use
+
+     #+begin_src shell-script
+       git diff --color-words
+       # or
+       git show --color-words
+       # or
+       git log --graph --all --pretty=format:'%Cred%h%Creset - %Cgreen(%cr)%Creset %s%C(yellow)%d%Creset' --abbrev-commit --date=relative --decorate
+     #+end_src
+
+     Use ~.gitconfig~ to define an /alias/
+     #+begin_src conf
+      [alias]
+              wdiff = diff --color-words
+              wshow = show --color-words
+              graph = log --graph --all --pretty=format:'%Cred%h%Creset - %Cgreen(%cr)%Creset %s%C(yellow)%d%Creset' --abbrev-commit --date=relative --decorate
+      [color]
+              ui = true
+      [merge]
+              conflictstyle = diff3    # gives more context on conflicts
+     #+end_src
+
+#+REVEAL: split:t
+**** Some More Advanced Comments
+
+     - Note: Configuration relevant for this repository only
+       is in ~.git/config~.
+
+     - Now what did this do? Let's have a look around!
+
+       /Note git is nothing scary - just a folder!/
+
+       Besides our file ~README.md~ there is a folder ~.git~ with
+       various bits in it.
+
+       All information will be stored here.  Usually no need to enter it.
+
+       #+REVEAL_HTML: <div style="width: 100%">
+       #+REVEAL_HTML: <div class="column" style="float:left; width: 50%">
+       #+begin_src shell-script
+         tree
+         # .
+         # ├── .git
+         # │   ├── branches
+         # │   ├── COMMIT_EDITMSG
+         # │   ├── config
+         # │   ├── description
+         # │   ├── HEAD
+         # │   ├── hooks
+         # │   ├── index
+         # │   ├── info
+         # │   │   └── exclude
+         # │   ├── logs
+         # │   │   ├── HEAD
+         # │   │   └── refs
+         # │   │       └── heads
+         # │   │           └── main
+         # │   │
+       #+end_src
+       #+REVEAL_HTML: </div>
+
+       #+REVEAL_HTML: <div class="column" style="float:right; width: 50%">
+       #+begin_src shell-script
+         # │   │
+         # │   ├── objects
+         # │   │   ├── 1f
+         # │   │   │   └── e5b7bc904e286e2740d8b40e9cd0b18309c743
+         # │   │   ├── 20
+         # │   │   │   └── 273694fcbe9537e321143b6427f07e5f0aad68
+         # │   │   ├── 22
+         # │   │   │   └── 8933b64e66dbbca9adb5e8e17810381eca6c5b
+         # │   │   ├── info
+         # │   │   └── pack
+         # │   └── refs
+         # │       ├── heads
+         # │       │   └── main
+         # │       └── tags
+         # └── README.md
+       #+end_src
+       #+REVEAL_HTML: </div>
+       #+REVEAL_HTML: </div>
 
 *** Committing and Commit Messages
 

@@ -1,5 +1,6 @@
 # -*- ispell-dictionary: "english" -*-
-#+AUTHOR: Martin Richter
+#+AUTHOR:
+#+CREATOR: Martin Richter
 #+TITLE: Examples for Using git
 #+EMAIL: martin.richter@nottingham.ac.uk
 
@@ -39,6 +40,8 @@
 
    To export: ~C-e R R~ to export as reveal.js presentation.
    #+BEGIN_SRC emacs-lisp
+     ;; Make sure the diff blocks have the correct background
+     (load-theme 'solarized-light nil nil)
      (org-reveal-export-to-html)
    #+END_SRC
 
@@ -101,9 +104,10 @@
       # [master (root-commit) 24bfc05] initial commit, add README.md
       #  1 file changed, 1 insertion(+)
       #  create mode 100644 README.md
-      # If you want, you can rename the branch to something else
-      git branch -M main
     #+end_src
+
+    #  # If you want, you can rename the branch to something else
+    #  git branch -M main
 
 *** Finding out About the State of the Repository
 
@@ -209,6 +213,7 @@ index b743fda..ef9b254 100644
 +Cognito ergo sum
 +
 +In dubio pro reo.
+
     #+end_src
 
 #+REVEAL: split:t
@@ -743,6 +748,7 @@ index b743fda..ef9b254 100644
  +
  + Sic transit gloria mundi
  ++>>>>>>> chapter1_alternative
+
       #+end_src
 
     - Let us go through these in a few steps:
@@ -1038,6 +1044,7 @@ index fc5a306,0736795..0000000
 +
 + Sic transit gloria mundi
 ++>>>>>>> add phrase on how all glory of the world passes
+
    #+end_src
 
  - Note that the markers ~<<<<<<<~, ~|||||||~, ~=======~, and

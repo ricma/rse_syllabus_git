@@ -126,10 +126,10 @@ Mix everything, let rest for 30 min in fridge, roll out and cut into shape.
 Bake for 10 - 12 minutes (200 degrees)
 #+end_quote
 Furthermore, create another file called =cinemon_stars.txt=:
-#+begin_quote
+#+begin_example
 Prepare dough like written in biscuits.txt but add 1/2 teaspoon of
 cinemon and 2 tsp of almond extract.
-#+end_quote
+#+end_example
 You can choose any text editor you want but please ensure you are
 storing the information as simple text files, not Word documents.
 

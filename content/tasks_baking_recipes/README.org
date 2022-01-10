@@ -1,3 +1,10 @@
+#+AUTHOR: Martin Richter
+#+TITLE: Self-directed Learning Tasks: Create a Recipe Book
+#+EMAIL: martin.richter@nottingham.ac.uk
+
+#+OPTIONS: <:nil d:nil timestamp:t ^:nil tags:nil toc:nil num:nil
+#+STARTUP: fninline overview inlineimages
+
 This folder contains step-by-step examples on how to use git.
 
 In order to keep in language agnostic, we will use baking recipes as

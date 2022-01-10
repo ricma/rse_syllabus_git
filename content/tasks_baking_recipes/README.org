@@ -2,7 +2,7 @@
 #+TITLE: Self-directed Learning Tasks: Create a Recipe Book
 #+EMAIL: martin.richter@nottingham.ac.uk
 
-#+OPTIONS: <:nil d:nil timestamp:t ^:nil tags:nil toc:nil num:nil
+#+OPTIONS: <:nil d:nil timestamp:t ^:nil tags:nil toc:nil num:nil \n:t
 #+STARTUP: fninline overview inlineimages
 
 This folder contains step-by-step examples on how to use git.

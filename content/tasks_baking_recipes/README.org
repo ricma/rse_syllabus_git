@@ -308,8 +308,8 @@ Let us now change content of our ~README.md~ to read
 
   ## Recipes
   So far we have:
-  1. Biscuits (see [biscuits.txt](here))
-  2. Cinemon Stars (see [cinemon_stars.txt](here))
+  1. Biscuits (see [here](biscuits.txt))
+  2. Cinemon Stars (see [here](cinemon_stars.txt))
 #+end_src
 to get a nicer overview of the recipes.
 
@@ -345,8 +345,8 @@ index 2a9e5c1..6f0768e 100644
 +
 +## Recipes
 +So far we have:
-+1. Biscuits (see [biscuits.txt](here))
-+2. Cinemon Stars (see [cinemon_stars.txt](here))
++1. Biscuits (see [here](biscuits.txt))
++2. Cinemon Stars (see [here](cinemon_stars.txt))
 #+end_src
 Note how the line which was already three (/A collection of recipes/)
 does not have a ~+~ in front while all the new lines are automatically
@@ -385,7 +385,7 @@ pinch of salt
 #+end_example
 and ~cinemon_stars.txt~ to
 #+begin_example
-Prepare dough like written in [biscuits.txt](the biscuits recipe) but add 1/2 teaspoon of
+Prepare dough like written in [the biscuits recipe](biscuits.txt) but add 1/2 teaspoon of
 cinemon and 2 tsp of almond extract.
 #+end_example
 
@@ -404,7 +404,7 @@ index 43998d3..bdc5db2 100644
 +++ b/cinemon_stars.txt
 @@ -1,2 +1,2 @@
 -Prepare dough like written in biscuits.txt but add 1/2 teaspoon of
-+Prepare dough like written in [biscuits.txt](the biscuits recipe) but add 1/2 teaspoon of
++Prepare dough like written in [the biscuits recipe](biscuits.txt) but add 1/2 teaspoon of
  cinemon and 2 tsp of almond extract.
 #+end_src
 Despite the fact that we only inserted a few characters, git says we

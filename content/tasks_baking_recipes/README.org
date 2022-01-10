@@ -62,6 +62,22 @@ If you start this, it will give you a command line like shown [[fig:git_bash_win
 #+caption: the above, you can do this instead.
 [[file:figures/task_00_020.png]]
 
+In order to be independent from specific UIs or IDEs, we will mainly
+focus on the command line here. Usually, the options in UIs and IDEs
+are names very similar to the options here.
+
+For computers at the University of Nottingham you can either use the
+above portable version of ~git~ or see here:
+[[https://workspace.nottingham.ac.uk/display/Software/Git+for+Windows]]
+
+NB: For Computer Science it is available on the remote desktops:
+https://rdweb.wvd.microsoft.com/arm/webclient
+
+For a list of possible UIs for git, see:
+[[https://git-scm.com/download/gui/windows]]
+
+(I personally use [[https://magit.vc]] (runs inside [[https://emacs.org]]).)
+
 * Tasks
 
 ** SDL 01 - Creating a Repository and Adding Content
@@ -73,15 +89,6 @@ This self-directed learning task will show you
 *** Create a New Repository
 First we need to create a new repository. It will start out as empty
 and we will add a first file.
-**** TODO Using Windows
-*Add screenshots here*
-
-    [[https://workspace.nottingham.ac.uk/display/Software/Git+for+Windows]]
-    NB: Available here only for Computer Science:
-    https://rdweb.wvd.microsoft.com/arm/webclient
-
-    Possible software: [[https://git-scm.com/download/gui/windows]]
-    (I use [[https://magit.vc]] (runs inside [[https://emacs.org]]).)
 
 **** Using the Command Line
 #+begin_src shell-script
@@ -127,7 +134,6 @@ cinemon and 2 tsp of almond extract.
 You can choose any text editor you want but please ensure you are
 storing the information as simple text files, not Word documents.
 
-***** TODO Using Windows
 ***** Using the Command Line
 Once the above file exists and are placed inside our ~recipe_book~
 folder, we can have a look at the folders content:
@@ -167,8 +173,6 @@ that we are going to add these files to the repository soon.
 The /staging-area/ might seem unnecessary at the beginning. But it will help
 us later when we only want to work on a subset of changes rather than
 all new things present in a repository.
-
-***** TODO Using Windows
 
 ***** Using the Command Line
 To add the files to the index, do:
@@ -211,9 +215,6 @@ Untracked files:
 #+end_quote
 
 **** Commit the New File
-
-***** TODO Using Windows
-
 ***** Using the Command Line
 If we now commit what is in our staging area by calling
 #+begin_src shell-script

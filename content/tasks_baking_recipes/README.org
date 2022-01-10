@@ -26,7 +26,7 @@ We will view the material presented here from three angles:
 - c) :: What are some of the technical details behind the scenes?
 
 You can mainly focus on point *b)* if you prefer. Some of you will find
-*a)* and *c)* helpful to understand what is going on - everyones style of
+*a)* and *c)* helpful to understand what is going on - everyone's style of
 learning is different!
 
 ** Learning Outcomes
@@ -37,7 +37,182 @@ By the end of these tasks, you will be able to
 3. Be able to look at the history of a repository
 4. ...
 
-* TODO Tasks
+* Tasks
+** SDL 01 - Creating a Repository and Adding Content
+This self-directed learning task will show you
+- how to create a new, empty repository (~git init~)
+- how to add files to it (~git add~ and ~git commit~)
+- how to see how the repository is growing as we go along (~git status~, ~git log~, ~git show~)
+
+*** Create a New Repository
+First we need to create a new repository. It will start out as empty
+and we will add a first file.
+**** TODO Using Windows
+*Add screenshots here*
+
+    [[https://workspace.nottingham.ac.uk/display/Software/Git+for+Windows]]
+    NB: Available here only for Computer Science:
+    https://rdweb.wvd.microsoft.com/arm/webclient
+
+**** Using the Command Line
+#+begin_src shell-script
+  cd ~/                   # Go to your home directory
+  mkdir recipe_book       # create a folder named "recipe_book"
+  git init recipe_book    # create an empty git repository
+  cd recipe_book
+                          # set name and email if we don't want to
+                          # use global default (optional)
+  git config --local user.name "Martin Richter"
+  git config --local user.email "martin.richter@nottingham.ac.uk"
+  # create a README file (good practice!)
+  echo "A collection of recipes" > README.md
+  # and add it to the index (= mark it for being saved in the repo)
+  git add README.md
+  # register the marked changes in the repository
+  git commit -m 'initial commit for recipes'
+#+end_src
+
+**** Your Task
+Repeat the above steps and create our own repository with an initial
+commit. Feel free to change the names of the repository, the content
+of the ~README.md~, and, of course, the name and email.
+
+Keep the name of the ~README.md~ file though - github will later use
+the format of this file to display its content nicely.
+
+*** Add Some More Files
+In order to see the basic operations, let us add files to the repository.
+**** Create some Files
+Create a simple text file called =biscuits.txt= with the following content:
+#+begin_quote
+Ingredients: 250g flour, 125g margarine, 60g sugar, 3tsp vanilla extract, pinch of salt, 1 egg.
+
+Mix everything, let rest for 30 min in fridge, roll out and cut into shape.
+Bake for 10 - 12 minutes (200 degrees)
+#+end_quote
+Furthermore, create another file called =cinemon_stars.txt=:
+#+begin_quote
+Prepare dough like written in biscuits.txt but add 1/2 teaspoon of
+cinemon and 2 tsp of almond extract.
+#+end_quote
+You can choose any text editor you want but please ensure you are
+storing the information as simple text files, not Word documents.
+
+***** TODO Using Windows
+***** Using the Command Line
+Once the above file exists and are placed inside our ~recipe_book~
+folder, we can have a look at the folders content:
+#+begin_src shell-script
+git status
+#+end_src
+This will tell you:
+#+begin_quote
+On branch master
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        biscuits.txt
+        cinemon_stars.txt
+
+nothing added to commit but untracked files present (use "git add" to track)
+#+end_quote
+This tells you that there is a file called ~biscuits.txt~ but git does
+not yet care about it (it is /untracked/).
+
+If you can also use ~gitk~ (for example) to see the repository status:
+#+begin_src shell-script
+  cd ~/recipe_book    # go into our repository (if not yet there)
+  gitk                # open `gitk` here
+#+end_src
+[[file:figures/task_02_010.png]]
+
+You will see that your ~biscuits.txt~ is not there - again, due to it
+being untracked.
+
+**** Add Files to the Index
+
+Just like in [[*Create a New Repository][Create a New Repository]] above, we need to add the files
+to the /index/ or /staging-area/. This makes git aware of the fact
+that we are going to add these files to the repository soon.
+
+***** Technical Background
+The /staging-area/ might seem unnecessary at the beginning. But it will help
+us later when we only want to work on a subset of changes rather than
+all new things present in a repository.
+
+***** TODO Using Windows
+
+***** Using the Command Line
+To add the files to the index, do:
+#+begin_src shell-script
+git add biscuits.txt
+#+end_src
+Before you proceed with the second file: Have a look at the output of
+~git status~ now! Then continue:
+#+begin_src shell-script
+git add cinemon_stars.txt
+#+end_src
+Now the status of the repository looks like this:
+#+begin_src shell-script
+  git status
+#+end_src
+#+begin_quote
+On branch master
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        new file:   biscuits.txt
+        new file:   cinemon_stars.txt
+#+end_quote
+
+Note the above hint about the ~git restore~ -- apparently we can take
+elements out of the index as well! Let's try!
+#+begin_src shell-script
+  git restore --staged biscuits.txt
+  git status
+#+end_src
+and we get:
+#+begin_quote
+On branch master
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        new file:   cinemon_stars.txt
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        biscuits.txt
+#+end_quote
+
+**** Commit the New File
+
+***** TODO Using Windows
+
+***** Using the Command Line
+If we now commit what is in our staging area by calling
+#+begin_src shell-script
+  git commit --message 'add a cinemon star recipe'
+#+end_src
+we get this ~git status~:
+#+begin_quote
+On branch master
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        biscuits.txt
+
+nothing added to commit but untracked files present (use "git add" to track)
+#+end_quote
+
+Note how we specified a message explaining what we did using
+~--message '...'~.  This is the same as specifying ~-m
+'...'~. Alternatively, you can leave it away. Then an editor will open
+and ask you for a commit message.
+
+Let us continue and add all remaining files: ~git add biscuits.txt~ and then
+#+begin_src shell-script
+git commit -m 'add biscuit recipe'
+#+end_src
+
+What does ~git status~ tell us now? For comparison, this is how the
+~gitk~ window would look like:
+[[file:figures/task_03_010.png]]
 
 
 # Local Variables:
@@ -46,3 +221,21 @@ By the end of these tasks, you will be able to
 # eval: (flyspell-mode t)
 # eval: (flyspell-buffer)
 # End:
+
+**** Your Task
+Repeat the above steps adding the two files to the repository. Feel
+free to add more files to it as well.
+
+What happens if you try to add a Word document? At this point, not
+much. It would be added just like the other files. However, we would
+get into trouble later, see [[*Changing Existing Files][Changing Existing Files]]
+
+*** Changing existing files
+This sub-task will tell you why it is important to use simple text
+files and how a version control system can help you keep track of
+changes.
+
+*** Examining what we have done so far
+This sub-task will tell you how to examine what has happened to a
+repository over time. It will also show you how to examine specific
+commits in more detail.

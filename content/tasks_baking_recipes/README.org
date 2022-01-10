@@ -29,7 +29,7 @@ You can mainly focus on point *b)* if you prefer. Some of you will find
 *a)* and *c)* helpful to understand what is going on - everyone's style of
 learning is different!
 
-** Learning Outcomes
+** Learning Outcomes                                                    :LOs:
 
 By the end of these tasks, you will be able to
 1. Know how to put files under version control
@@ -84,13 +84,12 @@ For a list of possible UIs for git, see:
 This self-directed learning task will show you
 - how to create a new, empty repository (~git init~)
 - how to add files to it (~git add~ and ~git commit~)
-- how to see how the repository is growing as we go along (~git status~, ~git log~, ~git show~)
 
-*** Create a New Repository
+*** SDL 01.01 - Create a New Repository
 First we need to create a new repository. It will start out as empty
 and we will add a first file.
 
-**** Using the Command Line
+**** Using the Command Line                                            :cmds:
 #+begin_src shell-script
   cd ~/                   # Go to your home directory
   mkdir recipe_book       # create a folder named "recipe_book"
@@ -108,15 +107,15 @@ and we will add a first file.
   git commit -m 'initial commit for recipes'
 #+end_src
 
-**** Your Task
+**** Your Task                                                         :task:
 Repeat the above steps and create our own repository with an initial
 commit. Feel free to change the names of the repository, the content
 of the ~README.md~, and, of course, the name and email.
 
-Keep the name of the ~README.md~ file though - github will later use
+Keep the name of the ~README.md~ file though - /github/ will later use
 the format of this file to display its content nicely.
 
-*** Add Some More Files
+*** SDL 01.02 - Add Some More Files
 In order to see the basic operations, let us add files to the repository.
 **** Create some Files
 Create a simple text file called =biscuits.txt= with the following content:
@@ -165,16 +164,16 @@ being untracked.
 
 **** Add Files to the Index
 
-Just like in [[*Create a New Repository][Create a New Repository]] above, we need to add the files
-to the /index/ or /staging-area/. This makes git aware of the fact
-that we are going to add these files to the repository soon.
+Just like in [[*SDL 01.01 - Create a New Repository][SDL 01.01 - Create a New Repository]] above, we need to add
+the files to the /index/ or /staging-area/. This makes git aware of
+the fact that we are going to add these files to the repository soon.
 
-***** Technical Background
+***** Technical Background                                       :background:
 The /staging-area/ might seem unnecessary at the beginning. But it will help
 us later when we only want to work on a subset of changes rather than
 all new things present in a repository.
 
-***** Using the Command Line
+***** Using the Command Line                                           :cmds:
 To add the files to the index, do:
 #+begin_src shell-script
 git add biscuits.txt
@@ -215,7 +214,7 @@ Untracked files:
 #+end_quote
 
 **** Commit the New File
-***** Using the Command Line
+***** Using the Command Line                                           :cmds:
 If we now commit what is in our staging area by calling
 #+begin_src shell-script
   git commit --message 'add a cinemon star recipe'
@@ -230,11 +229,6 @@ Untracked files:
 nothing added to commit but untracked files present (use "git add" to track)
 #+end_quote
 
-Note how we specified a message explaining what we did using
-~--message '...'~.  This is the same as specifying ~-m
-'...'~. Alternatively, you can leave it away. Then an editor will open
-and ask you for a commit message.
-
 Let us continue and add all remaining files: ~git add biscuits.txt~ and then
 #+begin_src shell-script
 git commit -m 'add biscuit recipe'
@@ -242,25 +236,43 @@ git commit -m 'add biscuit recipe'
 
 What does ~git status~ tell us now? For comparison, this is how the
 ~gitk~ window would look like:
+#+name: fig:gitk_example_after_three_commits
+#+caption: An overview of how our repository looks like after three commits.
 [[file:figures/task_03_010.png]]
 
+***** Advice: Use Meaningful commit messages                  :best_practice:
 
-# Local Variables:
-# mode: org
-# ispell-local-dictionary: "british"
-# eval: (flyspell-mode t)
-# eval: (flyspell-buffer)
-# End:
+Note how we specified a _message_ explaining what we did using
+~--message '...'~ or ~-m '...'~.  Alternatively, you can leave this
+command line parameter away. Then an editor will open and ask you for
+a _commit message_. Which editor that is depends on your
+configuration. In an IDE or GUI it would probably be included.
 
-**** Your Task
+The typical format of a commit message is
+1. 50 characters on a single line
+2. If you want to elaborate more, then leave one blank line and
+   continue with now up to 72 characters.
+
+While this sounds a bit strange, this has merit. Many tools will only
+show you the short first line when presenting an overview, for
+example (see for example [[fig:gitk_example_after_three_commits][above]]).
+
+**** Your Task                                                         :task:
 Repeat the above steps adding the two files to the repository. Feel
 free to add more files to it as well.
 
 What happens if you try to add a Word document? At this point, not
 much. It would be added just like the other files. However, we would
-get into trouble later, see [[*Changing Existing Files][Changing Existing Files]]
+get into trouble later, see [[*SDL 01.03 - Changing existing files][SDL 01.03 - Changing existing files]].
 
-*** Changing existing files
+** SDL 02 - Changing Files and Examining the History of Changes
+This self-directed learning task will show you
+- how to change files and register these changes in the repository
+  (~git add~, ~git commit~)
+- how to see how the repository is growing as we go along (~git
+  status~, ~git diff~, ~git log~, ~git show~)
+
+*** SDL 01.03 - Changing existing files
 This sub-task will tell you why it is important to use simple text
 files and how a version control system can help you keep track of
 changes.
@@ -269,3 +281,17 @@ changes.
 This sub-task will tell you how to examine what has happened to a
 repository over time. It will also show you how to examine specific
 commits in more detail.
+** SDL XX - Using Bisection to find Bugs
+
+This is deeply linked to the subjects of having good, automated tests
+for your code.
+
+Our recipe example does not really live up to this type of problems
+due to its simplicity.
+
+# Local Variables:
+# mode: org
+# ispell-local-dictionary: "british"
+# eval: (flyspell-mode t)
+# eval: (flyspell-buffer)
+# End:

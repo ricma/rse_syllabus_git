@@ -1,3 +1,7 @@
 * Notes on How to use GIT in Academia
 
   A short course with examples on how and why to use ~git~.
+
+* Example Tasks to Code-Along
+
+  See: [[file:content/tasks_baking_recipes/README.org::*Overview][content/tasks_baking_recipes/README.org]]

@@ -1,0 +1,41 @@
+This folder contains step-by-step examples on how to use git.
+
+In order to keep in language agnostic, we will use baking recipes as
+an example. We will create simple text files with recipes and then
+modify their content. To mimic more complicated situations, we will
+ask you to pretend to be a second person as well.
+
+* Overview
+
+We assume that you have already set-up ~git~ so that you are able to
+create new, empty repositories.
+
+The tasks will be all hands-on and you are encouraged to open your
+installation of git and type along.
+
+We will view the material presented here from three angles:
+- a) :: Why are we doing a special thing?
+- b) :: How are we doing it practically?
+- c) :: What are some of the technical details behind the scenes?
+
+You can mainly focus on point *b)* if you prefer. Some of you will find
+*a)* and *c)* helpful to understand what is going on - everyones style of
+learning is different!
+
+** Learning Outcomes
+
+By the end of these tasks, you will be able to
+1. Know how to put files under version control
+2. Know the difference between the /index/ and the /repository/
+3. Be able to look at the history of a repository
+4. ...
+
+* TODO Tasks
+
+
+# Local Variables:
+# mode: org
+# ispell-local-dictionary: "british"
+# eval: (flyspell-mode t)
+# eval: (flyspell-buffer)
+# End:

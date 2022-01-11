@@ -171,7 +171,7 @@ free to add more files to it as well.
 
 What happens if you try to add a Word document? At this point, not
 much. It would be added just like the other files. However, we would
-get into trouble later, see xo
+get into trouble later, see [[file:sdl_02.03.org::*Show what changed in a certain commit][later]].
 
 Repeat the above steps and change the files in the repository.
 Examine the repository using ~git status~ before and after adding

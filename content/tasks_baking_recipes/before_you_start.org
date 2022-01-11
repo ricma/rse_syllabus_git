@@ -37,3 +37,10 @@ For a list of possible UIs for git, see:
 [[https://git-scm.com/download/gui/windows]]
 
 (I personally use [[https://magit.vc]] (runs inside [[https://emacs.org]]).)
+
+# Local Variables:
+# mode: org
+# ispell-local-dictionary: "british"
+# eval: (flyspell-mode t)
+# eval: (flyspell-buffer)
+# End:

@@ -62,7 +62,17 @@ This self-directed learning task will show you
 2. [[file:sdl_02.02.org][SDL 02.02 - Examining what we have done so far]]
 3. [[file:sdl_02.03.org][SDL 02.03 - Examining single commits in more detail and Find Changes]]
 
-** SDL XX - Using Bisection to find Bugs
+** SDL 03 - Branching
+
+** SDL 04 - Merging Branches
+
+** SDL 05 - Merge Conflicts
+
+** SDL 06 - Rebase Branches
+
+** SDL 07 - Working with Remotes
+
+** SDL 08 - Using Bisection to find Bugs
 
 This is deeply linked to the subjects of having good, automated tests
 for your code.

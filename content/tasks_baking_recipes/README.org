@@ -48,9 +48,8 @@ This self-directed learning task will show you
 - how to create a new, empty repository (~git init~)
 - how to add files to it (~git add~ and ~git commit~)
 
-#+include: sdl_01.01.org
-
-#+include: sdl_01.02.org
+1. [[file:sdl_01.01.org][SDL 01.01 - Create a New Repository]]
+2. [[file:sdl_01.02.org][SDL 01.02 - Add Some More Files]]
 
 ** SDL 02 - Changing Files and Examining the History of Changes
 This self-directed learning task will show you
@@ -59,11 +58,9 @@ This self-directed learning task will show you
 - how to see how the repository is growing as we go along (~git
   status~, ~git diff~, ~git log~, ~git show~)
 
-#+include: sdl_02.01.org
-
-#+include: sdl_02.02.org
-
-#+include: sdl_03.02.org
+1. [[file:sdl_02.01.org][SDL 02.01 - Changing existing files]]
+2. [[file:sdl_02.02.org][SDL 02.02 - Examining what we have done so far]]
+3. [[file:sdl_02.03.org][SDL 02.03 Examining single commits in more detail and Find Changes]]
 
 ** SDL XX - Using Bisection to find Bugs
 

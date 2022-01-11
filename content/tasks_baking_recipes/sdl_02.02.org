@@ -1,4 +1,4 @@
-*** SDL 01.04 Examining what we have done so far
+*** SDL 02.02 Examining what we have done so far
 This sub-task will tell you how to examine what has happened to a
 repository over time. The new commands introduced here will be ~git
 log~ and an outlook in how to create custom commands for

@@ -1,0 +1,125 @@
+*** SDL 01.04 Examining what we have done so far
+This sub-task will tell you how to examine what has happened to a
+repository over time. The new commands introduced here will be ~git
+log~ and an outlook in how to create custom commands for
+certain tasks.
+
+**** Examine the Commit History                                        :cmds:
+We already saw one way of having a look at the history: By invoking
+~gitk~. When we we do this at this stage, we get a picture as shown in
+the screenshot [[fig:state_repo_gitk_changed_files][below]].
+
+#+name: fig:state_repo_gitk_changed_files
+#+caption: State of the repository after all files have been changed.
+[[file:figures/task_04_010.png]]
+
+There is a faster way to get an overview of the recent history using the command
+#+begin_src shell-script
+git log
+#+end_src
+which gives the below output (maybe even in color)
+#+begin_example
+git log
+commit 7d4a5110ac8f09a835ffb3395286f6e65a0ecf49 (HEAD -> master)
+Author: Martin Richter <martin.richter@nottingham.ac.uk>
+Date:   Mon Jan 10 19:00:42 2022 +0000
+
+    add link in cinemon star recipe
+
+commit bd180d6e425c57180453e5cf33303445110be978
+Author: Martin Richter <martin.richter@nottingham.ac.uk>
+Date:   Mon Jan 10 19:00:49 2022 +0000
+
+    restructure biscuit recipe
+#+end_example
+
+The command has plenty of options which you can read about using ~git
+help log~. One of them is
+#+begin_src shell-script
+  git log --oneline
+#+end_src
+#+begin_example
+7d4a511 (HEAD -> master) add link in cinemon star recipe
+bd180d6 restructure biscuit recipe
+ad7f952 add recipe overview to README.md
+957e0f7 add biscuit recipe
+7dae468 add a cinemon star recipe
+efa0975 initial commit for recipes
+#+end_example
+Note that this is the reason why the commit message should follow the
+format described in the [[*Advice: Use Meaningful commit messages][above best-practices]]: Here we only see the
+first line of the commit and it should describe what the commit did to
+the repository.
+
+Git log even allows you to specify a custom format like this:
+#+begin_src shell-script
+git log --graph --all --pretty=format:'%Cred%h%Creset - %Cgreen(%cr)%Creset %s%C(yellow)%d%Creset' --abbrev-commit --date=relative --decorate'
+#+end_src
+which sets the color as shown in [[fig:example_output_custom_log][the figure below]].
+#+name: fig:example_output_custom_log
+#+caption: Example output of customized ~git log~
+[[file:figures/task_03_030.png]]
+
+At this point it is worth mentioning that we can save abbreviations
+like this in our global git configuration. We can, for example, give
+the very long command above a shorter alias name ~graph~ (which does
+not exist):
+#+begin_src shell-script
+git config --global alias.graph "log --graph --all --pretty=format:'%Cred%h%Creset - %Cgreen(%cr)%Creset %s%C(yellow)%d%Creset' --abbrev-commit --date=relative --decorate"
+#+end_src
+Now, we get the same output as [[fig:example_output_custom_log][in the figure above]] by simply calling
+~git graph~.
+
+**** Technical Background                                        :background:
+The git configuration is stored in two places: One is for your user
+and applies to all every repository you work in. This /global/
+configuration is a simple text file usually stored in the users
+~$HOME~ directory.
+
+It is good practice to set your /name/ and /email/ in the global
+configuration, see [[fig:git_bash_windows_02][the screenshot above]]:
+#+begin_src shell-script
+  git config --global user.name "Martin Richter"
+  git config --global user.email "martin.richter@nottingham.ac.uk"
+#+end_src
+If we do this as well here, our global configuration file reads:
+#+begin_src shell-script
+cat ~/.gitconfig
+#+end_src
+#+begin_src conf
+[alias]
+        graph = log --graph --all --pretty=format:'%Cred%h%Creset - %Cgreen(%cr)%Creset %s%C(yellow)%d%Creset' --abbrev-commit --date=relative --decorate
+[user]
+        name = Martin Richter
+        email = martin.richter@nottingham.ac.uk
+#+end_src
+
+Besides this /global/ file, each repository has a local configuration
+as well - this allows you for example to use a different email address
+in a specific repository. This file is in ~.git/config~ relative to
+the base directory of the repository:
+#+begin_src shell-script
+  cd ~/recipe_book
+  cat .git/config
+#+end_src
+#+begin_src conf
+  [core]
+          repositoryformatversion = 0
+          filemode = true
+          bare = false
+          logallrefupdates = true
+  [branch "master"]
+          rebase = true
+  [user]
+          name = Martin Richter
+          email = martin.richter@nottingham.ac.uk
+#+end_src
+Note that this repeats the information about our user as we set those
+with the ~git --local ...~ above.
+
+**** Your Task                                                         :task:
+Examine your repository and the configuration you have.
+
+Try to add a custom command /wdiff/ which highlights changes in
+/words/ using the above ~git diff --color-words cinemon_stars.txt~
+command.

@@ -1,0 +1,176 @@
+*** SDL 01.03 - Changing existing files
+This sub-task will tell you why it is important to use simple text
+files and how a version control system can help you keep track of
+changes.
+
+Before we change the files which are in the repository, let us get an
+overview of which files _are_ in the repository:
+#+begin_src shell-script
+git ls-files
+#+end_src
+yields
+#+begin_example
+README.md
+biscuits.txt
+cinemon_stars.txt
+#+end_example
+Note that this is different from what we get when examining the folder:
+#+begin_src shell-script
+ls -a
+#+end_src
+shows also hidden entries (here these are entries which start with a dot: ~.~):
+#+begin_example
+.  ..  biscuits.txt  cinemon_stars.txt	.git  README.md
+#+end_example
+Note that there is a ~.git~. It is a directory which contains all
+information relevant to this git repository.
+
+**** Change the Files in the Repository
+
+Let us now change content of our ~README.md~ to read
+#+begin_src markdown
+  # Overview
+  A collection of recipes
+
+  ## Recipes
+  So far we have:
+  1. Biscuits (see [here](biscuits.txt))
+  2. Cinemon Stars (see [here](cinemon_stars.txt))
+#+end_src
+to get a nicer overview of the recipes.
+
+**** Examine the State of the Changed File                             :cmds:
+Once you have put this into the ~README.md~ file, we can call ~git
+status~ again. This time we get:
+#+begin_example
+On branch master
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   README.md
+
+no changes added to commit (use "git add" and/or "git commit -a")
+#+end_example
+
+Note that changing an existing file is shown as /modified/ in
+comparison to the above /new file/ when we were adding them.
+
+We can see in a bit more detail what we have changed by calling:
+#+begin_src shell-script
+git diff
+#+end_src
+and we get
+#+begin_src diff
+diff --git a/README.md b/README.md
+index 2a9e5c1..6f0768e 100644
+--- a/README.md
++++ b/README.md
+@@ -1 +1,7 @@
++# Overview
+ A collection of recipes
++
++## Recipes
++So far we have:
++1. Biscuits (see [here](biscuits.txt))
++2. Cinemon Stars (see [here](cinemon_stars.txt))
+#+end_src
+Note how the line which was already three (/A collection of recipes/)
+does not have a ~+~ in front while all the new lines are automatically
+recognised as new.
+
+Let us add these changes to the repository. We call
+#+begin_src shell-script
+  git add README.md
+  git commit -m 'add recipe overview to README.md'
+#+end_src
+
+**** Advice: Keep commits small and logically consistent      :best_practice:
+
+Keeping commits small will later help you understand better not only
+what you did but also what others did. It will greatly simplify should
+you be looking for a bug using ~git bisect~ [[*SDL XX - Using Bisection to find Bugs][later]].
+
+**** Change the remaining files
+
+Now let's also change the content of the two recipe files!
+Let us change ~biscuits.txt~ to
+#+begin_example
+# Ingredients
+250g flour
+125g margarine
+60g sugar
+3tsp vanilla extract
+pinch of salt
+1 egg.
+
+# Steps
+- Mix everything
+- let rest for 30 min in fridge
+- roll out and cut into shape
+- Bake for 10 - 12 minutes (200 degrees)
+#+end_example
+and ~cinemon_stars.txt~ to
+#+begin_example
+Prepare dough like written in [the biscuits recipe](biscuits.txt) but add 1/2 teaspoon of
+cinemon and 2 tsp of almond extract.
+#+end_example
+
+**** Committing the Changes to the repository                          :cmds:
+A ~git diff~ now shows us all the differences we made. If we
+explicitly state the filename, then it only shows the diff for this
+file:
+#+begin_src shell-script
+git diff cinemon_stars.txt
+#+end_src
+#+begin_src diff
+diff --git a/cinemon_stars.txt b/cinemon_stars.txt
+index 43998d3..bdc5db2 100644
+--- a/cinemon_stars.txt
++++ b/cinemon_stars.txt
+@@ -1,2 +1,2 @@
+-Prepare dough like written in biscuits.txt but add 1/2 teaspoon of
++Prepare dough like written in [the biscuits recipe](biscuits.txt) but add 1/2 teaspoon of
+ cinemon and 2 tsp of almond extract.
+#+end_src
+Despite the fact that we only inserted a few characters, git says we
+have removed a whole line ( starting with ~-~ ) and added a completely
+new one ( starting with ~+~ ).
+
+If necessary, you can also highlight the changes on a word level using
+~git diff --color-words cinemon_stars.txt~.
+
+If we do a ~git diff biscuits.txt~, then we get a lot of lines with
+~+~ and ~-~ because the content of the whole file changed. In cases
+like this we can also just show a statistic:
+#+begin_src shell-script
+  git diff --stat biscuits.txt
+#+end_src
+and we get:
+#+begin_example
+biscuits.txt | 15 ++++++++++++---
+1 file changed, 12 insertions(+), 3 deletions(-)
+#+end_example
+
+We can now add one file after the other -- this is where the /staging
+area/ comes in handy: We add the changes as separate commits:
+#+begin_src shell-script
+  git add cinemon_stars.txt
+  git commit -m 'restructure biscuit recipe'
+  git commit --all -m 'add link in cinemon star recipe'
+#+end_src
+
+Note: You can use ~--all~ in ~git commit~ to commit all remaining
+changed files.
+
+**** Your Task                                                         :task:
+Repeat the above steps adding the two files to the repository. Feel
+free to add more files to it as well.
+
+What happens if you try to add a Word document? At this point, not
+much. It would be added just like the other files. However, we would
+get into trouble later, see [[*SDL 01.03 - Changing existing files][SDL 01.03 - Changing existing files]].
+
+Repeat the above steps and change the files in the repository.
+Examine the repository using ~git status~ before and after adding
+changes to the staging area. And examine what you are about to commit
+with ~git diff~.

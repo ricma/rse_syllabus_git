@@ -1,0 +1,149 @@
+*** SDL 01.02 - Add Some More Files
+In order to see the basic operations, let us add files to the repository.
+**** Create some Files
+Create a simple text file called =biscuits.txt= with the following content:
+#+begin_example
+Ingredients: 250g flour, 125g margarine, 60g sugar, 3tsp vanilla extract, pinch of salt, 1 egg.
+
+Mix everything, let rest for 30 min in fridge, roll out and cut into shape.
+Bake for 10 - 12 minutes (200 degrees)
+#+end_example
+Furthermore, create another file called =cinemon_stars.txt=:
+#+begin_example
+Prepare dough like written in biscuits.txt but add 1/2 teaspoon of
+cinemon and 2 tsp of almond extract.
+#+end_example
+You can choose any text editor you want but please ensure you are
+storing the information as simple text files, not Word documents.
+
+***** Using the Command Line
+Once the above file exists and are placed inside our ~recipe_book~
+folder, we can have a look at the folders content:
+#+begin_src shell-script
+git status
+#+end_src
+This will tell you:
+#+begin_example
+On branch master
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        biscuits.txt
+        cinemon_stars.txt
+
+nothing added to commit but untracked files present (use "git add" to track)
+#+end_example
+This tells you that there is a file called ~biscuits.txt~ but git does
+not yet care about it (it is /untracked/).
+
+If you can also use ~gitk~ (for example) to see the repository status:
+#+begin_src shell-script
+  cd ~/recipe_book    # go into our repository (if not yet there)
+  gitk                # open `gitk` here
+#+end_src
+[[file:figures/task_02_010.png]]
+
+You will see that your ~biscuits.txt~ is not there - again, due to it
+being untracked.
+
+**** Add Files to the Index
+
+Just like in [[*SDL 01.01 - Create a New Repository][SDL 01.01 - Create a New Repository]] above, we need to add
+the files to the /index/ or /staging-area/. This makes git aware of
+the fact that we are going to add these files to the repository soon.
+
+***** Technical Background                                       :background:
+The /staging-area/ might seem unnecessary at the beginning. But it will help
+us later when we only want to work on a subset of changes rather than
+all new things present in a repository.
+
+***** Using the Command Line                                           :cmds:
+To add the files to the index, do:
+#+begin_src shell-script
+git add biscuits.txt
+#+end_src
+Before you proceed with the second file: Have a look at the output of
+~git status~ now! Then continue:
+#+begin_src shell-script
+git add cinemon_stars.txt
+#+end_src
+Now the status of the repository looks like this:
+#+begin_src shell-script
+  git status
+#+end_src
+#+begin_example
+On branch master
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        new file:   biscuits.txt
+        new file:   cinemon_stars.txt
+#+end_example
+
+Note the above hint about the ~git restore~ -- apparently we can take
+elements out of the index as well! Let's try!
+#+begin_src shell-script
+  git restore --staged biscuits.txt
+  git status
+#+end_src
+and we get:
+#+begin_example
+On branch master
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        new file:   cinemon_stars.txt
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        biscuits.txt
+#+end_example
+
+**** Commit the New File
+***** Using the Command Line                                           :cmds:
+If we now commit what is in our staging area by calling
+#+begin_src shell-script
+  git commit --message 'add a cinemon star recipe'
+#+end_src
+we get this ~git status~:
+#+begin_example
+On branch master
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        biscuits.txt
+
+nothing added to commit but untracked files present (use "git add" to track)
+#+end_example
+
+Let us continue and add all remaining files: ~git add biscuits.txt~ and then
+#+begin_src shell-script
+git commit -m 'add biscuit recipe'
+#+end_src
+
+What does ~git status~ tell us now? For comparison, this is how the
+~gitk~ window would look like:
+#+name: fig:gitk_example_after_three_commits
+#+caption: An overview of how our repository looks like after three commits.
+[[file:figures/task_03_010.png]]
+
+***** Advice: Use Meaningful commit messages                  :best_practice:
+
+Note how we specified a _message_ explaining what we did using
+~--message '...'~ or ~-m '...'~.  Alternatively, you can leave this
+command line parameter away. Then an editor will open and ask you for
+a _commit message_. Which editor that is depends on your
+configuration. In an IDE or GUI it would probably be included.
+
+The typical format of a commit message is
+1. 50 characters on a single line
+2. If you want to elaborate more, then leave one blank line and
+   continue with now up to 72 characters.
+
+While this sounds a bit strange, this has merit. Many tools will only
+show you the short first line when presenting an overview, for
+example (see for example [[fig:gitk_example_after_three_commits][above]]).
+
+**** Your Task                                                         :task:
+Repeat the above steps adding the two files to the repository. Feel
+free to add more files to it as well.
+
+What happens if you try to add a Word document? At this point, not
+much. It would be added just like the other files. However, we would
+get into trouble later, see [[*SDL 01.03 - Changing existing files][SDL 01.03 - Changing existing files]].

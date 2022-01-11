@@ -39,7 +39,7 @@ By the end of these tasks, you will be able to
 
 ** Before you start
 
-#+include: before_you_start.org
+   [[file:before_you_start.org][Please follow these steps]] to set up your configuration.
 
 * Tasks
 

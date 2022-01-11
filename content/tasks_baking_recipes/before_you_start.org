@@ -1,3 +1,4 @@
+* Before you start
 There are a few requirements. The most important one is, of course, having a ~git~ installation on your computer.
 
 You can get /git/ here: [[https://git-scm.com]].

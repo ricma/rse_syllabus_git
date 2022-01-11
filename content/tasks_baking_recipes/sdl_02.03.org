@@ -1,4 +1,4 @@
-* SDL 02.03 Examining single commits in more detail and Find Changes
+* SDL 02.03 - Examining single commits in more detail and Find Changes
 This sub-task will introduce ~git show~ to show what a certain commit
 changed. We will also introduce a way to search for certain changes
 throughout the whole history.

@@ -60,7 +60,7 @@ This self-directed learning task will show you
 
 1. [[file:sdl_02.01.org][SDL 02.01 - Changing existing files]]
 2. [[file:sdl_02.02.org][SDL 02.02 - Examining what we have done so far]]
-3. [[file:sdl_02.03.org][SDL 02.03 Examining single commits in more detail and Find Changes]]
+3. [[file:sdl_02.03.org][SDL 02.03 - Examining single commits in more detail and Find Changes]]
 
 ** SDL XX - Using Bisection to find Bugs
 

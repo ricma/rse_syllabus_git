@@ -1,6 +1,6 @@
-*** SDL 01.02 - Add Some More Files
+* SDL 01.02 - Add Some More Files
 In order to see the basic operations, let us add files to the repository.
-**** Create some Files
+** Create some Files
 Create a simple text file called =biscuits.txt= with the following content:
 #+begin_example
 Ingredients: 250g flour, 125g margarine, 60g sugar, 3tsp vanilla extract, pinch of salt, 1 egg.
@@ -16,7 +16,7 @@ cinemon and 2 tsp of almond extract.
 You can choose any text editor you want but please ensure you are
 storing the information as simple text files, not Word documents.
 
-***** Using the Command Line
+*** Using the Command Line
 Once the above file exists and are placed inside our ~recipe_book~
 folder, we can have a look at the folders content:
 #+begin_src shell-script
@@ -45,18 +45,18 @@ If you can also use ~gitk~ (for example) to see the repository status:
 You will see that your ~biscuits.txt~ is not there - again, due to it
 being untracked.
 
-**** Add Files to the Index
+** Add Files to the Index
 
-Just like in [[*SDL 01.01 - Create a New Repository][SDL 01.01 - Create a New Repository]] above, we need to add
+Just like in [[file:sdl_01.01.org::*SDL 01.01 - Create a New Repository][SDL 01.01 - Create a New Repository]] above, we need to add
 the files to the /index/ or /staging-area/. This makes git aware of
 the fact that we are going to add these files to the repository soon.
 
-***** Technical Background                                       :background:
+*** Technical Background                                         :background:
 The /staging-area/ might seem unnecessary at the beginning. But it will help
 us later when we only want to work on a subset of changes rather than
 all new things present in a repository.
 
-***** Using the Command Line                                           :cmds:
+*** Using the Command Line                                             :cmds:
 To add the files to the index, do:
 #+begin_src shell-script
 git add biscuits.txt
@@ -96,8 +96,8 @@ Untracked files:
         biscuits.txt
 #+end_example
 
-**** Commit the New File
-***** Using the Command Line                                           :cmds:
+** Commit the New File
+*** Using the Command Line                                             :cmds:
 If we now commit what is in our staging area by calling
 #+begin_src shell-script
   git commit --message 'add a cinemon star recipe'
@@ -123,7 +123,7 @@ What does ~git status~ tell us now? For comparison, this is how the
 #+caption: An overview of how our repository looks like after three commits.
 [[file:figures/task_03_010.png]]
 
-***** Advice: Use Meaningful commit messages                  :best_practice:
+*** Advice: Use Meaningful commit messages                    :best_practice:
 
 Note how we specified a _message_ explaining what we did using
 ~--message '...'~ or ~-m '...'~.  Alternatively, you can leave this
@@ -140,10 +140,10 @@ While this sounds a bit strange, this has merit. Many tools will only
 show you the short first line when presenting an overview, for
 example (see for example [[fig:gitk_example_after_three_commits][above]]).
 
-**** Your Task                                                         :task:
+** Your Task                                                           :task:
 Repeat the above steps adding the two files to the repository. Feel
 free to add more files to it as well.
 
 What happens if you try to add a Word document? At this point, not
 much. It would be added just like the other files. However, we would
-get into trouble later, see [[*SDL 01.03 - Changing existing files][SDL 01.03 - Changing existing files]].
+get into trouble [[file:sdl_02.03.org::*Show what changed in a certain commit][later when examining commits for their changes]].

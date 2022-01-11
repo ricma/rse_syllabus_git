@@ -1,9 +1,9 @@
-*** SDL 02.03 Examining single commits in more detail and Find Changes
+* SDL 02.03 Examining single commits in more detail and Find Changes
 This sub-task will introduce ~git show~ to show what a certain commit
 changed. We will also introduce a way to search for certain changes
 throughout the whole history.
 
-**** Show what changed in a certain commit
+** Show what changed in a certain commit
 In order to see what changed in a certain commit we could either
 invoke ~gitk~ and click on it or pick the somewhat cryptic number
 reported to us by ~git log~ and call. This number is called the /hash
@@ -41,7 +41,7 @@ ad7f~ to get the same output. A predecessor of a commit can be
 indicated by =git show ad7f~=, its predecessor with =git show ad7f~~=
 or =git show ad7f~2=.
 
-**** Finding Commits which introduced a certain Change
+** Finding Commits which introduced a certain Change
 When you work on a repository with others for a while you sometimes
 want to find a commit which either added or removed a certain
 change. Remember: the files in your folder are just the actual state
@@ -132,7 +132,7 @@ index 0000000..9beca6a
 +Bake for 10 - 12 minutes (200 degrees)
 #+end_src
 
-**** Your Task                                                         :task:
+** Your Task                                                           :task:
 Examine your repository. Have a look at the first and second
 commit. Also examine the most recent one (by either using its hash or
 by using the name ~HEAD~).

@@ -1,10 +1,10 @@
-*** SDL 02.02 Examining what we have done so far
+* SDL 02.02 Examining what we have done so far
 This sub-task will tell you how to examine what has happened to a
 repository over time. The new commands introduced here will be ~git
 log~ and an outlook in how to create custom commands for
 certain tasks.
 
-**** Examine the Commit History                                        :cmds:
+** Examine the Commit History                                          :cmds:
 We already saw one way of having a look at the history: By invoking
 ~gitk~. When we we do this at this stage, we get a picture as shown in
 the screenshot [[fig:state_repo_gitk_changed_files][below]].
@@ -47,7 +47,7 @@ ad7f952 add recipe overview to README.md
 efa0975 initial commit for recipes
 #+end_example
 Note that this is the reason why the commit message should follow the
-format described in the [[*Advice: Use Meaningful commit messages][above best-practices]]: Here we only see the
+format described in the [[file:sdl_01.02.org::*Advice: Use Meaningful commit messages][above best practices]]: Here we only see the
 first line of the commit and it should describe what the commit did to
 the repository.
 
@@ -70,14 +70,14 @@ git config --global alias.graph "log --graph --all --pretty=format:'%Cred%h%Cres
 Now, we get the same output as [[fig:example_output_custom_log][in the figure above]] by simply calling
 ~git graph~.
 
-**** Technical Background                                        :background:
+** Technical Background                                          :background:
 The git configuration is stored in two places: One is for your user
 and applies to all every repository you work in. This /global/
 configuration is a simple text file usually stored in the users
 ~$HOME~ directory.
 
 It is good practice to set your /name/ and /email/ in the global
-configuration, see [[fig:git_bash_windows_02][the screenshot above]]:
+configuration, see [[file:before_you_start.org::fig:git_bash_windows_02][the screenshot above]]:
 #+begin_src shell-script
   git config --global user.name "Martin Richter"
   git config --global user.email "martin.richter@nottingham.ac.uk"
@@ -117,7 +117,7 @@ the base directory of the repository:
 Note that this repeats the information about our user as we set those
 with the ~git --local ...~ above.
 
-**** Your Task                                                         :task:
+** Your Task                                                           :task:
 Examine your repository and the configuration you have.
 
 Try to add a custom command /wdiff/ which highlights changes in

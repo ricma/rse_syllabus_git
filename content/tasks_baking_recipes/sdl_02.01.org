@@ -1,4 +1,4 @@
-*** SDL 02.01 - Changing existing files
+* SDL 02.01 - Changing existing files
 This sub-task will tell you why it is important to use simple text
 files and how a version control system can help you keep track of
 changes.
@@ -25,7 +25,7 @@ shows also hidden entries (here these are entries which start with a dot: ~.~):
 Note that there is a ~.git~. It is a directory which contains all
 information relevant to this git repository.
 
-**** Change the Files in the Repository
+** Change the Files in the Repository
 
 Let us now change content of our ~README.md~ to read
 #+begin_src markdown
@@ -39,7 +39,7 @@ Let us now change content of our ~README.md~ to read
 #+end_src
 to get a nicer overview of the recipes.
 
-**** Examine the State of the Changed File                             :cmds:
+** Examine the State of the Changed File                               :cmds:
 Once you have put this into the ~README.md~ file, we can call ~git
 status~ again. This time we get:
 #+begin_example
@@ -84,13 +84,13 @@ Let us add these changes to the repository. We call
   git commit -m 'add recipe overview to README.md'
 #+end_src
 
-**** Advice: Keep commits small and logically consistent      :best_practice:
+** Advice: Keep commits small and logically consistent        :best_practice:
 
 Keeping commits small will later help you understand better not only
 what you did but also what others did. It will greatly simplify should
-you be looking for a bug using ~git bisect~ [[*SDL XX - Using Bisection to find Bugs][later]].
+you be looking for a bug using ~git bisect~ [[file:README.org::*SDL XX - Using Bisection to find Bugs][later]].
 
-**** Change the remaining files
+** Change the remaining files
 
 Now let's also change the content of the two recipe files!
 Let us change ~biscuits.txt~ to
@@ -115,7 +115,7 @@ Prepare dough like written in [the biscuits recipe](biscuits.txt) but add 1/2 te
 cinemon and 2 tsp of almond extract.
 #+end_example
 
-**** Committing the Changes to the repository                          :cmds:
+** Committing the Changes to the repository                            :cmds:
 A ~git diff~ now shows us all the differences we made. If we
 explicitly state the filename, then it only shows the diff for this
 file:
@@ -162,13 +162,13 @@ area/ comes in handy: We add the changes as separate commits:
 Note: You can use ~--all~ in ~git commit~ to commit all remaining
 changed files.
 
-**** Your Task                                                         :task:
+** Your Task                                                           :task:
 Repeat the above steps adding the two files to the repository. Feel
 free to add more files to it as well.
 
 What happens if you try to add a Word document? At this point, not
 much. It would be added just like the other files. However, we would
-get into trouble later, see [[*SDL 01.03 - Changing existing files][SDL 01.03 - Changing existing files]].
+get into trouble later, see xo
 
 Repeat the above steps and change the files in the repository.
 Examine the repository using ~git status~ before and after adding

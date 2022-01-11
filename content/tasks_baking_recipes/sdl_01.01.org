@@ -1,8 +1,8 @@
-*** SDL 01.01 - Create a New Repository
+* SDL 01.01 - Create a New Repository
 First we need to create a new repository. It will start out as empty
 and we will add a first file.
 
-**** Using the Command Line                                            :cmds:
+** Using the Command Line                                              :cmds:
 #+begin_src shell-script
   cd ~/                   # Go to your home directory
   mkdir recipe_book       # create a folder named "recipe_book"
@@ -20,7 +20,7 @@ and we will add a first file.
   git commit -m 'initial commit for recipes'
 #+end_src
 
-**** Your Task                                                         :task:
+** Your Task                                                           :task:
 Repeat the above steps and create our own repository with an initial
 commit. Feel free to change the names of the repository, the content
 of the ~README.md~, and, of course, the name and email.

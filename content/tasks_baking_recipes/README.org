@@ -3,7 +3,7 @@
 #+EMAIL: martin.richter@nottingham.ac.uk
 
 #+OPTIONS: <:nil d:nil timestamp:t ^:nil tags:nil toc:nil num:nil \n:t
-#+STARTUP: fninline overview inlineimages
+#+STARTUP: fninline inlineimages showall
 
 This folder contains step-by-step examples on how to use git.
 

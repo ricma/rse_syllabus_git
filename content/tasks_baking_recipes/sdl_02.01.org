@@ -1,3 +1,6 @@
+#+OPTIONS: <:nil d:nil timestamp:t ^:nil tags:nil toc:nil num:nil \n:t
+#+STARTUP: fninline inlineimages showall
+
 * SDL 02.01 - Changing existing files
 This sub-task will tell you why it is important to use simple text
 files and how a version control system can help you keep track of

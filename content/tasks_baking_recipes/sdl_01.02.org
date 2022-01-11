@@ -1,3 +1,6 @@
+#+OPTIONS: <:nil d:nil timestamp:t ^:nil tags:nil toc:nil num:nil \n:t
+#+STARTUP: fninline inlineimages showall
+
 * SDL 01.02 - Add Some More Files
 In order to see the basic operations, let us add files to the repository.
 ** Create some Files

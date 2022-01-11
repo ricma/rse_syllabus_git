@@ -1,3 +1,6 @@
+#+OPTIONS: <:nil d:nil timestamp:t ^:nil tags:nil toc:nil num:nil \n:t
+#+STARTUP: fninline inlineimages showall
+
 * SDL 02.03 - Examining single commits in more detail and Find Changes
 This sub-task will introduce ~git show~ to show what a certain commit
 changed. We will also introduce a way to search for certain changes

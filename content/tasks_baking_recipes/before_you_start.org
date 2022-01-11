@@ -1,3 +1,6 @@
+#+OPTIONS: <:nil d:nil timestamp:t ^:nil tags:nil toc:nil num:nil \n:t
+#+STARTUP: fninline inlineimages showall
+
 * Before you start
 There are a few requirements. The most important one is, of course, having a ~git~ installation on your computer.
 

@@ -123,3 +123,10 @@ Examine your repository and the configuration you have.
 Try to add a custom command /wdiff/ which highlights changes in
 /words/ using the above ~git diff --color-words cinemon_stars.txt~
 command.
+
+# Local Variables:
+# mode: org
+# ispell-local-dictionary: "british"
+# eval: (flyspell-mode t)
+# eval: (flyspell-buffer)
+# End:

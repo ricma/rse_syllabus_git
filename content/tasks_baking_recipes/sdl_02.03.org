@@ -139,3 +139,10 @@ by using the name ~HEAD~).
 
 Also search for certain changes using ~git log -S~ and ~git log
 -G~. Can you combine those with ~--oneline~ or ~--color-words~?
+
+# Local Variables:
+# mode: org
+# ispell-local-dictionary: "british"
+# eval: (flyspell-mode t)
+# eval: (flyspell-buffer)
+# End:

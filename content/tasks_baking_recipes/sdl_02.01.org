@@ -174,3 +174,10 @@ Repeat the above steps and change the files in the repository.
 Examine the repository using ~git status~ before and after adding
 changes to the staging area. And examine what you are about to commit
 with ~git diff~.
+
+# Local Variables:
+# mode: org
+# ispell-local-dictionary: "british"
+# eval: (flyspell-mode t)
+# eval: (flyspell-buffer)
+# End:

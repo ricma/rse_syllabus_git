@@ -27,3 +27,10 @@ of the ~README.md~, and, of course, the name and email.
 
 Keep the name of the ~README.md~ file though - /github/ will later use
 the format of this file to display its content nicely.
+
+# Local Variables:
+# mode: org
+# ispell-local-dictionary: "british"
+# eval: (flyspell-mode t)
+# eval: (flyspell-buffer)
+# End:

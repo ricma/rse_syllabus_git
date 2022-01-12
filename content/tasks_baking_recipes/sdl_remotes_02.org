@@ -4,7 +4,7 @@
 * SDL - Using Github
 In this learning task, we will add a remote repository on
 [[https://github.com]]. There are alternatives to this
-([[https://gitlub.com]], [[https://bitbucket.org]]) all run by different
+([[https://gitlab.com]], [[https://bitbucket.org]]) all run by different
 companies. Make sure you understand that putting your code on one of
 these means that you give copies of your code away - which, if you are
 working on IP relevant projects might not be desireable.

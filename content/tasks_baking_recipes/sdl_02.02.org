@@ -127,6 +127,8 @@ Try to add a custom command /wdiff/ which highlights changes in
 /words/ using the above ~git diff --color-words cinemon_stars.txt~
 command.
 
+([[file:README.org::*SDL - Changing Files and Examining the History of Changes][back to main document]])
+
 # Local Variables:
 # mode: org
 # ispell-local-dictionary: "british"

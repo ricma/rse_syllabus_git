@@ -178,6 +178,8 @@ Examine the repository using ~git status~ before and after adding
 changes to the staging area. And examine what you are about to commit
 with ~git diff~.
 
+([[file:README.org::*SDL - Changing Files and Examining the History of Changes][back to main document]])
+
 # Local Variables:
 # mode: org
 # ispell-local-dictionary: "british"

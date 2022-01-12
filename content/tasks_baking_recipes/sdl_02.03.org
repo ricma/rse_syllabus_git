@@ -143,6 +143,8 @@ by using the name ~HEAD~).
 Also search for certain changes using ~git log -S~ and ~git log
 -G~. Can you combine those with ~--oneline~ or ~--color-words~?
 
+([[file:README.org::*SDL - Changing Files and Examining the History of Changes][back to main document]])
+
 # Local Variables:
 # mode: org
 # ispell-local-dictionary: "british"

@@ -25,7 +25,126 @@ bd180d6 restructure biscuit recipe
 #+end_example
 
 The line ~HEAD -> master~ tells us that our current working directory
-is still on the old, original branch called =master=.
+is still on the old, original branch called =master=. Note that both
+branches reference the same commit (~7d4a511~ in this case) and
+therefore represent the same state of the repository.
+
+To switch to the new branch, we can use
+#+begin_src shell-script
+git checkout gluten_free
+#+end_src
+and now the above ~git log~ would give
+#+begin_example
+7d4a511 (HEAD -> gluten_free, master) add link in cinemon star recipe
+bd180d6 restructure biscuit recipe
+#+end_example
+
+We can see which branch we are on by calling ~git branch~ without any
+further arguments:
+#+begin_src shell-script
+git branch
+#+end_src
+#+begin_example
+ * gluten_free
+   master
+#+end_example
+We get a list of all available branches and the one we are on is
+marked with an asterisk.
+
+** Add content to the new branch
+To see the full benefit of branches, let us change some of the
+contents to make the recipe gluten free:
+#+begin_example
+# Ingredients
+150g buckwheat flour
+1/2 tsp baking powder
+110g butter
+110g sugar
+3tsp vanilla extract
+pinch of salt
+1 egg.
+
+# Steps
+- Mix butter and sugar, then whisk in egg
+- add flour, baking powder, salt and stri until comes together
+- let rest for 30 min in fridge
+- roll out and cut into shape
+- Bake for 12 - 15 minutes (180 degrees)
+#+end_example
+
+With the file ~biscuits.txt~ changed like this we can add it to the
+staging area and commit it (see [[file:sdl_02.01.org::*SDL - Changing existing files][SDL - Changing existing files]]):
+#+begin_src shell-script
+  git add biscuits.txt
+  git commit -m 'make biscuits recipe gluten free'
+#+end_src
+#+begin_example
+[gluten_free 01bb2d4] make biscuits recipe gluten free
+ 1 file changed, 7 insertions(+), 5 deletions(-)
+#+end_example
+
+If we now have a look at
+#+begin_src shell-script
+git log --oneline --max-count=3
+#+end_src
+#+begin_example
+01bb2d4 (HEAD -> gluten_free) make biscuits recipe gluten free
+7d4a511 (master) add link in cinemon star recipe
+bd180d6 restructure biscuit recipe
+#+end_example
+we see that our old branch, =master=, has not moved.
+
+If we examine the file ~biscuits.txt~ on the file system, it will show
+the /gluten-free/ version. However, if we switch back to our old branch,
+#+begin_src shell-script
+git checkout master
+#+end_src
+the file is back to its /non-gluten-free/ state using wheat flour!
+
+If we decide to change the recipe here to, for example, increase the
+amount of sugar to, say, replace the "125g margarine" with "125g butter" and then
+#+begin_src shell-script
+git commit -a -m 'replace margarine with butter in biscuit recipe'
+#+end_src
+#+begin_example
+[master 5755eba] replace margarine with butter in biscuit recipe
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+#+end_example
+then our ~git log --oneline~ does not show the ~gluten_free~ anymore
+because it has diverged from the ~master~ branch:
+#+begin_src shell-script
+git log --oneline --all
+#+end_src
+#+begin_example
+5755eba (HEAD -> master) replace margarine with butter in biscuit recipe
+01bb2d4 (gluten_free) make biscuits recipe gluten free
+7d4a511 add link in cinemon star recipe
+bd180d6 restructure biscuit recipe
+ad7f952 add recipe overview to README.md
+957e0f7 add biscuit recipe
+7dae468 add a cinemon star recipe
+efa0975 initial commit for recipes
+#+end_example
+
+At this point, we can use our user-defined ~git graph~ command
+introduced here: [[file:sdl_02.02.org::*Examine the Commit History][Examine the Commit History]]:
+#+begin_src shell-script
+git graph --max-count 4
+#+end_src
+#+begin_example
+ * 5755eba - (61 seconds ago) replace margarine with butter in biscuit recipe (HEAD -> master)
+ | * 01bb2d4 - (11 minutes ago) make biscuits recipe gluten free (gluten_free)
+ |/
+ * 7d4a511 - (25 hours ago) add link in cinemon star recipe
+ * bd180d6 - (25 hours ago) restructure biscuit recipe
+#+end_example
+
+Note that we see the same when invoking ~gitk --all~, see
+Fig. [[fig:gitk_first_branch][fig:gitk_first_branch]].
+#+name: fig:gitk_first_branch
+#+caption: A view on our repository using ~gitk~ after having
+#+caption: introduced a first branch =gluten_free=.
+[[file:./figures/task_03_060.png]]
 
 ** Your Task                                                           :task:
 

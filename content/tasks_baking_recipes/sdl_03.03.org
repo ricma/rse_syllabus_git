@@ -3,7 +3,182 @@
 
 * SDL - Creating tags to have permanent names
 
+We have seen that /branches/ are just names refering to specific
+commits and that when we add more content to them, they evolve in
+time.
+
+However, sometimes you want to give a name to a specific commit which
+does not change in time. Examples are "The state of the repository
+where I know xyz was working" or "state of the repository when paper
+was submitted" or another one when "paper was accepted".
+
+To get these, we will have a look at ~git tag~.
+
+** Introducing tags for specific commits                               :cmds:
+
+Let's place a tag on the version where we introduced the
+[[file:sdl_03.01.org::*Create new branches at an earlier stage][list of replacements]] for vegan recipes. Let us first find it:
+#+begin_src shell-script
+  git log --patch -i -G "replacement"    # use -i to match upper case as well
+#+end_src
+We use ~--patch~ to see the change of that commit. We get
+#+begin_example
+commit 49e85053a670d19307449a9c816740c8ae036b39 (HEAD -> vegan)
+Author: Martin Richter <martin.richter@nottingham.ac.uk>
+Date:   Wed Jan 12 11:36:39 2022 +0000
+
+    add table of replacements in vegan recipes
+#+end_example
+
+All we need is the commit number. Note that in this case ~HEAD~ and
+the branch ~vegan~ point to the same commit and can be used as well:
+#+begin_src shell-script
+  git tag -a -m 'first version with vegan substitutes' v_0.1_vegan_replacement 49e85053a
+#+end_src
+Tags can have a message. This has to be enabled by using ~-a~ and then
+specified with ~-m '...'~.
+
+To see the list of all tags:
+#+begin_src shell-script
+  git tag --list
+#+end_src
+#+begin_example
+v_0.1_vegan_replacement
+#+end_example
+
+To look at a specific tag, use ~git show~ we met [[file:sdl_02.03.org::*Show what changed in a certain commit][here]] first:
+#+begin_src shell-script
+  git show --stat v_0.1_vegan_replacement    # use --stat to not see the diff
+#+end_src
+#+begin_example
+tag v_0.1_vegan_replacement
+Tagger: Martin Richter <martin.richter@nottingham.ac.uk>
+Date:   Wed Jan 12 12:54:52 2022 +0000
+
+first version with vegan substitutes
+
+commit 49e85053a670d19307449a9c816740c8ae036b39 (HEAD -> vegan, tag: v_0.1_vegan_replacement)
+Author: Martin Richter <martin.richter@nottingham.ac.uk>
+Date:   Wed Jan 12 11:36:39 2022 +0000
+
+    add table of replacements in vegan recipes
+
+ substitutes.rst | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+#+end_example
+
+Note that this shows more than the commit (~49e85053a67~) it also
+shows the name of the tag (~v_0.1_vegan_replacement~), when it was
+created and its annotation message.
+
+** Change files after tag was created
+To emphasise that tags do not move when we continue our development,
+let us add another line to our ~substitutes.rst~ and commit it such that
+#+begin_src shell-script
+  git commit -a -m 'add replacement for honey'
+  git show
+#+end_src
+#+begin_example
+commit ec39d144c66be95496c62cc8f7243dda43313bbc (HEAD -> vegan)
+Author: Martin Richter <martin.richter@nottingham.ac.uk>
+Date:   Wed Jan 12 13:03:53 2022 +0000
+
+    add replacement for honey
+#+end_example
+#+begin_src diff
+diff --git a/substitutes.rst b/substitutes.rst
+index 45a5957..e6338ea 100644
+--- a/substitutes.rst
++++ b/substitutes.rst
+@@ -10,3 +10,5 @@ List of typical replacements for recipes:
+ +--------------+------------------------+
+ | egg          | chickpea water, banana |
+ +--------------+------------------------+
++| honey        | agave sirup            |
+++--------------+------------------------+
+#+end_src
+
+** See tags in the history
+
+Note that these tags are also shown in ~git log~ and ~gitk --all~:
+#+begin_src shell-script
+git graph -n 6 --all
+#+end_src
+#+begin_example
+ * ec39d14 - (66 seconds ago) add replacement for honey (HEAD -> vegan)
+ * 49e8505 - (87 minutes ago) add table of replacements in vegan recipes (tag: v_0.1_vegan_replacement)
+ | * 34f83d7 - (2 hours ago) update README for gluten-free recipes (gluten_free)
+ | * 01bb2d4 - (2 hours ago) make biscuits recipe gluten free
+ |/
+ | * 5755eba - (2 hours ago) replace margarine with butter in biscuit recipe (master)
+ |/
+ * 7d4a511 - (27 hours ago) add link in cinemon star recipe
+#+end_example
+
+With ~gitk --all~ we get the [[fig:tag_in_gitk][screenshot below]].
+#+name: fig:tag_in_gitk
+#+caption: Tags (yellow) as seen in ~gitk~. Note that it did not
+#+caption: progress when updating the branch ~vegan~ (green).
+[[file:./figures/task_03_070.png]]
+
+** How to get help / find helpful options                        :background:
+General advice: All commands come with an extensive help, e.g.
+#+begin_src shell-script
+  git help tag
+#+end_src
+Additionally, most modern shells ([[https://www.zsh.org/]],
+[[https://www.gnu.org/software/bash/]]) come with completions such that,
+for example in a /zsh/ you can press ~TAB~ to see possible options.
+If you press ~TAB~ after the dash ~-~ below you get for example:
+#+begin_src shell-script
+  git tag -<TAB>
+#+end_src
+#+begin_example
+Completing option
+--annotate       -a  -- create an unsigned, annotated tag
+--cleanup            -- specify how to strip spaces and #comments from message
+--color              -- respect any colors specified in the format
+--column             -- display tag listing in columns
+--contains           -- only list tags that contain the specified commit
+--create-reflog      -- create a reflog
+--delete         -d  -- delete tags
+--edit           -e  -- force edit of tag message
+--file           -F  -- read tag message from given file
+--force          -f  -- replace existing tag
+--format             -- specify format to use for the output
+--ignore-case    -i  -- sorting and filtering are case-insensitive
+--list           -l  -- list tags matching pattern
+--local-user     -u  -- create a tag, annotated and signed with the given key
+--merged             -- print only tags that are merged
+--message        -m  -- specify tag message
+-n                   -- limit line output of annotation
+--no-column          -- do not display in columns
+--no-contains        -- only list tags that don't contain the specified commit
+--no-merged          -- print only tags that are not merged
+--points-at          -- only list tags of the given object
+--sign           -s  -- create a signed and annotated tag
+--sort               -- specify how the tags should be sorted
+--verify         -v  -- verify gpg signature of tags
+#+end_example
+
+They even pick up on the aliases you have defined:
+#+begin_src shell-script
+  git gr<TAB>
+#+end_src
+#+begin_example
+Completing alias
+graph -- alias for 'log --graph --all --pretty=format:'%Cred%h%Creset - %Cgreen(%cr)%Creset %s%C(yellow)%d%Creset' --abbrev-commit --date=relative --decorate'
+Completing main porcelain command
+grep  -- print lines matching a pattern
+#+end_example
+
+Use this to your advantage to save typing!
+
 ** Your Task                                                           :task:
+Repeat the above steps. Create your own tags. Create some without the
+annotation - do you think this is still helpful?
+
+Can you find a way to delete a tag you created?
 
 ([[file:README.org::*SDL - Changing Files and Examining the History of Changes][back to main document]])
 

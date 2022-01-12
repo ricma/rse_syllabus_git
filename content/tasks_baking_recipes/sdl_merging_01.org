@@ -1,0 +1,24 @@
+#+OPTIONS: <:nil d:nil timestamp:t ^:nil tags:nil toc:nil num:nil \n:t
+#+STARTUP: fninline inlineimages showall
+
+* SDL - Fixing a bug in a separate branch - and merge back
+We will spot a bug we introduced (relying on things we learned about
+~git log -G~) and add a new branch (using ~git checkout~) to fix it.
+
+We will then use ~git merge~ to feed our fix back in.
+
+** Finding the bug
+
+
+
+
+** Your Task                                                           :task:
+
+([[file:README.org::*SDL - Merging Branches][back to main document]])
+
+# Local Variables:
+# mode: org
+# ispell-local-dictionary: "british"
+# eval: (flyspell-mode t)
+# eval: (flyspell-buffer)
+# End:

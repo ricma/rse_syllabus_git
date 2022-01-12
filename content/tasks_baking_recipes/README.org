@@ -80,7 +80,18 @@ others.
 - SDL 03.02 :: [[file:sdl_03.02.org][Showing differences between branches]]
 - SDL 03.03 :: [[file:sdl_03.03.org][Creating tags to have permanent names]]
 
-** TODO SDL - Merging Branches
+** SDL - Merging Branches
+Branches introduced a concept which allows for a diverging
+history. But especially with /bug-fixes/ in software we want to get
+them back into our main version!
+
+We will use the typo (deliberately) introduced in [[file:sdl_03.01.org::src:add_typo][an earlier step]].
+
+- You will learn how to merge branches together thereby combining
+  there changes. This is done using ~git merge~
+- We will look at a simple and a more difficult example.
+
+- SDL 04.01 :: [[file:sdl_merging_01.org::*SDL - Fixing a bug in a separate branch - and merge back][Fixing a bug in a separate branch - and merge back]]
 
 ** TODO SDL - Merge Conflicts
 

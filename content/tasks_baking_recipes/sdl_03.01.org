@@ -155,6 +155,7 @@ and replace the content of ~README.md~ such that
 #+begin_src shell-script
   git diff
 #+end_src
+#+name: src:add_typo
 #+begin_src diff
 diff --git a/README.md b/README.md
 index a134858..21f7c73 100644

@@ -93,6 +93,7 @@ We will use the typo (deliberately) introduced in [[file:sdl_03.01.org::src:add_
   SDL, [[*SDL - Merge Conflicts][SDL - Merge Conflicts]]
 
 - SDL 04.01 :: [[file:sdl_merging_01.org::*SDL - Fixing a bug in a separate branch - and merge back][Fixing a bug in a separate branch - and merge back]]
+- SDL 04.02 :: [[file:sdl_merging_02.org::*SDL - A more complicated example and how to abort a merge][A more complicated example and how to abort a merge]]
 
 ** TODO SDL - Merge Conflicts
 

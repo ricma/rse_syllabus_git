@@ -1,0 +1,26 @@
+#+OPTIONS: <:nil d:nil timestamp:t ^:nil tags:nil toc:nil num:nil \n:t
+#+STARTUP: fninline inlineimages showall
+
+* SDL - A more complicated example and how to abort a merge
+Let us re-visit the last example and look at it in more detail.
+
+The main reason for this is to lay a foundation for the
+[[file:README.org::*SDL - Merge Conflicts][more complicated merge case later]].
+
+We will learn that /merging/ and /committing/ a merge commit are two
+separate steps. The gap between the two allow us to amend necessary
+changes.
+
+** Finding the bug                                                     :cmds:
+
+
+** Your Task                                                           :task:
+
+([[file:README.org::*SDL - Merging Branches][back to main document]])
+
+# Local Variables:
+# mode: org
+# ispell-local-dictionary: "british"
+# eval: (flyspell-mode t)
+# eval: (flyspell-buffer)
+# End:

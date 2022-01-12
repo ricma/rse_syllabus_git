@@ -28,7 +28,7 @@ point where we want to fix the bug:
   git checkout fix_typo
 #+end_src
 Note: Because it happens quite often that one wants to create a branch
-and swtich to it, there is also a shortcut: ~git checkout -b fix_typo
+and switch to it, there is also a shortcut: ~git checkout -b fix_typo
 34f83d7~.
 
 ** Fixing the bug

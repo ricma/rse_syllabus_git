@@ -146,7 +146,128 @@ Fig. [[fig:gitk_first_branch][fig:gitk_first_branch]].
 #+caption: introduced a first branch =gluten_free=.
 [[file:./figures/task_03_060.png]]
 
+Let us quickly update the description in ~README.md~ for our
+gluten-free version:
+#+begin_src shell-script
+  git checkout gluten_free
+#+end_src
+and replace the content of ~README.md~ such that
+#+begin_src shell-script
+  git diff
+#+end_src
+#+begin_src diff
+diff --git a/README.md b/README.md
+index a134858..21f7c73 100644
+--- a/README.md
++++ b/README.md
+@@ -1,7 +1,7 @@
+ # Overview
+-A collection of recipes
++A collection of gluten-free recipes
+
+ ## Recipes
+ So far we have:
+-1. Biscuits (see [here](biscuits.txt))
++1. Biscuits (see [here](biscuits.txt), basd on buckwheat flour)
+ 2. Cinemon Stars (see [here](cinemon_stars.txt))
+#+end_src
+Note that we introduced a typo in "basd on" - this is on purpose and
+we will correct it later. For now we can
+#+begin_src shell-script
+  git commit -a -m 'update README for gluten-free recipes'
+#+end_src
+
+Now ~git graph --max-count 4~ gives
+#+begin_example
+ * 34f83d7 - (2 minutes ago) update README for gluten-free recipes (HEAD -> gluten_free)
+ * 01bb2d4 - (26 minutes ago) make biscuits recipe gluten free
+ | * 5755eba - (16 minutes ago) replace margarine with butter in biscuit recipe (master)
+ |/
+ * 7d4a511 - (25 hours ago) add link in cinemon star recipe
+#+end_example
+so we only advanced ~gluten_free~ and kept ~master~ where it is. By
+this use of /branches/ we can follow different development ideas in
+the same repository.
+
+** Create new branches at an earlier stage                             :cmds:
+At this point, we might want to also add our vegan version. But the
+~master~ branch just replaced "margarine" with "butter" - so that is
+not a good starting point! Let's go to an earlier stage in history and
+branch off there.
+#+begin_src shell-script
+  git branch vegan 7d4a511
+#+end_src
+Note that the number (the commit hash) will be different in your
+case. It is the one just before ~gluten_free~ diverged from
+~master~. Or where ~master~ diverged from ~gluten_free~ - both views
+are correct.
+
+Let us change to the new branch (~git checkout vegan~) and add a new
+file ~substitutes.rst~ to list typical substitutes for non-vegan
+ingredients:
+#+begin_src rst
+Typical replacements for Ingregients
+------------------------------------
+
+List of typical replacements for recipes:
+
++--------------+------------------------+
+| Ingredient   | Replacement            |
++==============+========================+
+| milk         | soy, almond, oat milk  |
++--------------+------------------------+
+| egg          | chickpea water, banana |
++--------------+------------------------+
+#+end_src
+and then
+#+begin_src shell-script
+  git add substitutes.rst
+  git commit -m 'add table of replcements in vegan recipes'
+#+end_src
+#+begin_example
+[vegan eddd880] add table of replcements in vegan recipes
+ 1 file changed, 12 insertions(+)
+ create mode 100644 substitutes.rst
+#+end_example
+
+Oh no! This commit message also had a typo in it! If you want to
+change the last commit message, then this can be done by
+#+begin_src shell-script
+  git commit --amend -m 'add table of replacements in vegan recipes'
+#+end_src
+#+begin_example
+[vegan 49e8505] add table of replacements in vegan recipes
+ Date: Wed Jan 12 11:36:39 2022 +0000
+ 1 file changed, 12 insertions(+)
+ create mode 100644 substitutes.rst
+#+end_example
+
+Note how the commit time was not updated! When /amending/ we create a
+new commit taking certain aspects of the previous commit into account.
+There can be pitfalls with this, see later: [[file:README.org::*SDL - Working with Remotes][SDL - Working with Remotes]].
+So best not to use it too often.
+
+Our overall history now looks like this:
+#+begin_src shell-script
+git graph --max-count 6
+#+end_src
+#+begin_example
+ * 49e8505 - (4 minutes ago) add table of replacements in vegan recipes (HEAD -> vegan)
+ | * 34f83d7 - (24 minutes ago) update README for gluten-free recipes (gluten_free)
+ | * 01bb2d4 - (48 minutes ago) make biscuits recipe gluten free
+ |/
+ | * 5755eba - (38 minutes ago) replace margarine with butter in biscuit recipe (master)
+ |/
+ * 7d4a511 - (26 hours ago) add link in cinemon star recipe
+ * bd180d6 - (26 hours ago) restructure biscuit recipe
+#+end_example
+
+
 ** Your Task                                                           :task:
+Repeat the above steps and add a branch to your repository. Can you
+examine the history with the commands we have learned before?
+
+Feel free to add more steps to either of the two branches.
 
 ([[file:README.org::*SDL - Changing Files and Examining the History of Changes][back to main document]])
 

@@ -124,6 +124,7 @@ Now the ~git merge~ cannot possibly be a /fast-forward/ as the
 histories of both branches have diverged! However - they did touch
 different files. This allows git to still go ahead with a merge:
 
+#+name: src:cmd_merge_fix_typo_example
 #+begin_src shell-script
 git merge --no-edit fix_typo
 #+end_src

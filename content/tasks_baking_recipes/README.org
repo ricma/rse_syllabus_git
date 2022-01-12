@@ -110,7 +110,7 @@ a common ground for opposite views. When you work with colleagues, it
 is necessary to talk to them at this stage!
 
 - SDL 05.01 :: [[file:sdl_merge_conflict_01.org][Examining Merge CONFLICTs]]
-- SDL 05.02 :: [[file:sdl_merge_conflict_01.org][Solving Merge CONFLICTs]]
+- SDL 05.02 :: [[file:sdl_merge_conflict_02.org][Solving Merge CONFLICTs]]
 
 ** TODO SDL - Rebase Branches
 

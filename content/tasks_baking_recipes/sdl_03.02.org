@@ -3,7 +3,164 @@
 
 * SDL - Showing differences between branches
 
+Now that we have introduced several branches, let us try to find out
+about there differences.
+
+In real life, these branches would be branches in which a bug-fix is
+being implemented or a new feature is brought to life.
+
+** Looking at the difference between two branches
+Just like ~git diff~ was able to show us the state of a changed file
+(see [[file:sdl_02.01.org::*Examine the State of the Changed File][here]]), we can use it to display the difference between any two
+commits in a repository. They don't even have to be in the same
+branch. Here area few examples
+
+#+begin_src shell-script
+  git checkout vegan        # make sure we are on the `vegan`
+  git diff gluten_free      # diff between HEAD (≡ `vegan`) and `gluten_free`
+  git diff gluten_free vegan   # same as above but more explicit
+#+end_src
+#+begin_src diff
+diff --git a/README.md b/README.md
+index 21f7c73..a134858 100644
+--- a/README.md
++++ b/README.md
+@@ -1,7 +1,7 @@
+ # Overview
+-A collection of gluten-free recipes
++A collection of recipes
+
+ ## Recipes
+ So far we have:
+-1. Biscuits (see [here](biscuits.txt), basd on buckwheat flour)
++1. Biscuits (see [here](biscuits.txt))
+ 2. Cinemon Stars (see [here](cinemon_stars.txt))
+diff --git a/biscuits.txt b/biscuits.txt
+index f16e658..50decd5 100644
+--- a/biscuits.txt
++++ b/biscuits.txt
+@@ -1,15 +1,13 @@
+ # Ingredients
+-150g buckwheat flour
+-1/2 tsp baking powder
+-110g butter
+-110g sugar
++250g flour
++125g margarine
++60g sugar
+ 3tsp vanilla extract
+ pinch of salt
+ 1 egg.
+
+ # Steps
+-- Mix butter and sugar, then whisk in egg
+-- add flour, baking powder, salt and stri until comes together
++- Mix everything
+ - let rest for 30 min in fridge
+ - roll out and cut into shape
+-- Bake for 12 - 15 minutes (180 degrees)
++- Bake for 10 - 12 minutes (200 degrees)
+diff --git a/substitutes.rst b/substitutes.rst
+new file mode 100644
+index 0000000..45a5957
+--- /dev/null
++++ b/substitutes.rst
+@@ -0,0 +1,12 @@
++Typical replacements for Ingregients
++------------------------------------
++
++List of typical replacements for recipes:
++
+++--------------+------------------------+
++| Ingredient   | Replacement            |
+++==============+========================+
+diff --git a/README.md b/README.md
+index 21f7c73..a134858 100644
+--- a/README.md
++++ b/README.md
+@@ -1,7 +1,7 @@
+ # Overview
+-A collection of gluten-free recipes
++A collection of recipes
+
+ ## Recipes
+ So far we have:
+-1. Biscuits (see [here](biscuits.txt), basd on buckwheat flour)
++1. Biscuits (see [here](biscuits.txt))
+ 2. Cinemon Stars (see [here](cinemon_stars.txt))
+diff --git a/biscuits.txt b/biscuits.txt
+index f16e658..50decd5 100644
+--- a/biscuits.txt
++++ b/biscuits.txt
+@@ -1,15 +1,13 @@
+ # Ingredients
+-150g buckwheat flour
+-1/2 tsp baking powder
+-110g butter
+-110g sugar
++250g flour
++125g margarine
++60g sugar
+ 3tsp vanilla extract
+ pinch of salt
+ 1 egg.
+
+ # Steps
+-- Mix butter and sugar, then whisk in egg
+-- add flour, baking powder, salt and stri until comes together
++- Mix everything
+ - let rest for 30 min in fridge
+ - roll out and cut into shape
+-- Bake for 12 - 15 minutes (180 degrees)
++- Bake for 10 - 12 minutes (200 degrees)
+diff --git a/substitutes.rst b/substitutes.rst
+new file mode 100644
+index 0000000..45a5957
+--- /dev/null
++++ b/substitutes.rst
+@@ -0,0 +1,12 @@
++Typical replacements for Ingregients
++------------------------------------
++
++List of typical replacements for recipes:
++
+++--------------+------------------------+
++| Ingredient   | Replacement            |
+++==============+========================+
++| milk         | soy, almond, oat milk  |
+++--------------+------------------------+
++| egg          | chickpea water, banana |
+++--------------+------------------------+
++| milk         | soy, almond, oat milk  |
+++--------------+------------------------+
++| egg          | chickpea water, banana |
+++--------------+------------------------+
+#+end_src
+
+#+begin_src shell-script
+  git diff --stat gluten_free  # only show summary overview
+#+end_src
+#+begin_example
+ README.md       |  4 ++--
+ biscuits.txt    | 12 +++++-------
+ substitutes.rst | 12 ++++++++++++
+ 3 files changed, 19 insertions(+), 9 deletions(-)
+#+end_example
+
+Using ~git log~ or ~gitk~, you can also use explicit commits to
+compare. These all yield the same:
+#+begin_src shell-script
+  git diff 01bb2d4 5755eba
+  git diff 34f83d7~ 5755eba
+  git diff gluten_free~ 5755eba
+  git diff gluten_free~ master
+#+end_src
+
 ** Your Task                                                           :task:
+
+Have a look around in your repository. Do you remember ~git log -G~
+form [[file:sdl_02.03.org::*Finding Commits which introduced a certain Change][earlier]]? Despite being on branch ~vegan~ -- can you find the
+commits which introduced ~buckwheat~? Hint: Use ~--all~ in ~git log~.
 
 ([[file:README.org::*SDL - Changing Files and Examining the History of Changes][back to main document]])
 

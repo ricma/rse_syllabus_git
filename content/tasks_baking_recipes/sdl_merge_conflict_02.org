@@ -202,6 +202,19 @@ Using ~gitk --all~ gives the following view:
 
 ** Your Task                                                           :task:
 
+Repeat the above steps. Come up with your own version about how a
+combined recipe could look like!
+
+Once done, create a new branch at the old points from before the merge
+and repeat the merge, using a different resolution recipe.
+
+Note that in real examples, one solution will suffice. But there might
+be more than one way of correctly resolving conflicts and talking to
+your colleagues is key!
+
+Furthermore, make sure not to miss things git fixed for your. A
+typical example is missing documentation or comments.
+
 ([[file:README.org::*SDL - Merge Conflicts][back to main document]])
 
 # Local Variables:

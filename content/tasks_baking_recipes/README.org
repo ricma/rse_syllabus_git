@@ -88,7 +88,7 @@ others.
 
 ** TODO SDL - Working with Remotes
 
-- SDL 07.02 :: [[file:sdl_remotes_02.org::*SDL - Using Github][Using Github]]
+- SDL 07.02 :: [[file:sdl_remotes_02.org][Using Github]]
 
 ** TODO SDL - Using Bisection to find Bugs
 

@@ -11,7 +11,7 @@ being implemented or a new feature is brought to life.
 
 ** Looking at the difference between two branches
 Just like ~git diff~ was able to show us the state of a changed file
-(see [[file:sdl_02.01.org::*Examine the State of the Changed File][here]]), we can use it to display the difference between any two
+(see [[file:sdl_change_files.01.org::*Examine the State of the Changed File][here]]), we can use it to display the difference between any two
 commits in a repository. They don't even have to be in the same
 branch. Here area few examples
 
@@ -159,7 +159,7 @@ compare. These all yield the same:
 ** Your Task                                                           :task:
 
 Have a look around in your repository. Do you remember ~git log -G~
-form [[file:sdl_02.03.org::*Finding Commits which introduced a certain Change][earlier]]? Despite being on branch ~vegan~ -- can you find the
+form [[file:sdl_change_files.03.org::*Finding Commits which introduced a certain Change][earlier]]? Despite being on branch ~vegan~ -- can you find the
 commits which introduced ~buckwheat~? Hint: Use ~--all~ in ~git log~.
 
 ([[file:README.org::*SDL - Changing Files and Examining the History of Changes][back to main document]])

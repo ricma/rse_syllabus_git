@@ -48,8 +48,8 @@ This self-directed learning task will show you
 - how to create a new, empty repository (~git init~)
 - how to add files to it (~git add~ and ~git commit~)
 
-- SDL 01.01 :: [[file:sdl_01.01.org][Create a New Repository]]
-- SDL 01.02 :: [[file:sdl_01.02.org][Add Some More Files]]
+- SDL 01.01 :: [[file:sdl_create_repo.01.org][Create a New Repository]]
+- SDL 01.02 :: [[file:sdl_create_repo.02.org][Add Some More Files]]
 
 ** SDL - Changing Files and Examining the History of Changes
 This self-directed learning task will show you
@@ -58,9 +58,9 @@ This self-directed learning task will show you
 - how to see how the repository is growing as we go along (~git
   status~, ~git diff~, ~git log~, ~git show~)
 
-- SDL 02.01 :: [[file:sdl_02.01.org][Changing existing files]]
-- SDL 02.02 :: [[file:sdl_02.02.org][Examining what we have done so far]]
-- SDL 02.03 :: [[file:sdl_02.03.org][Examining single commits in more detail and Find Changes]]
+- SDL 02.01 :: [[file:sdl_change_files.01.org][Changing existing files]]
+- SDL 02.02 :: [[file:sdl_change_files.02.org][Examining what we have done so far]]
+- SDL 02.03 :: [[file:sdl_change_files.03.org][Examining single commits in more detail and Find Changes]]
 
 ** SDL - Branching
 This self directed learning task will introduce the concept of
@@ -76,16 +76,16 @@ others.
 - The command ~git checkout~ is used to change branches.
 - The command ~git tag~ allows to permanently mark specific versions.
 
-- SDL 03.01 :: [[file:sdl_03.01.org][Creating new Branches]]
-- SDL 03.02 :: [[file:sdl_03.02.org][Showing differences between branches]]
-- SDL 03.03 :: [[file:sdl_03.03.org][Creating tags to have permanent names]]
+- SDL 03.01 :: [[file:sdl_branching.01.org][Creating new Branches]]
+- SDL 03.02 :: [[file:sdl_branching.02.org][Showing differences between branches]]
+- SDL 03.03 :: [[file:sdl_branching.03.org][Creating tags to have permanent names]]
 
 ** SDL - Merging Branches
 Branches introduced a concept which allows for a diverging
 history. But especially with /bug-fixes/ in software we want to get
 them back into our main version!
 
-We will use the typo (deliberately) introduced in [[file:sdl_03.01.org::src:add_typo][an earlier step]].
+We will use the typo (deliberately) introduced in [[file:sdl_branching.01.org::src:add_typo][an earlier step]].
 
 - You will learn how to merge branches together thereby combining
   there changes. This is done using ~git merge~

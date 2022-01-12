@@ -73,7 +73,7 @@ pinch of salt
 #+end_example
 
 With the file ~biscuits.txt~ changed like this we can add it to the
-staging area and commit it (see [[file:sdl_02.01.org::*SDL - Changing existing files][SDL - Changing existing files]]):
+staging area and commit it (see [[file:sdl_change_files.01.org::*SDL - Changing existing files][SDL - Changing existing files]]):
 #+begin_src shell-script
   git add biscuits.txt
   git commit -m 'make biscuits recipe gluten free'
@@ -127,7 +127,7 @@ efa0975 initial commit for recipes
 #+end_example
 
 At this point, we can use our user-defined ~git graph~ command
-introduced here: [[file:sdl_02.02.org::*Examine the Commit History][Examine the Commit History]]:
+introduced here: [[file:sdl_change_files.02.org::*Examine the Commit History][Examine the Commit History]]:
 #+begin_src shell-script
 git graph --max-count 4
 #+end_src

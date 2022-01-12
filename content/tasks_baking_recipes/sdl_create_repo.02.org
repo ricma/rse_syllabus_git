@@ -50,7 +50,7 @@ being untracked.
 
 ** Add Files to the Index
 
-Just like in [[file:sdl_01.01.org::*SDL - Create a New Repository][SDL - Create a New Repository]] above, we need to add
+Just like in [[file:sdl_create_repo.01.org::*SDL - Create a New Repository][SDL - Create a New Repository]] above, we need to add
 the files to the /index/ or /staging-area/. This makes git aware of
 the fact that we are going to add these files to the repository soon.
 
@@ -149,7 +149,7 @@ free to add more files to it as well.
 
 What happens if you try to add a Word document? At this point, not
 much. It would be added just like the other files. However, we would
-get into trouble [[file:sdl_02.03.org::*Show what changed in a certain commit][later when examining commits for their changes]].
+get into trouble [[file:sdl_change_files.03.org::*Show what changed in a certain commit][later when examining commits for their changes]].
 
 ([[file:README.org::*SDL - Creating a Repository and Adding Content][back to main document]])
 

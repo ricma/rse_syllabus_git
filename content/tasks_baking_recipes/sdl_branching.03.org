@@ -17,7 +17,7 @@ To get these, we will have a look at ~git tag~.
 ** Introducing tags for specific commits                               :cmds:
 
 Let's place a tag on the version where we introduced the
-[[file:sdl_03.01.org::*Create new branches at an earlier stage][list of replacements]] for vegan recipes. Let us first find it:
+[[file:sdl_branching.01.org::*Create new branches at an earlier stage][list of replacements]] for vegan recipes. Let us first find it:
 #+begin_src shell-script
   git log --patch -i -G "replacement"    # use -i to match upper case as well
 #+end_src

@@ -50,7 +50,7 @@ ad7f952 add recipe overview to README.md
 efa0975 initial commit for recipes
 #+end_example
 Note that this is the reason why the commit message should follow the
-format described in the [[file:sdl_01.02.org::*Advice: Use Meaningful commit messages][above best practices]]: Here we only see the
+format described in the [[file:sdl_create_repo.02.org::*Advice: Use Meaningful commit messages][above best practices]]: Here we only see the
 first line of the commit and it should describe what the commit did to
 the repository.
 

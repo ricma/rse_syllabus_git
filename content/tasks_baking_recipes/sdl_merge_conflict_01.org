@@ -123,7 +123,7 @@ Let us first state the complete content of ~biscuits.txt~:
 #+begin_src shell-script
 cat biscuits.txt
 #+end_src
-#+begin_src magit-diff
+#+begin_src smerge
 # Ingredients
 <<<<<<< HEAD
 250g very fine flour

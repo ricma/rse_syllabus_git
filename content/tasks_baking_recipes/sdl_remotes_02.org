@@ -119,7 +119,7 @@ Note that a call to ~git graph~ or ~gitk --all~ also shows the
 remotes. Note that the positons of the /remotes/ is not their current
 state but the last time you called a ~git fetch github~.
 
-(back to main document: [[file:README.org::*SDL - Working with Remotes][SDL - Working with Remotes]])
+(back to main document: [[file:README.org::*SDL - Working with Remotes]])
 
 # Local Variables:
 # mode: org

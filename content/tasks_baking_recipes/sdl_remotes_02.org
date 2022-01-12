@@ -1,0 +1,129 @@
+#+OPTIONS: <:nil d:nil timestamp:t ^:nil tags:nil toc:nil num:nil \n:t
+#+STARTUP: fninline inlineimages showall
+
+* SDL - Using Github
+In this learning task, we will add a remote repository on
+[[https://github.com]]. There are alternatives to this
+([[https://gitlub.com]], [[https://bitbucket.org]]) all run by different
+companies. Make sure you understand that putting your code on one of
+these means that you give copies of your code away - which, if you are
+working on IP relevant projects might not be desireable.
+
+** Creating an empty repository on Github
+
+#+name: fig:github_create_new_repo
+#+caption: Create a new repository on github.
+#+caption: I chose the name ~recipe_book_example~, set it to
+#+caption: /public/ and did not add a /README/, /LICENSE/,
+#+caption: or /.gitignore/.
+[[file:./figures/github_010.png]]
+
+Once the repository is set up, you can use its address to populate it
+with the history we have created so far.
+
+#+name: fig:github_new_repo_url
+#+caption: Getting the url of the new repository. I have set up my /ssh/
+#+caption: keys with github. If you have not, then choose ~https~ instead.
+#+caption: In this case you have to provide your username and password
+#+caption: everytime you connect to it.
+[[file:./figures/github_020.png]]
+
+** Register the remote server on our local repository
+
+To let our local git know about the github repository, we can do
+#+begin_src shell-script
+  git remote add github git@github.com:ricma/recipe_book_example.git
+#+end_src
+This command is also mentioned on the web page. Note that I changed
+the suggested name ~origin~ to ~github~.
+
+** Push data to the remote repository
+
+Because the remote is completely empty, we can simply push all our
+branches:
+#+begin_src shell-script
+      git push --set-upstream github vegan
+#+end_src
+#+begin_example
+Enumerating objects: 21, done.
+Counting objects: 100% (21/21), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (16/16), done.
+Writing objects: 100% (21/21), 2.52 KiB | 2.52 MiB/s, done.
+Total 21 (delta 4), reused 17 (delta 3)
+remote: Resolving deltas: 100% (4/4), done.
+To github.com:ricma/recipe_book_example.git
+ * [new branch]      vegan -> vegan
+Branch 'vegan' set up to track remote branch 'vegan' from 'github'.
+#+end_example
+
+We can also push a branch currently not checked out and set its
+destination explicitly (here we chose the same name ~gluten_free~):
+#+begin_src shell-script
+  git push --set-upstream github gluten_free:gluten_free
+#+end_src
+#+begin_example
+Enumerating objects: 9, done.
+Counting objects: 100% (9/9), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (6/6), done.
+Writing objects: 100% (6/6), 1.00 KiB | 205.00 KiB/s, done.
+Total 6 (delta 0), reused 0 (delta 0)
+remote:
+remote: Create a pull request for 'gluten_free' on GitHub by visiting:
+remote:      https://github.com/ricma/recipe_book_example/pull/new/gluten_free
+remote:
+To github.com:ricma/recipe_book_example.git
+ * [new branch]      gluten_free -> gluten_free
+Branch 'gluten_free' set up to track remote branch 'gluten_free' from 'github'.
+#+end_example
+
+We can also change the name of the branch on the repository:
+#+begin_src shell-script
+  git push --set-upstream github master:main
+#+end_src
+#+begin_example
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 387 bytes | 193.00 KiB/s, done.
+Total 3 (delta 1), reused 0 (delta 0)
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+remote:
+remote: Create a pull request for 'main' on GitHub by visiting:
+remote:      https://github.com/ricma/recipe_book_example/pull/new/main
+remote:
+To github.com:ricma/recipe_book_example.git
+ * [new branch]      master -> main
+Branch 'master' set up to track remote branch 'main' from 'github'.
+#+end_example
+
+** Getting an Overview of remote branches
+
+We can see all branches, local and remote, by using
+#+begin_src shell-script
+  git branch --all
+#+end_src
+in our case we see:
+#+begin_example
+   gluten_free
+   master
+ * vegan
+   remotes/github/gluten_free
+   remotes/github/main
+   remotes/github/vegan
+#+end_example
+
+Note that a call to ~git graph~ or ~gitk --all~ also shows the
+remotes. Note that the positons of the /remotes/ is not their current
+state but the last time you called a ~git fetch github~.
+
+([[file:README.org::*SDL - Changing Files and Examining the History of Changes][back to main document]])
+
+# Local Variables:
+# mode: org
+# ispell-local-dictionary: "british"
+# eval: (flyspell-mode t)
+# eval: (flyspell-buffer)
+# End:

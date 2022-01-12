@@ -1,7 +1,7 @@
 #+OPTIONS: <:nil d:nil timestamp:t ^:nil tags:nil toc:nil num:nil \n:t
 #+STARTUP: fninline inlineimages showall
 
-* SDL 02.01 - Changing existing files
+* SDL - Changing existing files
 This sub-task will tell you why it is important to use simple text
 files and how a version control system can help you keep track of
 changes.
@@ -91,7 +91,7 @@ Let us add these changes to the repository. We call
 
 Keeping commits small will later help you understand better not only
 what you did but also what others did. It will greatly simplify should
-you be looking for a bug using ~git bisect~ [[file:README.org::*SDL XX - Using Bisection to find Bugs][later]].
+you be looking for a bug using ~git bisect~ [[file:README.org::*SDL - Using Bisection to find Bugs][later]].
 
 ** Change the remaining files
 

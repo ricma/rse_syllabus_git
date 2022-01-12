@@ -29,7 +29,7 @@ You can mainly focus on point *b)* if you prefer. Some of you will find
 *a)* and *c)* helpful to understand what is going on - everyone's style of
 learning is different!
 
-** Learning Outcomes                                                    :LOs:
+** TODO Learning Outcomes                                               :LOs:
 
 By the end of these tasks, you will be able to
 1. Know how to put files under version control
@@ -43,36 +43,36 @@ By the end of these tasks, you will be able to
 
 * Tasks
 
-** SDL 01 - Creating a Repository and Adding Content
+** SDL - Creating a Repository and Adding Content
 This self-directed learning task will show you
 - how to create a new, empty repository (~git init~)
 - how to add files to it (~git add~ and ~git commit~)
 
-1. [[file:sdl_01.01.org][SDL 01.01 - Create a New Repository]]
-2. [[file:sdl_01.02.org][SDL 01.02 - Add Some More Files]]
+- SDL 01.01 :: [[file:sdl_01.01.org][Create a New Repository]]
+- SDL 01.02 :: [[file:sdl_01.02.org][Add Some More Files]]
 
-** SDL 02 - Changing Files and Examining the History of Changes
+** SDL - Changing Files and Examining the History of Changes
 This self-directed learning task will show you
 - how to change files and register these changes in the repository
   (~git add~, ~git commit~)
 - how to see how the repository is growing as we go along (~git
   status~, ~git diff~, ~git log~, ~git show~)
 
-1. [[file:sdl_02.01.org][SDL 02.01 - Changing existing files]]
-2. [[file:sdl_02.02.org][SDL 02.02 - Examining what we have done so far]]
-3. [[file:sdl_02.03.org][SDL 02.03 - Examining single commits in more detail and Find Changes]]
+- SDL 02.01 :: [[file:sdl_02.01.org][Changing existing files]]
+- SDL 02.02 :: [[file:sdl_02.02.org][Examining what we have done so far]]
+- SDL 02.03 :: [[file:sdl_02.03.org][Examining single commits in more detail and Find Changes]]
 
-** SDL 03 - Branching
+** SDL - Branching
 
-** SDL 04 - Merging Branches
+** TODO SDL - Merging Branches
 
-** SDL 05 - Merge Conflicts
+** TODO SDL - Merge Conflicts
 
-** SDL 06 - Rebase Branches
+** TODO SDL - Rebase Branches
 
-** SDL 07 - Working with Remotes
+** TODO SDL - Working with Remotes
 
-** SDL 08 - Using Bisection to find Bugs
+** TODO SDL - Using Bisection to find Bugs
 
 This is deeply linked to the subjects of having good, automated tests
 for your code.

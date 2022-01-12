@@ -1,7 +1,7 @@
 #+OPTIONS: <:nil d:nil timestamp:t ^:nil tags:nil toc:nil num:nil \n:t
 #+STARTUP: fninline inlineimages showall
 
-* SDL 01.01 - Create a New Repository
+* SDL - Create a New Repository
 First we need to create a new repository. It will start out as empty
 and we will add a first file.
 

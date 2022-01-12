@@ -1,7 +1,7 @@
 #+OPTIONS: <:nil d:nil timestamp:t ^:nil tags:nil toc:nil num:nil \n:t
 #+STARTUP: fninline inlineimages showall
 
-* SDL 01.02 - Add Some More Files
+* SDL - Add Some More Files
 In order to see the basic operations, let us add files to the repository.
 ** Create some Files
 Create a simple text file called =biscuits.txt= with the following content:
@@ -50,7 +50,7 @@ being untracked.
 
 ** Add Files to the Index
 
-Just like in [[file:sdl_01.01.org::*SDL 01.01 - Create a New Repository][SDL 01.01 - Create a New Repository]] above, we need to add
+Just like in [[file:sdl_01.01.org::*SDL - Create a New Repository][SDL - Create a New Repository]] above, we need to add
 the files to the /index/ or /staging-area/. This makes git aware of
 the fact that we are going to add these files to the repository soon.
 

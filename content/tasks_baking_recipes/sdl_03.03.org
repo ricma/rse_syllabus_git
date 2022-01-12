@@ -112,7 +112,7 @@ git graph -n 6 --all
  |/
  | * 5755eba - (2 hours ago) replace margarine with butter in biscuit recipe (master)
  |/
- * 7d4a511 - (27 hours ago) add link in cinemon star recipe
+ * 7d4a511 - (27 hours ago) add link in cinnamon star recipe
 #+end_example
 
 With ~gitk --all~ we get the [[fig:tag_in_gitk][screenshot below]].

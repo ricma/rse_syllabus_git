@@ -27,7 +27,7 @@ commit 7d4a5110ac8f09a835ffb3395286f6e65a0ecf49 (HEAD -> master)
 Author: Martin Richter <martin.richter@nottingham.ac.uk>
 Date:   Mon Jan 10 19:00:42 2022 +0000
 
-    add link in cinemon star recipe
+    add link in cinnamon star recipe
 
 commit bd180d6e425c57180453e5cf33303445110be978
 Author: Martin Richter <martin.richter@nottingham.ac.uk>
@@ -42,11 +42,11 @@ help log~. One of them is
   git log --oneline
 #+end_src
 #+begin_example
-7d4a511 (HEAD -> master) add link in cinemon star recipe
+7d4a511 (HEAD -> master) add link in cinnamon star recipe
 bd180d6 restructure biscuit recipe
 ad7f952 add recipe overview to README.md
 957e0f7 add biscuit recipe
-7dae468 add a cinemon star recipe
+7dae468 add a cinnamon star recipe
 efa0975 initial commit for recipes
 #+end_example
 Note that this is the reason why the commit message should follow the
@@ -124,7 +124,7 @@ with the ~git --local ...~ above.
 Examine your repository and the configuration you have.
 
 Try to add a custom command /wdiff/ which highlights changes in
-/words/ using the above ~git diff --color-words cinemon_stars.txt~
+/words/ using the above ~git diff --color-words cinnamon_stars.txt~
 command.
 
 ([[file:README.org::*SDL - Changing Files and Examining the History of Changes][back to main document]])

@@ -48,7 +48,7 @@ Now our history looks like this (~git graph --all -n 7~)
  |/
  | * 5755eba - (3 hours ago) replace margarine with butter in biscuit recipe (github/main, master)
  |/
- * 7d4a511 - (28 hours ago) add link in cinemon star recipe
+ * 7d4a511 - (28 hours ago) add link in cinnamon star recipe
 #+end_example
 
 ** Merge the fix - Fast Forwards                                       :cmds:
@@ -106,15 +106,15 @@ git graph -n 3
 #+end_example
 
 Assume you also put additional information into a different file
-_while_ the bug was fixed. Let us change for example ~cinemon_starts.txt~ to
+_while_ the bug was fixed. Let us change for example ~cinnamon_stars.txt~ to
 #+begin_example
 - Prepare dough like written in [the biscuits recipe](biscuits.txt)
-- Add 1/2 teaspoon of cinemon and 2 tsp of almond extract.
+- Add 1/2 teaspoon of cinnamon and 2 tsp of almond extract.
 #+end_example
-and ~git commit -a -m 'reformat cinemon recipe'~. This gives
+and ~git commit -a -m 'reformat cinnamon recipe'~. This gives
 via ~git graph -n 3~
 #+begin_example
- * 461de20 - (8 seconds ago) reformat cinemon recipe (HEAD -> gluten_free)
+ * 461de20 - (8 seconds ago) reformat cinnamon recipe (HEAD -> gluten_free)
  | * 4a5c4eb - (13 minutes ago) fix typo in README.md (fix_typo)
  |/
  * 34f83d7 - (3 hours ago) update README for gluten-free recipes
@@ -143,7 +143,7 @@ Let us have a look at the history (~git graph -n 5~):
  *   716409e - (2 minutes ago) Merge branch 'fix_typo' into gluten_free (HEAD -> gluten_free)
  |\
  | * 4a5c4eb - (17 minutes ago) fix typo in README.md (fix_typo)
- * | 461de20 - (4 minutes ago) reformat cinemon recipe
+ * | 461de20 - (4 minutes ago) reformat cinnamon recipe
  |/
  * 34f83d7 - (3 hours ago) update README for gluten-free recipes
  * 01bb2d4 - (3 hours ago) make biscuits recipe gluten free
@@ -169,16 +169,16 @@ index 21f7c73..4fa763f 100644
  So far we have:
 -1. Biscuits (see [here](biscuits.txt), basd on buckwheat flour)
 +1. Biscuits (see [here](biscuits.txt), based on using buckwheat flour)
- 2. Cinemon Stars (see [here](cinemon_stars.txt))
-diff --git a/cinemon_stars.txt b/cinemon_stars.txt
+ 2. Cinnamon Stars (see [here](cinnamon_stars.txt))
+diff --git a/cinnamon_stars.txt b/cinnamon_stars.txt
 index 5ccf5d5..4204415 100644
---- a/cinemon_stars.txt
-+++ b/cinemon_stars.txt
+--- a/cinnamon_stars.txt
++++ b/cinnamon_stars.txt
 @@ -1,2 +1,2 @@
 -Prepare dough like written in [the biscuits recipe](biscuits.txt) but add 1/2 teaspoon of
--cinemon and 2 tsp of almond extract.
+-cinnamon and 2 tsp of almond extract.
 +- Prepare dough like written in [the biscuits recipe](biscuits.txt)
-+- Add 1/2 teaspoon of cinemon and 2 tsp of almond extract.
++- Add 1/2 teaspoon of cinnamon and 2 tsp of almond extract.
 #+end_src
 which indeed is the union of the two changes introduced.
 

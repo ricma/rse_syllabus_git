@@ -35,7 +35,7 @@ index 2a9e5c1..a134858 100644
 +## Recipes
 +So far we have:
 +1. Biscuits (see [here](biscuits.txt))
-+2. Cinemon Stars (see [here](cinemon_stars.txt))
++2. Cinnamon Stars (see [here](cinnamon_stars.txt))
 #+end_src
 
 Note that you don't have to specify the whole hash. It only has to be

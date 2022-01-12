@@ -20,7 +20,7 @@ Now, a call to ~git log~ tells us that there is another branch:
 git log --oneline --max-count 2
 #+end_src
 #+begin_example
-7d4a511 (HEAD -> master, gluten_free) add link in cinemon star recipe
+7d4a511 (HEAD -> master, gluten_free) add link in cinnamon star recipe
 bd180d6 restructure biscuit recipe
 #+end_example
 
@@ -35,7 +35,7 @@ git checkout gluten_free
 #+end_src
 and now the above ~git log~ would give
 #+begin_example
-7d4a511 (HEAD -> gluten_free, master) add link in cinemon star recipe
+7d4a511 (HEAD -> gluten_free, master) add link in cinnamon star recipe
 bd180d6 restructure biscuit recipe
 #+end_example
 
@@ -89,7 +89,7 @@ git log --oneline --max-count=3
 #+end_src
 #+begin_example
 01bb2d4 (HEAD -> gluten_free) make biscuits recipe gluten free
-7d4a511 (master) add link in cinemon star recipe
+7d4a511 (master) add link in cinnamon star recipe
 bd180d6 restructure biscuit recipe
 #+end_example
 we see that our old branch, =master=, has not moved.
@@ -118,11 +118,11 @@ git log --oneline --all
 #+begin_example
 5755eba (HEAD -> master) replace margarine with butter in biscuit recipe
 01bb2d4 (gluten_free) make biscuits recipe gluten free
-7d4a511 add link in cinemon star recipe
+7d4a511 add link in cinnamon star recipe
 bd180d6 restructure biscuit recipe
 ad7f952 add recipe overview to README.md
 957e0f7 add biscuit recipe
-7dae468 add a cinemon star recipe
+7dae468 add a cinnamon star recipe
 efa0975 initial commit for recipes
 #+end_example
 
@@ -135,7 +135,7 @@ git graph --max-count 4
  * 5755eba - (61 seconds ago) replace margarine with butter in biscuit recipe (HEAD -> master)
  | * 01bb2d4 - (11 minutes ago) make biscuits recipe gluten free (gluten_free)
  |/
- * 7d4a511 - (25 hours ago) add link in cinemon star recipe
+ * 7d4a511 - (25 hours ago) add link in cinnamon star recipe
  * bd180d6 - (25 hours ago) restructure biscuit recipe
 #+end_example
 
@@ -170,7 +170,7 @@ index a134858..21f7c73 100644
  So far we have:
 -1. Biscuits (see [here](biscuits.txt))
 +1. Biscuits (see [here](biscuits.txt), basd on buckwheat flour)
- 2. Cinemon Stars (see [here](cinemon_stars.txt))
+ 2. Cinnamon Stars (see [here](cinnamon_stars.txt))
 #+end_src
 Note that we introduced a typo in "basd on" - this is on purpose and
 we will correct it later. For now we can
@@ -184,7 +184,7 @@ Now ~git graph --max-count 4~ gives
  * 01bb2d4 - (26 minutes ago) make biscuits recipe gluten free
  | * 5755eba - (16 minutes ago) replace margarine with butter in biscuit recipe (master)
  |/
- * 7d4a511 - (25 hours ago) add link in cinemon star recipe
+ * 7d4a511 - (25 hours ago) add link in cinnamon star recipe
 #+end_example
 so we only advanced ~gluten_free~ and kept ~master~ where it is. By
 this use of /branches/ we can follow different development ideas in
@@ -259,7 +259,7 @@ git graph --max-count 6
  |/
  | * 5755eba - (38 minutes ago) replace margarine with butter in biscuit recipe (master)
  |/
- * 7d4a511 - (26 hours ago) add link in cinemon star recipe
+ * 7d4a511 - (26 hours ago) add link in cinnamon star recipe
  * bd180d6 - (26 hours ago) restructure biscuit recipe
 #+end_example
 

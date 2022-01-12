@@ -29,7 +29,7 @@ This leaves us at
  *   716409e - (3 hours ago) Merge branch 'fix_typo' into gluten_free (gluten_free)
  |\
  | * 4a5c4eb - (3 hours ago) fix typo in README.md (fix_typo)
- * | 461de20 - (3 hours ago) reformat cinemon recipe (HEAD -> gluten_free_merge_again)
+ * | 461de20 - (3 hours ago) reformat cinnamon recipe (HEAD -> gluten_free_merge_again)
  |/
  * 34f83d7 - (5 hours ago) update README for gluten-free recipes
 #+end_example
@@ -74,7 +74,7 @@ index 21f7c73..4fa763f 100644
  So far we have:
 -1. Biscuits (see [here](biscuits.txt), basd on buckwheat flour)
 +1. Biscuits (see [here](biscuits.txt), based on using buckwheat flour)
- 2. Cinemon Stars (see [here](cinemon_stars.txt))
+ 2. Cinnamon Stars (see [here](cinnamon_stars.txt))
 #+end_src
 which is indeed our bug fix!
 
@@ -120,7 +120,7 @@ index 21f7c73..57e1a29 100644
  So far we have:
 -1. Biscuits (see [here](biscuits.txt), basd on buckwheat flour)
 +1. Biscuits (see [here](biscuits.txt), based on buckwheat flour)
- 2. Cinemon Stars (see [here](cinemon_stars.txt))
+ 2. Cinnamon Stars (see [here](cinnamon_stars.txt))
 #+end_src
 
 We can finally commit. We could either type a ~-m 'merge fix'~ or we
@@ -145,7 +145,7 @@ At this point the commit history starts looking a bit complicated
  | |/|
  |/|/
  | * 4a5c4eb - (3 hours ago) fix typo in README.md (fix_typo)
- * | 461de20 - (3 hours ago) reformat cinemon recipe
+ * | 461de20 - (3 hours ago) reformat cinnamon recipe
  |/
  * 34f83d7 - (6 hours ago) update README for gluten-free recipes
  * 01bb2d4 - (6 hours ago) make biscuits recipe gluten free
@@ -154,11 +154,11 @@ At this point the commit history starts looking a bit complicated
  |/
  | * 5755eba - (6 hours ago) replace margarine with butter in biscuit recipe (master)
  |/
- * 7d4a511 - (31 hours ago) add link in cinemon star recipe
+ * 7d4a511 - (31 hours ago) add link in cinnamon star recipe
  * bd180d6 - (31 hours ago) restructure biscuit recipe
  * ad7f952 - (31 hours ago) add recipe overview to README.md
  * 957e0f7 - (2 days ago) add biscuit recipe
- * 7dae468 - (2 days ago) add a cinemon star recipe
+ * 7dae468 - (2 days ago) add a cinnamon star recipe
  * efa0975 - (2 days ago) initial commit for recipes
 #+end_example
 This is mainly due to us having created a new branch to play around
@@ -185,7 +185,7 @@ index 57e1a29..4fa763f 100644
  So far we have:
 -1. Biscuits (see [here](biscuits.txt), based on using buckwheat flour)
 +1. Biscuits (see [here](biscuits.txt), based on buckwheat flour)
- 2. Cinemon Stars (see [here](cinemon_stars.txt))
+ 2. Cinnamon Stars (see [here](cinnamon_stars.txt))
 #+end_src
 Note that this is exactly the change we introduced between the ~git
 merge --no-commit~ and the ~git commit -F~ above!

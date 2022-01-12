@@ -7,12 +7,207 @@ We will spot a bug we introduced (relying on things we learned about
 
 We will then use ~git merge~ to feed our fix back in.
 
-** Finding the bug
+** Finding the bug                                                     :cmds:
+If you remember the bug was that I mistyped "based" as "basd". Let's
+find the commit:
+#+begin_quote
+git log --oneline --all -G basd
+#+end_quote
+#+begin_example
+34f83d7 (gluten_free) update README for gluten-free recipes
+#+end_example
 
+The error was introduced in commit ~34f83d7~ (NB: your number is
+different!) which currently is also the last commit in branch
+~gluten_free~.
 
+Instead of touching this branch, we will create a new branch at the
+point where we want to fix the bug:
+#+begin_src shell-script
+  git branch fix_typo 34f83d7
+  git checkout fix_typo
+#+end_src
+Note: Because it happens quite often that one wants to create a branch
+and swtich to it, there is also a shortcut: ~git checkout -b fix_typo
+34f83d7~.
 
+** Fixing the bug
+Let us fix the bug (replace "basd on" with "based on using") and
+commit the fix:
+#+begin_src shell-script
+  git add README.md
+  git commit -m 'fix typo in README.md'
+#+end_src
+Now our history looks like this (~git graph --all -n 7~)
+#+begin_example
+ * 4a5c4eb - (29 seconds ago) fix typo in README.md (HEAD -> fix_typo)
+ * 34f83d7 - (2 hours ago) update README for gluten-free recipes (gluten_free)
+ * 01bb2d4 - (3 hours ago) make biscuits recipe gluten free
+ | * ec39d14 - (34 minutes ago) add replacement for honey (github/vegan, vegan)
+ | * 49e8505 - (2 hours ago) add table of replacements in vegan recipes (tag: v_0.1_vegan_replacement)
+ |/
+ | * 5755eba - (3 hours ago) replace margarine with butter in biscuit recipe (github/main, master)
+ |/
+ * 7d4a511 - (28 hours ago) add link in cinemon star recipe
+#+end_example
+
+** Merge the fix - Fast Forwards                                       :cmds:
+Let us go back into our ~gluten_free~ branch and merge the result in:
+#+begin_src shell-script
+  git checkout gluten_free
+  git merge fix_typo
+#+end_src
+#+begin_example
+Updating 34f83d7..4a5c4eb
+Fast-forward
+ README.md | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+#+end_example
+#+begin_src shell-script
+  git graph --all -n 3
+#+end_src
+#+begin_example
+ * 4a5c4eb - (2 minutes ago) fix typo in README.md (HEAD -> gluten_free, fix_typo)
+ * 34f83d7 - (2 hours ago) update README for gluten-free recipes
+ * 01bb2d4 - (3 hours ago) make biscuits recipe gluten free
+#+end_example
+
+Note how the ~gluten_free~ simply moved forward to where ~fix_typo~
+was. This is what is called a /fast-forward/ as indicated in the
+above. It is the easiest merge because one of the two branches
+involved did not change at all!
+
+** Fixing the bug - Non-Fast Forwards                                  :cmds:
+Let us rewind what we just did -- let us undo the merge.
+
+From a conceptual level, this is not hard at all: When branches are
+just variables referring to specific commits, then we just need to
+tell git to please reset ~gluten_free~ to the version we were on
+_before_ the merge:
+#+begin_src shell-script
+  git reset --hard 34f83d7    # We could also write HEAD~ here
+#+end_src
+Note again that your number will be different. If you use =HEAD~=
+instead, it will work: It always references the last-but-one commit.
+
+Commands like ~git reset~ have to be used *with care* as you might
+loose information. Nothing in git is ever lost but you should better
+be sure you really don't need the commit you are on (unless another
+branch references to it -- like in our case).
+
+Now our repository looks again like where we started:
+#+begin_src shell-script
+git graph -n 3
+#+end_src
+#+begin_example
+ * 4a5c4eb - (10 minutes ago) fix typo in README.md (fix_typo)
+ * 34f83d7 - (3 hours ago) update README for gluten-free recipes (HEAD -> gluten_free)
+ * 01bb2d4 - (3 hours ago) make biscuits recipe gluten free
+#+end_example
+
+Assume you also put additional information into a different file
+_while_ the bug was fixed. Let us change for example ~cinemon_starts.txt~ to
+#+begin_example
+- Prepare dough like written in [the biscuits recipe](biscuits.txt)
+- Add 1/2 teaspoon of cinemon and 2 tsp of almond extract.
+#+end_example
+and ~git commit -a -m 'reformat cinemon recipe'~. This gives
+via ~git graph -n 3~
+#+begin_example
+ * 461de20 - (8 seconds ago) reformat cinemon recipe (HEAD -> gluten_free)
+ | * 4a5c4eb - (13 minutes ago) fix typo in README.md (fix_typo)
+ |/
+ * 34f83d7 - (3 hours ago) update README for gluten-free recipes
+#+end_example
+
+Now the ~git merge~ cannot possibly be a /fast-forward/ as the
+histories of both branches have diverged! However - they did touch
+different files. This allows git to still go ahead with a merge:
+
+#+begin_src shell-script
+git merge --no-edit fix_typo
+#+end_src
+#+begin_example
+Merge made by the 'recursive' strategy.
+ README.md | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+#+end_example
+
+Note: We added ~--no-edit~ for convenience. If you don't, then an
+editor will open and ask you for a commit message of this merge.  It
+will be prepopulated with the default. If this default is okay, then
+you might as well use ~--no-edit~.
+
+Let us have a look at the history (~git graph -n 5~):
+#+begin_src emacs-lisp
+ *   716409e - (2 minutes ago) Merge branch 'fix_typo' into gluten_free (HEAD -> gluten_free)
+ |\
+ | * 4a5c4eb - (17 minutes ago) fix typo in README.md (fix_typo)
+ * | 461de20 - (4 minutes ago) reformat cinemon recipe
+ |/
+ * 34f83d7 - (3 hours ago) update README for gluten-free recipes
+ * 01bb2d4 - (3 hours ago) make biscuits recipe gluten free
+#+end_src
+
+The first line shows the default message ("Merge branch ...")
+mentioned above.  Furthermore, we see that the history is now properly
+non-linear: It branches off in two separate versions and then merges
+back into one common history!
+
+To see the overall difference to before, we can do:
+#+begin_src shell-script
+  git diff 34f83d7    # same as git diff HEAD~~
+#+end_src
+#+begin_src diff
+diff --git a/README.md b/README.md
+index 21f7c73..4fa763f 100644
+--- a/README.md
++++ b/README.md
+@@ -3,5 +3,5 @@ A collection of gluten-free recipes
+
+ ## Recipes
+ So far we have:
+-1. Biscuits (see [here](biscuits.txt), basd on buckwheat flour)
++1. Biscuits (see [here](biscuits.txt), based on using buckwheat flour)
+ 2. Cinemon Stars (see [here](cinemon_stars.txt))
+diff --git a/cinemon_stars.txt b/cinemon_stars.txt
+index 5ccf5d5..4204415 100644
+--- a/cinemon_stars.txt
++++ b/cinemon_stars.txt
+@@ -1,2 +1,2 @@
+-Prepare dough like written in [the biscuits recipe](biscuits.txt) but add 1/2 teaspoon of
+-cinemon and 2 tsp of almond extract.
++- Prepare dough like written in [the biscuits recipe](biscuits.txt)
++- Add 1/2 teaspoon of cinemon and 2 tsp of almond extract.
+#+end_src
+which indeed is the union of the two changes introduced.
+
+As a last step, we might delete the bugfix branch as we don't need it anymore:
+#+begin_src shell-script
+git branch -d fix_typo
+#+end_src
+#+begin_example
+Deleted branch fix_typo (was 4a5c4eb).
+#+end_example
+
+** Retrieving things accidentally deleted                        :background:
+
+Should you realise that you lost something in one of the destructive
+steps above (~git reset~, ~git branch -d~), there is good news: Git
+always states the commit hash of what has been deleted. As long as you
+know this number, you can create a new branch and let it point to this
+commit!
+
+In our examples:
+#+begin_src shell-script
+  git branch deleted_bugfix_branch_fix 4a5c4eb
+#+end_src
+and you have a branch starting there.
 
 ** Your Task                                                           :task:
+Repeat the above steps. Merging is one of the more complicated
+things - so starting with these simple examples is the best to get
+used to it!
 
 ([[file:README.org::*SDL - Merging Branches][back to main document]])
 

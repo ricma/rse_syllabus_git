@@ -1,0 +1,39 @@
+#+OPTIONS: <:nil d:nil timestamp:t ^:nil tags:nil toc:nil num:nil \n:t
+#+STARTUP: fninline inlineimages showall
+
+* SDL - Creating new Branches
+We will mimic different versions of a piece of software by introducing
+different versions of recipes: We will create a vegan and a gluten
+free version.
+
+We do this by creating new /branches/. In simple terms, a branch is
+just a name of a variable which references a point in our repository
+history and which allows us to continue development from there.
+
+** Create new branches                                                 :cmds:
+To create a new branch at the current state, we can type ~git branch
+gluten_free~. This creates a new branch called =gluten_free=
+referencing the same point as the current state of the repository.
+
+Now, a call to ~git log~ tells us that there is another branch:
+#+begin_src shell-script
+git log --oneline --max-count 2
+#+end_src
+#+begin_example
+7d4a511 (HEAD -> master, gluten_free) add link in cinemon star recipe
+bd180d6 restructure biscuit recipe
+#+end_example
+
+The line ~HEAD -> master~ tells us that our current working directory
+is still on the old, original branch called =master=.
+
+** Your Task                                                           :task:
+
+([[file:README.org::*SDL - Changing Files and Examining the History of Changes][back to main document]])
+
+# Local Variables:
+# mode: org
+# ispell-local-dictionary: "british"
+# eval: (flyspell-mode t)
+# eval: (flyspell-buffer)
+# End:

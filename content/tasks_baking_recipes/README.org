@@ -63,6 +63,22 @@ This self-directed learning task will show you
 - SDL 02.03 :: [[file:sdl_02.03.org][Examining single commits in more detail and Find Changes]]
 
 ** SDL - Branching
+This self directed learning task will introduce the concept of
+/branches/: Ways of keeping different versions of a software under one
+hood and allow for easy switching between them.
+
+We will introduce them first in our local repository and later
+highlight [[*SDL - Working with Remotes][in a later SDL]] how to do the same when collaborating with
+others.
+
+- You will learn how to use ~git branch~ to create new branches and see
+  the available ones.
+- The command ~git checkout~ is used to change branches.
+- The command ~git tag~ allows to permanently mark specific versions.
+
+- SDL 03.01 :: [[file:sdl_03.01.org][Creating new Branches]]
+- SDL 03.02 :: [[file:sdl_03.02.org][Showing differences between branches]]
+- SDL 03.03 :: [[file:sdl_03.03.org][Creating tags to have permanent names]]
 
 ** TODO SDL - Merging Branches
 

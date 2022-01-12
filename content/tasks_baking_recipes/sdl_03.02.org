@@ -1,0 +1,15 @@
+#+OPTIONS: <:nil d:nil timestamp:t ^:nil tags:nil toc:nil num:nil \n:t
+#+STARTUP: fninline inlineimages showall
+
+* SDL - Showing differences between branches
+
+** Your Task                                                           :task:
+
+([[file:README.org::*SDL - Changing Files and Examining the History of Changes][back to main document]])
+
+# Local Variables:
+# mode: org
+# ispell-local-dictionary: "british"
+# eval: (flyspell-mode t)
+# eval: (flyspell-buffer)
+# End:

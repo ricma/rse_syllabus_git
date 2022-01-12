@@ -1,0 +1,22 @@
+#+OPTIONS: <:nil d:nil timestamp:t ^:nil tags:nil toc:nil num:nil \n:t
+#+STARTUP: fninline inlineimages showall
+
+* SDL - Solving Merge CONFLICTs
+In this SDL we will bring ourselves into a /CONFLICT/
+situation. Before solving it, we will abort the merge and look at the
+problem from another side (giving the same result though).
+
+At the end
+
+
+
+** Your Task                                                           :task:
+
+([[file:README.org::*SDL - Merge Conflicts][back to main document]])
+
+# Local Variables:
+# mode: org
+# ispell-local-dictionary: "british"
+# eval: (flyspell-mode t)
+# eval: (flyspell-buffer)
+# End:

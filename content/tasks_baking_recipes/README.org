@@ -95,7 +95,22 @@ We will use the typo (deliberately) introduced in [[file:sdl_branching.01.org::s
 - SDL 04.01 :: [[file:sdl_merging_01.org][Fixing a bug in a separate branch - and merge back]]
 - SDL 04.02 :: [[file:sdl_merging_02.org][A more complicated example and how to abort a merge]]
 
-** TODO SDL - Merge Conflicts
+** SDL - Merge Conflicts
+In this example we will create a proper conflict -- and looks at ways
+to resolve it.
+
+To get a feeling of how complicated it can get, let us combine our
+~vegan~ and ~gluten_free~ recipes into a ~vegan_and_gf~ branch.
+
+At the end of this task, you will be able to
+- understand what the words and markers in a merge conflict mean and
+- how to resolve them
+But let there be a warning ahead: Merge conflicts mainly mean finding
+a common ground for opposite views. When you work with colleagues, it
+is necessary to talk to them at this stage!
+
+- SDL 05.01 :: [[file:sdl_merge_conflict_01.org][Examining Merge CONFLICTs]]
+- SDL 05.02 :: [[file:sdl_merge_conflict_01.org][Solving Merge CONFLICTs]]
 
 ** TODO SDL - Rebase Branches
 

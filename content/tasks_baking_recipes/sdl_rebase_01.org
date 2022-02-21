@@ -1,0 +1,8 @@
+#+OPTIONS: <:nil d:nil timestamp:t ^:nil tags:nil toc:nil num:nil \n:t
+#+STARTUP: fninline inlineimages showall
+
+* SDL - Rebase a branch onto another branch - Example 1
+In order to combine the content from the gluten-free and the vegan
+branches in this example we will rebase ~vegan~ onto ~gluten-free~.
+The [[file:sdl_rebase_02.org::*SDL - Rebase a branch onto another branch - Example 2][second example SDL]] achieves a similar result but by rebasing the
+other way around.

@@ -112,7 +112,35 @@ is necessary to talk to them at this stage!
 - SDL 05.01 :: [[file:sdl_merge_conflict_01.org][Examining Merge CONFLICTs]]
 - SDL 05.02 :: [[file:sdl_merge_conflict_02.org][Solving Merge CONFLICTs]]
 
+For more information, see [[https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging][Pro Git (book, online version)]].
+
 ** TODO SDL - Rebase Branches
+The above method of resolving conflicts via /merges/ has a
+disadvantage: It leaves the history of the repository in a very
+non-linear state (see [[file:sdl_merge_conflict_02.org::fig:gitk_after_conflict_resolution][the screenshot]]).
+
+Instead of these merges, which take two branches and bundle them back
+together to form a combined, resolved new state, we can use
+/rebases/. They detach the current branch from the last common
+ancestor and try to reattach it _on top_ of the other branch - a bit
+like [[https://en.wikipedia.org/wiki/Grafting][grafting]] a branch of an apple tree onto a different trunk.
+
+We will re-visit our above conflict situation and use ~git rebase~.
+
+At the end of this task you will be able to
+- understand the differences between /merge/ and /rebase/
+- point out the advantages and disadvantages of /rebase/.
+
+Because we already examined the merge conflict [[*SDL - Merge Conflicts][above]], we can start
+right away: First, we will rebase the ~vegan~ branch onto the
+~gluten_free~ one. Second, we will do it the other way around. In
+reality, you would rebase _your_ changes onto the existing ones. Here,
+we do it both ways solely for educational purposes.
+
+- SDL 06.01 :: [[file:sdl_rebase_01.org][Rebase ~vegan~ onto ~gluten-free~ to combine content]]
+- SDL 06.02 :: [[file:sdl_rebase_02.org][Rebase ~gluten-free~ onto ~vegan~ to combine content]]
+
+For more information, see [[https://git-scm.com/book/en/v2/Git-Branching-Rebasing][Pro Git (book, online version)]].
 
 ** TODO SDL - Working with Remotes
 

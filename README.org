@@ -1,3 +1,16 @@
 * Notes on How to use GIT in Academia
 
   A short course with examples on how and why to use ~git~.
+
+* Video Recordings
+
+- Introduction Video (20 min)
+  /RSE - Course - Part 02 - Version control - 01 - Introduction to git/
+  [[https://web.microsoftstream.com/video/eb592952-6139-42b2-a431-b0147dbb85c1]]
+  Material to go along:
+  [[https://github.com/ricma/rse_syllabus_git/blob/first_practical_steps/content/first_steps_git/first_steps.org]]
+
+* Request for Comments
+
+- Richard and Josh
+  [[mu4e:msgid:87sfrbbjl4.fsf@nottingham.ac.uk][git Course and Self Directed Learning tasks]]

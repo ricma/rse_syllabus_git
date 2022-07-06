@@ -57,6 +57,8 @@ This self-directed learning task will show you
   (~git add~, ~git commit~)
 - how to see how the repository is growing as we go along (~git
   status~, ~git diff~, ~git log~, ~git show~)
+- If there are files you don't care about, then you tell git to ignore
+  them (~git ignore~)
 
 - SDL 02.01 :: [[file:sdl_change_files.01.org][Changing existing files]]
 - SDL 02.02 :: [[file:sdl_change_files.02.org][Examining what we have done so far]]

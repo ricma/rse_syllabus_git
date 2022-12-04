@@ -29,13 +29,23 @@ You can mainly focus on point *b)* if you prefer. Some of you will find
 *a)* and *c)* helpful to understand what is going on - everyone's style of
 learning is different!
 
-** TODO Learning Outcomes                                               :LOs:
+** Learning Outcomes :LOs:
 
 By the end of these tasks, you will be able to
 1. Know how to put files under version control
+   (SDLs 1)
 2. Know the difference between the /index/ and the /repository/
+   (SDLs 1 and 2)
 3. Be able to look at the history of a repository
-4. ...
+   (SDLs 2)
+4. How to work on different aspects of a problem (branches)
+   (SDLs 3, 4, and 5)
+5. Know the difference between /merging/ and /rebasing/
+   (SDLs 4 and 6)
+6. How to work with different remote repositories
+   (SDLs 7)
+7. Extra: How to quickly find a commit which introduced a bug (~git bisect~)
+   (SDLs 8)
 
 ** Before you start
 
@@ -136,8 +146,8 @@ At the end of this task you will be able to
 Because we already examined the merge conflict [[*SDL - Merge Conflicts][above]], we can start
 right away: First, we will rebase the ~vegan~ branch onto the
 ~gluten_free~ one. Second, we will do it the other way around. In
-reality, you would rebase _your_ changes onto the existing ones. Here,
-we do it both ways solely for educational purposes.
+reality, you would rebase _your_ changes onto other peoples work,
+for example. Here, we do it both ways solely for educational purposes.
 
 - SDL 06.01 :: [[file:sdl_rebase_01.org][Rebase ~vegan~ onto ~gluten-free~ to combine content]]
 - SDL 06.02 :: [[file:sdl_rebase_02.org][Rebase ~gluten-free~ onto ~vegan~ to combine content]]

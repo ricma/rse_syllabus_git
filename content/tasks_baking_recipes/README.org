@@ -5,6 +5,13 @@
 #+OPTIONS: <:nil d:nil timestamp:t ^:nil tags:nil toc:nil num:nil \n:t
 #+STARTUP: fninline inlineimages showall
 
+#
+# Comment: In order to start with a clean shell, I used this to set up the
+# recipe example locally:
+#   HOME=~/temp_dir_rse_course zsh -l
+# And then (if recipe book not yet present)
+#   % git -C ~/ clone git@github.com:ricma/recipe_book_example.git
+#
 This folder contains step-by-step examples on how to use git.
 
 In order to keep in language agnostic, we will use baking recipes as

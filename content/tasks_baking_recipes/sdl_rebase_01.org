@@ -58,7 +58,7 @@ since we branched off from ~master~ onto all the changes in ~gluten_free~:
 #+begin_src shell-script
 git rebase gluten_free_1
 #+end_src
-#+begin_quote
+#+begin_example
 First, rewinding head to replay your work on top of it...
 Applying: add table of replacements in vegan recipes
 Applying: add replacement for honey
@@ -78,7 +78,7 @@ Resolve all conflicts manually, mark them as resolved with
 "git add/rm <conflicted_files>", then run "git rebase --continue".
 You can instead skip this commit: run "git rebase --skip".
 To abort and get back to the state before "git rebase", run "git rebase --abort".
-#+end_quote
+#+end_example
 
 The most important bit first: If you don't feel comfortable finishing this task, then
 #+begin_src shell-script

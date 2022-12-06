@@ -112,7 +112,7 @@ More specifically, we have to investigate what is in this /both modified/ files:
 #+begin_src shell-script
 git diff README.md
 #+end_src
-#+begin_src smerge
+#+begin_src diff
 diff --cc README.md
 index 4fa763f,68a50d7..0000000
 --- a/README.md

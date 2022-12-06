@@ -136,3 +136,29 @@ index 4fa763f,68a50d7..0000000
 + ## Common replacements
 + See this [table](substitutes.rst)
 #+end_src
+
+Before we continue. let us understand what are we seeing here. Just like we had
+seen when solving the ~merge conflict~ [[file:sdl_merge_conflict_01.org::*Examining the merge conflict][earlier]], there are certain markers in
+between which we see different versions of the file (see [[file:sdl_merge_conflict_01.org::*Adding more information to merges: three-way-merges][here]]).
+
+Now, there are lines indicating conflicts
+1. *<<<<<<< HEAD*
+2. *||||||| constructed merge base*
+3. *=======*, and
+4. *>>>>>>> add link to table, add notes to recipe*
+
+Unlike when merging, the markers have different labels here. Between /HEAD/ and
+/constructed merge base/, we see the version which is present in branch
+~gluten_free_1~. You can check this by viewing a specific version of a file:
+#+begin_src shell-script
+git show gluten_free_1:README.md
+#+end_src
+
+The version between ~=======~ and ~>>>>>>>~ is the version at the commit with the
+indicated commit message (in our case this is the same as ~vegan_1~).
+
+The content between the two lines ~|||||||~ and ~=======~ is from the commit where
+the two branches we are looking at diverged from. In our case this commit happens to be the ancestor of the most recent commit in ~master~. We can therefore either address it as ~7d4a511~ or ~master^~. So you can see the whole file by calling
+#+begin_src shell-script
+git show master^:README.md
+#+end_src

@@ -182,7 +182,7 @@ Let's see it in action:
   git merge gluten_free
 #+end_src
 Now the content of ~biscuits.txt~ is
-#+begin_src smerge
+#+begin_src diff
 # Ingredients
 <<<<<<< HEAD
 250g very fine flour

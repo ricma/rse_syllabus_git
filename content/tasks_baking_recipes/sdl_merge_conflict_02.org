@@ -51,7 +51,7 @@ index 68a50d7,4fa763f..0000000
   So far we have:
 - 1. Biscuits (see [here](biscuits.txt))
 + 1. Biscuits (see [here](biscuits.txt), based on using buckwheat flour)
-  2. Cinemon Stars (see [here](cinemon_stars.txt))
+  2. Cinnamon Stars (see [here](cinemon_stars.txt))
 +
 + ## Common replacements
 + See this [table](substitutes.rst)
@@ -64,7 +64,7 @@ A collection of vegan, gluten-free recipes
 ## Recipes
 So far we have:
 1. Biscuits (see [here](biscuits.txt), based on using buckwheat flour, banana, and margarine)
-2. Cinemon Stars (see [here](cinemon_stars.txt))
+2. Cinnamon Stars (see [here](cinemon_stars.txt))
 
 ## Common replacements
 See this [table](substitutes.rst)

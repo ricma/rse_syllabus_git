@@ -22,7 +22,7 @@ git branch vegan_1 e40def1
    Your repsoitory should look like this (where you can ignore the merge at the
    top (~3525589~) for this SDL.
    #+begin_src shell-script
-% git graph -n 11
+git graph -n 11
    #+end_src
    #+begin_example
  *   3525589 - (11 months ago) merge gluten-free and vegan recipes

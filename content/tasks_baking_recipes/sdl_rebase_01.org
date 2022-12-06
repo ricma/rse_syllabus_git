@@ -6,3 +6,133 @@ In order to combine the content from the gluten-free and the vegan
 branches in this example we will rebase ~vegan~ onto ~gluten-free~.
 The [[file:sdl_rebase_02.org::*SDL - Rebase a branch onto another branch - Example 2][second example SDL]] achieves a similar result but by rebasing the
 other way around.
+
+** Getting back to before the merge
+In order to compare what we are achieving with a rebase, let us go back to where
+we were before the merge in [[file:sdl_merge_conflict_01.org::*Creating a merge conflict][a previous SDL]]:
+
+1. Introduce new branches called ~gluten_free_1~ and ~vegan_1~ at the states where their originals were before we merged them into ~vegan_and_gf~. Note that the original branches might be gone if you deleted / renamed them [[file:sdl_merge_conflict_02.org::*Clean up branches][earlier]].
+   #+begin_src shell-script
+git branch gluten_free_1 716409
+git branch vegan_1 e40def1
+   #+end_src
+   Note that your numbers will be different and you have to take them from your
+   repository.
+
+   Your repsoitory should look like this (where you can ignore the merge at the
+   top (~3525589~) for this SDL.
+   #+begin_src shell-script
+% git graph -n 11
+   #+end_src
+   #+begin_example
+ *   3525589 - (11 months ago) merge gluten-free and vegan recipes
+ |       (HEAD -> vegan_and_gf, tag: v_0.2_first_vegan_gf_version, github/vegan_and_gf)
+ |\
+ | *   716409e - (11 months ago) Merge branch 'fix_typo' into gluten_free (gluten_free_1)
+ | |\
+ | | * 4a5c4eb - (11 months ago) fix typo in README.md
+ | * | 461de20 - (11 months ago) reformat cinemon recipe
+ | |/
+ | * 34f83d7 - (11 months ago) update README for gluten-free recipes
+ | * 01bb2d4 - (11 months ago) make biscuits recipe gluten free
+ * | e40def1 - (11 months ago) add link to table, add notes to recipe (vegan_1)
+ * | ec39d14 - (11 months ago) add replacement for honey
+ * | 49e8505 - (11 months ago) add table of replacements in vegan recipes (tag: v_0.1_vegan_replacement)
+ |/
+ | * 5755eba - (11 months ago) replace margarine with butter in biscuit recipe (master)
+ |/
+ * 7d4a511 - (11 months ago) add link in cinemon star recipe
+   #+end_example
+
+2. Checkout one of the branches you just created. (And also note that a branch
+   is nothing more than just a name for a point in the tree - pretty much like a
+   variable name in a program can contain a value)
+   #+begin_src shell-script
+git checkout vegan_1
+   #+end_src
+
+** Rebasing the Changes from ~vegan~ onto the ~gluten_free~ branch
+Now we are all set and we can put all the changes introduced in the branch ~vegan~
+since we branched off from ~master~ onto all the changes in ~gluten_free~:
+
+#+begin_src shell-script
+git rebase gluten_free_1
+#+end_src
+#+begin_quote
+First, rewinding head to replay your work on top of it...
+Applying: add table of replacements in vegan recipes
+Applying: add replacement for honey
+Applying: add link to table, add notes to recipe
+Using index info to reconstruct a base tree...
+M       README.md
+M       biscuits.txt
+Falling back to patching base and 3-way merge...
+Auto-merging biscuits.txt
+CONFLICT (content): Merge conflict in biscuits.txt
+Auto-merging README.md
+CONFLICT (content): Merge conflict in README.md
+error: Failed to merge in the changes.
+Patch failed at 0003 add link to table, add notes to recipe
+hint: Use 'git am --show-current-patch' to see the failed patch
+Resolve all conflicts manually, mark them as resolved with
+"git add/rm <conflicted_files>", then run "git rebase --continue".
+You can instead skip this commit: run "git rebase --skip".
+To abort and get back to the state before "git rebase", run "git rebase --abort".
+#+end_quote
+
+The most important bit first: If you don't feel comfortable finishing this task, then
+#+begin_src shell-script
+git rebase --abort
+#+end_src
+brings your right back to before you started your attempt.
+
+** Solving the CONFLICTs
+However, we do feel up for the task and we instead have a look at the
+repository:
+#+begin_src shell-script
+git status
+#+end_src
+#+begin_example
+rebase in progress; onto 716409e
+You are currently rebasing branch 'vegan_1' on '716409e'.
+  (fix conflicts and then run "git rebase --continue")
+  (use "git rebase --skip" to skip this patch)
+  (use "git rebase --abort" to check out the original branch)
+
+Unmerged paths:
+  (use "git restore --staged <file>..." to unstage)
+  (use "git add <file>..." to mark resolution)
+        both modified:   README.md
+        both modified:   biscuits.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+#+end_example
+
+More specifically, we have to investigate what is in this /both modified/ files:
+#+begin_src shell-script
+git diff README.md
+#+end_src
+#+begin_src diff
+diff --cc README.md
+index 4fa763f,68a50d7..0000000
+--- a/README.md
++++ b/README.md
+@@@ -1,7 -1,10 +1,16 @@@
+  # Overview
+++<<<<<<< HEAD
+ +A collection of gluten-free recipes
+++||||||| constructed merge base
+++A collection of recipes
+++=======
++ A collection of vegan recipes
+++>>>>>>> add link to table, add notes to recipe
+
+  ## Recipes
+  So far we have:
+ -1. Biscuits (see [here](biscuits.txt))
+ +1. Biscuits (see [here](biscuits.txt), based on using buckwheat flour)
+  2. Cinemon Stars (see [here](cinemon_stars.txt))
++
++ ## Common replacements
++ See this [table](substitutes.rst)
+#+end_src

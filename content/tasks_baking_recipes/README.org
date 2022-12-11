@@ -132,7 +132,7 @@ is necessary to talk to them at this stage!
 
 For more information, see [[https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging][Pro Git (book, online version)]].
 
-** TODO SDL - Rebase Branches
+** SDL - Rebase Branches
 The above method of resolving conflicts via /merges/ has a
 disadvantage: It leaves the history of the repository in a very
 non-linear state (see [[file:sdl_merge_conflict_02.org::fig:gitk_after_conflict_resolution][the screenshot]]).

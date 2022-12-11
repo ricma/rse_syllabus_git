@@ -260,10 +260,41 @@ time but the /Committer/ is the one who did the rebase including the current tim
 - Caution with already published commits :: If you are working with others,
   rebasing might be less desirable if you have already shared your commits with
   others. Note how the commit with the label /add replacement for honey/ changed
-  from ~ec39d14~ to ~70001cc~. If you have already copied ("/pushed/") it to a server,
-  then you might not be able to easily copy your rebased version as this could
-  lead to a loss of work.
+  from ~ec39d14~ to ~70001cc~ – in fact, the commit with that description can
+  therefore be seen twice in the above screenshot / history! If you have already
+  copied ("/pushed/") it to a server, then you might not be able to easily copy
+  your rebased version as this could lead to a loss of work.
 - Advidse :: If you work on a separate part of code / text, create your own
   branch. This will reduce the amount of /rebases/ and /merges/ while copying your
   work to others. Only once your and/or their work is done, you combine it using
   a /merge/.
+
+** Your Task                                                           :task:
+Play around with the above situation. Don't be afraid of getting into
+conflicts. You can always get out again by ~git rebase --abort~.
+
+If you get stuck and want to start this task from the beginning, you can always
+#+begin_src shell-script
+# This is how you force your currently checked out branch to be somewhere else
+git checkout vegan_1
+git reset --hard  e40def1
+# This is how you force a different branch to be somewhere else
+git branch -f gluten_free_1 716409
+#+end_src
+
+Alternatively, you could also start with two new branches ~vegan_1b~ and
+~gluten_free_1b~ in all the above.
+
+You only have to be careful in the same sense as for ~git merge~: If you call ~git
+rebase~ and start adding changes, those changes will be lost when you abort. Git
+can only protect things you committed. Before this, you might loose what you
+have just done.
+
+([[file:README.org::*SDL - Rebase Branches][back to main document]])
+
+# Local Variables:
+# mode: org
+# ispell-local-dictionary: "british"
+# eval: (flyspell-mode t)
+# eval: (flyspell-buffer)
+# End:

@@ -58,6 +58,8 @@ since we branched off from ~master~ onto all the changes in ~gluten_free~:
 #+begin_src shell-script
 git rebase gluten_free_1
 #+end_src
+
+#+name: output:git_rebase_1
 #+begin_example
 First, rewinding head to replay your work on top of it...
 Applying: add table of replacements in vegan recipes
@@ -79,6 +81,10 @@ Resolve all conflicts manually, mark them as resolved with
 You can instead skip this commit: run "git rebase --skip".
 To abort and get back to the state before "git rebase", run "git rebase --abort".
 #+end_example
+
+Have a look at the first few lines of ths output: ~git~ is /Applying: …/ commits and
+for two of them, this works without problem. Only the third one makes trouble
+and results in /CONFLICT/.
 
 The most important bit first: If you don't feel comfortable finishing this task, then
 #+begin_src shell-script
@@ -137,9 +143,15 @@ index 4fa763f,68a50d7..0000000
 + See this [table](substitutes.rst)
 #+end_src
 
-Before we continue. let us understand what are we seeing here. Just like we had
-seen when solving the ~merge conflict~ [[file:sdl_merge_conflict_01.org::*Examining the merge conflict][earlier]], there are certain markers in
-between which we see different versions of the file (see [[file:sdl_merge_conflict_01.org::*Adding more information to merges: three-way-merges][here]]).
+Before we continue, let us understand what are we seeing here.
+
+At the very bottom, there is a part of the change which just got applied. There
+was no conflict there as this was something which was only introduced in the
+commit at the very end of the branch ~vegan_1~ (in our case ~e40def1~).
+
+But there is more: Just like we had seen when solving the ~merge conflict~ [[file:sdl_merge_conflict_01.org::*Examining the merge conflict][earlier]],
+there are certain markers in between which we see different
+versions of the file (see [[file:sdl_merge_conflict_01.org::*Adding more information to merges: three-way-merges][here]]).
 
 Now, there are lines indicating conflicts
 1. *<<<<<<< HEAD*
@@ -158,7 +170,10 @@ The version between ~=======~ and ~>>>>>>>~ is the version at the commit with th
 indicated commit message (in our case this is the same as ~vegan_1~).
 
 The content between the two lines ~|||||||~ and ~=======~ is from the commit where
-the two branches we are looking at diverged from. In our case this commit happens to be the ancestor of the most recent commit in ~master~. We can therefore either address it as ~7d4a511~ or ~master^~. So you can see the whole file by calling
+the two branches we are looking at diverged from. In our case this commit
+happens to be the ancestor of the most recent commit in ~master~. We can therefore
+either address it as ~7d4a511~ or ~master^~. So you can see the whole file by
+calling
 #+begin_src shell-script
 git show master^:README.md
 #+end_src
@@ -189,6 +204,9 @@ git rebase --continue
 #+begin_example
 applying: add link to table, add notes to recipe
 #+end_example
+
+The line /Applying: …/ informs us that the change from this very commit is now
+apply on top of the commits before, compare to the lines [[output:git_rebase_1][above]].
 
 The resulting state looks like this:
 #+begin_src shell

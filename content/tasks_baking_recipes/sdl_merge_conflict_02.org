@@ -57,6 +57,7 @@ index 68a50d7,4fa763f..0000000
 + See this [table](substitutes.rst)
   #+end_src
 - Replace the content with
+  #+name: code:merge_conflic_solved
   #+begin_src markdown
 # Overview
 A collection of vegan, gluten-free recipes

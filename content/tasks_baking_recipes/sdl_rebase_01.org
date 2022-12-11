@@ -186,15 +186,15 @@ rebase:
 git add README.md biscuits.txt
 git rebase --continue
 #+end_src
-#+begin_quote
+#+begin_example
 applying: add link to table, add notes to recipe
-#+end_quote
+#+end_example
 
 The resulting state looks like this:
 #+begin_src shell
 git graph -n 14
 #+end_src
-#+begin_quote
+#+begin_example
  * 078e2b8 - (46 seconds ago) add link to table, add notes to recipe (HEAD -> vegan_1)
  * 70001cc - (25 hours ago) add replacement for honey
  * 726de4d - (25 hours ago) add table of replacements in vegan recipes
@@ -218,4 +218,4 @@ git graph -n 14
  | * 5755eba - (11 months ago) replace margarine with butter in biscuit recipe (master)
  | /
  * 7d4a511 - (11 months ago) add link in cinemon star recipe
-#+end_quote
+#+end_example

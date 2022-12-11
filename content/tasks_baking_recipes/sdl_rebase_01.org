@@ -217,12 +217,11 @@ git graph -n 14
  * 70001cc - (25 hours ago) add replacement for honey
  * 726de4d - (25 hours ago) add table of replacements in vegan recipes
  | *   3525589 - (11 months ago) merge gluten-free and vegan recipes
- | |             (tag: v_0.2_first_vegan_gf_version, github/vegan_and_gf, vegan_and_gf)
- | |\
+ | |\            (tag: v_0.2_first_vegan_gf_version, github/vegan_and_gf, vegan_and_gf)
  | |/
  |/|
- * |   716409e - (11 months ago) Merge branch 'fix_typo' into gluten_free (gluten_free_1)
- |\ \
+ * |   716409e - (11 months ago) Merge branch 'fix_typo' into gluten_free
+ |\ \            (gluten_free_1)
  | * | 4a5c4eb - (11 months ago) fix typo in README.md
  * | | 461de20 - (11 months ago) reformat cinemon recipe
  |/ /
@@ -231,9 +230,27 @@ git graph -n 14
  | * e40def1 - (11 months ago) add link to table, add notes to recipe
  | * ec39d14 - (11 months ago) add replacement for honey
  | * 49e8505 - (11 months ago) add table of replacements in vegan recipes
- | |           (tag: v_0.1_vegan_replacement)
- | /
- | * 5755eba - (11 months ago) replace margarine with butter in biscuit recipe (master)
- | /
+ | /           (tag: v_0.1_vegan_replacement)
+ | * 5755eba - (11 months ago) replace margarine with butter in biscuit recipe
+ | /           (master)
  * 7d4a511 - (11 months ago) add link in cinemon star recipe
 #+end_example
+
+The main difference to merges is that the resulting historry is linear: Instead
+of combining two branches together, we cut a branch off and position it on top
+of an existing one.
+
+- Benefits :: You will get a linear version history which might be easier to understand later
+- Drawbacks :: Rebases can be more complicated than merges as you can have
+  /CONFLICTs/ in every commit you rebase. Above, we were lucky that it only
+  happened at the last one. But it could have happened at every single /Applying …/ step.
+- Caution with already published commits :: If you are working with others,
+  rebasing might be less desirable if you have already shared your commits with
+  others. Note how the commit with the label /add replacement for honey/ changed
+  from ~ec39d14~ to ~70001cc~. If you have already copied ("/pushed/") it to a server,
+  then you might not be able to easily copy your rebased version as this could
+  lead to a loss of work.
+- Advidse :: If you work on a separate part of code / text, create your own
+  branch. This will reduce the amount of /rebases/ and /merges/ while copying your
+  work to others. Only once your and/or their work is done, you combine it using
+  a /merge/.

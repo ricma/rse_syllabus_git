@@ -19,7 +19,7 @@ git branch vegan_1 e40def1
    Note that your numbers will be different and you have to take them from your
    repository.
 
-   Your repsoitory should look like this (where you can ignore the merge at the
+   Your repository should look like this (where you can ignore the merge at the
    top (~3525589~) for this SDL.
    #+begin_src shell-script
 git graph -n 11
@@ -195,7 +195,7 @@ rm biscuits.txt
 git show v_0.2_first_vegan_gf_version:biscuits.txt > biscuits.txt
 #+end_src
 
-After having put a version into both files we like, we commit and contrinue the
+After having put a version into both files we like, we commit and continue the
 rebase:
 #+begin_src shell-script
 git add README.md biscuits.txt
@@ -247,7 +247,7 @@ Using ~gitk --all~ gives the following view:
 #+caption: /Committer/ is the one who did the rebase including the current time.
 [[file:figures/task_06_010.png]]
 
-The main difference to merges is that the resulting historry is linear: Instead
+The main difference to merges is that the resulting history is linear: Instead
 of combining two branches together, we cut a branch off and position it on top
 of an existing one. Also note in the ~gitk --all~ screenshot: The last commit of
 the ones being rebased is selected. Note how the /Author/ and the time is the old

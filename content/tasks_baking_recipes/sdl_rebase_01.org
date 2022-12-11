@@ -206,8 +206,7 @@ applying: add link to table, add notes to recipe
 #+end_example
 
 The line /Applying: …/ informs us that the change from this very commit is now
-apply on top of the commits before, compare to the lines [[output:git_rebase_1][above]] when
-[[*Rebasing the Changes from ~vegan~ onto the ~gluten_free~ branch][starting the rebase]].
+apply on top of the commits before, compare to the lines [[output:git_rebase_1][above]].
 
 The resulting state looks like this:
 #+begin_src shell

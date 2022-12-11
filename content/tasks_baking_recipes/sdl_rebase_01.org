@@ -249,7 +249,9 @@ Using ~gitk --all~ gives the following view:
 
 The main difference to merges is that the resulting historry is linear: Instead
 of combining two branches together, we cut a branch off and position it on top
-of an existing one.
+of an existing one. Also note in the ~gitk --all~ screenshot: The last commit of
+the ones being rebased is selected. Note how the /Author/ and the time is the old
+time but the /Committer/ is the one who did the rebase including the current time.
 
 - Benefits :: You will get a linear version history which might be easier to understand later
 - Drawbacks :: Rebases can be more complicated than merges as you can have

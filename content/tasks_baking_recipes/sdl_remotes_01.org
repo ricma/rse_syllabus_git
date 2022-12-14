@@ -13,8 +13,8 @@ computer. It sounds a bit odd - but will allow us to play around with remotes
 and get used to the concepts without having to set up complicated things on,
 e.g. [[https://github.com]].
 
-** TODO Set up a bare Repository
-If you have a look at your repository, you might have realized, that there is a
+** Set up a bare Repository
+If you have a look at your repository, you might have realised, that there is a
 ~.git~ folder at its base level:
 #+begin_src shell script
 ls -la
@@ -64,7 +64,7 @@ AUTO_MERGE  COMMIT_EDITMSG  description  gitk.cache  hooks  info  objects    pac
 branches    config          FETCH_HEAD   HEAD        index  logs  ORIG_HEAD  refs
 #+end_example
 We are not going to go into any detail about what this all is -- we just want to
-emphasize that we won't be doing any actual work in the /bare/ repository.
+emphasise that we won't be doing any actual work in the /bare/ repository.
 
 Now with this repository in place, we can register it as a /remote/ in our working copy:
 #+begin_src shell-script
@@ -97,8 +97,8 @@ From /home/martin/recipe_book_example
  * [new branch]      vegan_2       -> local/vegan_2
 #+end_example
 
-This tells us that there are several branches available on the /bare/ repo and
-that they will be called ~local/xyz~ here.
+This tells us that there are several branches available on the /bare/ repository
+and that they will be called ~local/xyz~ here.
 
 If we call ~git log --all~ or ~gitk --all~, they will show the remote as well:
 #+begin_src shell-script
@@ -136,7 +136,7 @@ Note that the branch ~gluten_free_2~ exists twice: Once locally, once on the
 remote.
 
 We mentioned ~git fetch~ above to get the current state of a remote into our local
-repositories database. To synchronize the other way around, use
+repositories database. To synchronise the other way around, use
 #+begin_src shell-script
 git push local
 #+end_src
@@ -154,8 +154,18 @@ To /home/martin/temp_dir_rse_course/recipe_book_example.git
 If you check with ~git log --all~ or ~gitk --all~, you will see that the remote
 ~local/gluten_free_2~ is again at the same commit like ~gluten_free_2~.
 
-** TODO Playing around: Clone to anoter Working Copy
+** TODO Playing around: Clone to another Working Copy
 
 ** TODO Pretending to be Two Persons
 
 ** TODO Using what we learnt on CONFLICTs
+
+** Your Task :task:
+([[file:README.org::*SDL - Rebase Branches][back to main document]])
+
+# Local Variables:
+# mode: org
+# ispell-local-dictionary: "british"
+# eval: (flyspell-mode t)
+# eval: (flyspell-buffer)
+# End:

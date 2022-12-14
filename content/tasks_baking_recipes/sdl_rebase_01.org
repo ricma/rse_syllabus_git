@@ -305,7 +305,7 @@ git status
 #+end_src
 
 This should leave you again in the conflict state mentioned above.
-#+begin_quote
+#+begin_example
 interactive rebase in progress; onto 716409e
 Last commands done (3 commands done):
    pick ec39d14 add replacement for honey
@@ -324,7 +324,7 @@ Unmerged paths:
 	both modified:   biscuits.txt
 
 no changes added to commit (use "git add" and/or "git commit -a")
-#+end_quote
+#+end_example
 Now add some changes to, for example, ~README.md~:
 Add the following line at the end:
 #+begin_src markdown

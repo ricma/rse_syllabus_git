@@ -14,6 +14,145 @@ and get used to the concepts without having to set up complicated things on,
 e.g. [[https://github.com]].
 
 ** TODO Set up a bare Repository
+If you have a look at your repository, you might have realized, that there is a
+~.git~ folder at its base level:
+#+begin_src shell script
+ls -la
+#+end_src
+#+begin_example
+total 28
+drwxrwxr-x 3 martin martin 4096 Dec 14 13:29 .
+drwxrwxr-x 5 martin martin 4096 Dec 14 13:34 ..
+-rw-rw-r-- 1 martin martin  394 Dec 14 13:18 biscuits.txt
+-rw-rw-r-- 1 martin martin  127 Dec 14 13:29 cinemon_stars.txt
+drwxrwxr-x 8 martin martin 4096 Dec 14 13:45 .git
+-rw-rw-r-- 1 martin martin  261 Dec 14 13:29 README.md
+-rw-rw-r-- 1 martin martin  496 Dec 14 13:12 substitutes.rst
+#+end_example
+This folder contains all the database files for your repository, all the
+history, local configuration etc.
+
+Having all the actual files also there makes this folder a so called /working copy/.
+
+In what follows, we will use so called /bare repositories/: These are essentially
+only the ~.git~ folder without a working version of the files being present.
+
+If you already have a repository (like we do), there are two ways of creating a
+/bare/ version:
+
+1. Clone your repository somewhere :: We use ~git clone~ using our /working copy/:
+   #+begin_src shell-script
+# let's go to the folder where our repository resides -- in my case in $HOME
+cd ~/
+git clone --bare recipe_book_example recipe_book_example.git
+Cloning into bare repository 'recipe_book_example.git'...
+done.
+   #+end_src
+It is common to call the folder for a /bare/ repository with a trailing ~.git~.
+
+Now we have to folders here and the content of the ~.git~ folder inside our
+/working copy/ looks similar to the /bare/ repository:
+#+begin_src shell-script
+ls recipe_book_example.git recipe_book_example/.git
+#+end_src
+#+begin_example
+recipe_book_example.git:
+branches  config  description  HEAD  hooks  info  objects  packed-refs  refs
+
+recipe_book_example/.git:
+AUTO_MERGE  COMMIT_EDITMSG  description  gitk.cache  hooks  info  objects    packed-refs  TAG_EDITMSG
+branches    config          FETCH_HEAD   HEAD        index  logs  ORIG_HEAD  refs
+#+end_example
+We are not going to go into any detail about what this all is -- we just want to
+emphasize that we won't be doing any actual work in the /bare/ repository.
+
+Now with this repository in place, we can register it as a /remote/ in our working copy:
+#+begin_src shell-script
+cd ~/recipe_book_example
+git remote add local ~/recipe_book_example.git
+#+end_src
+This creates a new remote calling it ~local~ and having it refer to the /bare/
+repository we just created.
+
+You can see all remotes set up by using
+#+begin_src shell-script
+git remote --verbose
+#+end_src
+#+begin_example
+local   /home/martin/recipe_book_example.git (fetch)
+local   /home/martin/recipe_book_example.git (push)
+#+end_example
+
+But so far, we have only told git about it -- not actually connected to it. For
+getting the most current state of the /remote/ repository, you do
+#+begin_src shell-script
+git fetch local     # 'local' was the name of the remote we chose above
+#+end_src
+#+begin_example
+From /home/martin/recipe_book_example
+ * [new branch]      gluten_free_1 -> local/gluten_free_1
+ * [new branch]      gluten_free_2 -> local/gluten_free_2
+ * [new branch]      vegan         -> local/vegan
+ * [new branch]      vegan_1       -> local/vegan_1
+ * [new branch]      vegan_2       -> local/vegan_2
+#+end_example
+
+This tells us that there are several branches available on the /bare/ repo and
+that they will be called ~local/xyz~ here.
+
+If we call ~git log --all~ or ~gitk --all~, they will show the remote as well:
+#+begin_src shell-script
+git graph -n 5
+#+end_src
+#+begin_example
+ * 04321c1 - (79 minutes ago) fix typo in README.md
+ |           (HEAD -> gluten_free_2, tag: v_0.2_third_vegan_gf_version,
+ |            local/gluten_free_2)
+ * d1d1966 - (79 minutes ago) reformat cinemon recipe
+ * 00cbb59 - (79 minutes ago) update README for gluten-free recipes (based on vegan)
+ * f4e11d6 - (88 minutes ago) make biscuits recipe gluten free
+ | * c85a553 - (3 hours ago) add link to table, add notes to recipe
+ |             (tag: v_0.2_second_vegan_gf_version, vegan_1,
+ |              local/vegan_1)
+#+end_example
+
+If we now add another commit onto the branch checked out (see ~HEAD~ above), e.g. by adding this to the ~README.md~
+#+begin_src markdown
+## Future Ideas
+We should do more non-bakes!
+#+end_src
+and
+#+begin_src shell-script
+git commit -a -m 'add future ideas'
+#+end_src
+Now, ~gitk --all~ yields the below screenshot.
+
+#+name: fig:gitk_after_conflict_resolution_rebase_2
+#+caption: History after adding one more commit. Note the ~remote~ branches
+#+caption: being shown.
+[[file:figures/task_07_010.png]]
+
+Note that the branch ~gluten_free_2~ exists twice: Once locally, once on the
+remote.
+
+We mentioned ~git fetch~ above to get the current state of a remote into our local
+repositories database. To synchronize the other way around, use
+#+begin_src shell-script
+git push local
+#+end_src
+#+begin_example
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 443 bytes | 443.00 KiB/s, done.
+Total 3 (delta 1), reused 0 (delta 0), pack-reused 0
+To /home/martin/temp_dir_rse_course/recipe_book_example.git
+   04321c1..dd3b759  gluten_free_2 -> gluten_free_2
+#+end_example
+
+If you check with ~git log --all~ or ~gitk --all~, you will see that the remote
+~local/gluten_free_2~ is again at the same commit like ~gluten_free_2~.
 
 ** TODO Playing around: Clone to anoter Working Copy
 

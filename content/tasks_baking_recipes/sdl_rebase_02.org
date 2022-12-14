@@ -309,7 +309,7 @@ Using ~gitk --all~ gives the following view:
 #+caption: onto ~vegan~.
 #+caption: Note the different order of the commit messages between
 #+caption: ~vegan_1~ (where we rebased ~vegan~ onto ~gluten_free~),
-#+caption: ~gluten_free_1~ (the merged version), and
+#+caption: the ~tag…~ above ~gluten_free_1~ (the merged version), and
 #+caption: ~gluten_free_2~ (where we rebased ~gluten_free~ onto ~vegan~).
 [[file:figures/task_06_020.png]]
 

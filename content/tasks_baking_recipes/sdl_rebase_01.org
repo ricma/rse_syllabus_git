@@ -329,7 +329,7 @@ Now add some changes to, for example, ~README.md~:
 Add the following line at the end:
 #+begin_src markdown
 ## Additional Notes
-I will get the nobel price for the following idea: ...
+I will get the Nobel Price for the following idea: ...
 #+end_src
 With this, ~git diff README.md~ yields
 #+begin_src diff

@@ -313,6 +313,12 @@ Using ~gitk --all~ gives the following view:
 #+caption: ~gluten_free_2~ (where we rebased ~gluten_free~ onto ~vegan~).
 [[file:figures/task_06_020.png]]
 
+The history shows the log after resolving the conflicts from rebasing
+~gluten_free~ onto ~vegan~. Note the different order of the commit messages between
+~vegan_1~ (where we rebased ~vegan~ onto ~gluten_free~), the ~tag…~ above ~gluten_free_1~
+(the merged version), and ~gluten_free_2~ (where we rebased ~gluten_free~ onto
+~vegan~).
+
 The overall summary is: ~git merge~ is less trouble as you only have to combine
 versions once. The cost it comes with is a /non-linear history/ as shown above.
 

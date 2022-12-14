@@ -154,6 +154,13 @@ To /home/martin/temp_dir_rse_course/recipe_book_example.git
 If you check with ~git log --all~ or ~gitk --all~, you will see that the remote
 ~local/gluten_free_2~ is again at the same commit like ~gluten_free_2~.
 
+Note: Sometimes ~git~ will complain about not being able to deduce what to push
+where (names of branches might be different for you and the /remote/ you are
+pushing to). In this case you can use
+#+begin_src shell-script
+git push local gluten_free_2:gluten_free_2
+#+end_src
+
 ** TODO Playing around: Clone to another Working Copy
 
 ** TODO Pretending to be Two Persons

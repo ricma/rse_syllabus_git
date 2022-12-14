@@ -269,6 +269,11 @@ time but the /Committer/ is the one who did the rebase including the current tim
   work to others. Only once your and/or their work is done, you combine it using
   a /merge/.
 
+Finally, let us create a new tag to mark the rebased version:
+#+begin_src shell-script
+git tag --annotate --message 'combined vegan and gf using rebase' v_0.2_second_vegan_gf_version
+#+end_src
+
 ** Your Task                                                           :task:
 Play around with the above situation. Don't be afraid of getting into
 conflicts. You can always get out again by ~git rebase --abort~.

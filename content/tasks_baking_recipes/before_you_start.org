@@ -41,6 +41,16 @@ For a list of possible UIs for git, see:
 
 (I personally use [[https://magit.vc]] (runs inside [[https://emacs.org]]).)
 
+** Other Helpful Things to Set
+We will cover these later but let's mention them here to have them at one point
+#+begin_src shell-script
+git config --core.editor nano   # if you want to set a specific editor
+# To get more context when encountering conflicts
+git config --global merge.conflictstyle diff3
+# To have a colourful graph representation of your history
+git config --global alias.graph "log --graph --all --pretty=format:'%Cred%h%Creset - %Cgreen(%cr)%Creset %s%C(yellow)%d%Creset' --abbrev-commit --date=relative --decorate"
+#+end_src
+
 ([[file:README.org::*Before you start][back to main document]])
 
 # Local Variables:

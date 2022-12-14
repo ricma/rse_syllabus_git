@@ -13,7 +13,7 @@ we were before the merge in [[file:sdl_merge_conflict_01.org::*Creating a merge 
 
 1. Introduce new branches called ~gluten_free_1~ and ~vegan_1~ at the states where their originals were before we merged them into ~vegan_and_gf~. Note that the original branches might be gone if you deleted / renamed them [[file:sdl_merge_conflict_02.org::*Clean up branches][earlier]].
    #+begin_src shell-script
-git branch gluten_free_1 716409
+git branch gluten_free_1 716409e
 git branch vegan_1 e40def1
    #+end_src
    Note that your numbers will be different and you have to take them from your
@@ -279,7 +279,7 @@ If you get stuck and want to start this task from the beginning, you can always
 git checkout vegan_1
 git reset --hard  e40def1
 # This is how you force a different branch to be somewhere else
-git branch -f gluten_free_1 716409
+git branch -f gluten_free_1 716409e
 #+end_src
 
 Alternatively, you could also start with two new branches ~vegan_1b~ and
@@ -289,6 +289,76 @@ You only have to be careful in the same sense as for ~git merge~: If you call ~g
 rebase~ and start adding changes, those changes will be lost when you abort. Git
 can only protect things you committed. Before this, you might loose what you
 have just done.
+
+*** Subtask :task:
+Try deliberately to loose data. The aim of this almost /counter exercise/ is to
+give you a feeling for when you are doing things which are potentially
+dangerous.
+
+#+begin_src shell-script
+# Create two new branches to start all over again with the rebase
+git branch vegan_2 e40def1
+git branch gluten_free_2 716409e
+git checkout vegan_2
+git rebase gluten_free_2
+git status
+#+end_src
+
+This should leave you again in the conflict state mentioned above.
+#+begin_quote
+interactive rebase in progress; onto 716409e
+Last commands done (3 commands done):
+   pick ec39d14 add replacement for honey
+   pick e40def1 add link to table, add notes to recipe
+  (see more in file .git/rebase-merge/done)
+No commands remaining.
+You are currently rebasing branch 'vegan_2' on '716409e'.
+  (fix conflicts and then run "git rebase --continue")
+  (use "git rebase --skip" to skip this patch)
+  (use "git rebase --abort" to check out the original branch)
+
+Unmerged paths:
+  (use "git restore --staged <file>..." to unstage)
+  (use "git add <file>..." to mark resolution)
+	both modified:   README.md
+	both modified:   biscuits.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+#+end_quote
+Now add some changes to, for example, ~README.md~:
+Add the following line at the end:
+#+begin_src markdown
+## Additional Notes
+I will get the nobel price for the following idea: ...
+#+end_src
+With this, ~git diff README.md~ yields
+#+begin_src diff
+diff --cc README.md
+index 4fa763f,68a50d7..0000000
+--- a/README.md
++++ b/README.md
+@@@ -1,7 -1,10 +1,17 @@@
+  # Overview
+++<<<<<<< HEAD
+ +A collection of gluten-free recipes
+++=======
++ A collection of vegan recipes
+++>>>>>>> e40def1 (add link to table, add notes to recipe)
+
+  ## Recipes
+  So far we have:
+ -1. Biscuits (see [here](biscuits.txt))
+ +1. Biscuits (see [here](biscuits.txt), based on using buckwheat flour)
+  2. Cinemon Stars (see [here](cinemon_stars.txt))
++
++ ## Common replacements
++ See this [table](substitutes.rst)
+++
+++## Additional Notes
+++I will get the Nobel Price for the following idea: ...
+#+end_src
+
+If you now type ~git rebase --abort~, then your Nobel Price winning idea is *gone*. *Without warning*.
 
 ([[file:README.org::*SDL - Rebase Branches][back to main document]])
 

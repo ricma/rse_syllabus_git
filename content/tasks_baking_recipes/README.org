@@ -162,6 +162,7 @@ For more information, see [[https://git-scm.com/book/en/v2/Git-Branching-Rebasin
 
 ** TODO SDL - Working with Remotes
 
+- SDL 07.01 :: [[file:sdl_remotes_01.org][The concepts of ~remotes~]]
 - SDL 07.02 :: [[file:sdl_remotes_02.org][Using Github]]
 
 ** TODO SDL - Using Bisection to find Bugs

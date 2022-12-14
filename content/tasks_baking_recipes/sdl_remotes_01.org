@@ -1,0 +1,4 @@
+#+title: Sdl_remotes_01
+#+OPTIONS: <:nil d:nil timestamp:t ^:nil tags:nil toc:nil num:nil \n:t
+#+STARTUP: fninline inlineimages showall
+* An Introduction to Remotes

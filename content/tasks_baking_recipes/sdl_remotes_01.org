@@ -1,4 +1,9 @@
-#+title: Sdl_remotes_01
+#+title: An Introduction to Remotes
 #+OPTIONS: <:nil d:nil timestamp:t ^:nil tags:nil toc:nil num:nil \n:t
 #+STARTUP: fninline inlineimages showall
 * An Introduction to Remotes
+There are two reasons why you do not only want to have your code in the one ~git~
+repository you are working in. One reason to copy it somewhere else is to have a
+/backup/ as well as to be able to work on /different computers/ (e.g. using your
+code on your laptop as well as on the HPC or a workstation). The other main
+reason is /collaboration/.

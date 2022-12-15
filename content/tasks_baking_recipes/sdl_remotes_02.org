@@ -7,7 +7,7 @@ In this learning task, we will add a remote repository on
 ([[https://gitlab.com]], [[https://bitbucket.org]]) all run by different
 companies. Make sure you understand that putting your code on one of
 these means that you give copies of your code away - which, if you are
-working on IP relevant projects might not be desireable.
+working on IP relevant projects might not be desirable.
 
 ** Creating an empty repository on Github
 
@@ -37,12 +37,16 @@ To let our local git know about the github repository, we can do
 This command is also mentioned on the web page. Note that I changed
 the suggested name ~origin~ to ~github~.
 
+This is pretty much the same command we used earlier with our local toy
+repository. From the point of view from our local /working copy/, the /github.com/
+repository is not special!
+
 ** Push data to the remote repository
 
 Because the remote is completely empty, we can simply push all our
 branches:
 #+begin_src shell-script
-      git push --set-upstream github vegan
+git push --set-upstream github vegan
 #+end_src
 #+begin_example
 Enumerating objects: 21, done.
@@ -116,8 +120,26 @@ in our case we see:
 #+end_example
 
 Note that a call to ~git graph~ or ~gitk --all~ also shows the
-remotes. Note that the positons of the /remotes/ is not their current
+remotes. Note that the positions of the /remotes/ is not their current
 state but the last time you called a ~git fetch github~.
+
+#+name: fig:two_remotes_github_gitk
+#+caption: Final histpry overview with two remotes.
+[[file:figures/task_07_020.png]]
+
+After having pushed the information onto [[https://github.com]], you can explore the
+code there as well. Note, how certain formats such as ~markdown~, ~restructured
+Text~, or ~org-mode~ are highlighted explicitly!
+
+You can even change the files on github directly -- in which case you have to
+call ~git fetch~ in your local folder, of course!
+
+** Your Task :task:
+
+Create your own repository on [[https://github.com]], [[https://bitbucket.org]], or
+[[https://gitlab.com]].
+
+Note, as our example is text based only -- we could even use [[https://overleaf.com]] (for which you need a license if you want to use its ~git~ interface!)
 
 ([[file:README.org::*SDL - Working with Remotes][back to main document]])
 

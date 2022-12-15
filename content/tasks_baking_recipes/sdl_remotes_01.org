@@ -340,10 +340,204 @@ others. We will use the interactive session to see whether we can go through a
 few examples.
 
 ** Synchronising the Work
+We have seen what happens when you are updating a remote using ~git push~. If we
+know that we will mostly push a given branch to a specific location, we can
+#+begin_src shell-script
+git push --set-upstream local vegan_1
+#+end_src
+#+begin_example
+Enumerating objects: 9, done.
+Counting objects: 100% (9/9), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (7/7), done.
+Writing objects: 100% (7/7), 969 bytes | 138.00 KiB/s, done.
+Total 7 (delta 2), reused 0 (delta 0)
+To /home/martin/temp_dir_rse_course/recipe_book.git
+   c85a553..c484680  vegan_1 -> vegan_1
+Branch 'vegan_1' set up to track remote branch 'vegan_1' from 'local'.
+#+end_example
+If we do that, then the next time a simple ~git push~ suffices.
 
-** Using what we learnt on CONFLICTs
+If we go to our other repository and try the same, it fails:
+#+begin_src shell-script
+cd ~/other/second_copy_recipe_book
+git branch --set-upstream-to local_repo/vegan_1
+git push
+#+end_src
+#+begin_example
+To ~/recipe_book.git
+ ! [rejected]        vegan_1 -> vegan_1 (non-fast-forward)
+error: failed to push some refs to '~/recipe_book.git'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. Integrate the remote changes (e.g.
+hint: 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+#+end_example
+
+~git~ won't allow us to move the branch to /our/ version of ~vegan_1~, as there is a more recent one!
+To fix this, we have to
+1. first get the new version over:
+   #+begin_src shell-script
+git fetch
+   #+end_src
+   #+begin_example
+From /home/martin/temp_dir_rse_course/recipe_book
+   c85a553..c484680  vegan_1    -> local_repo/vegan_1
+   #+end_example
+2. examine the situation
+   #+begin_src shell-script
+git graph -n 5
+   #+end_src
+   #+begin_example
+ * 164f961 - (3 hours ago) add note on cookie-cutter
+ |           (HEAD -> vegan_1)
+ |
+ | * c484680 - (3 hours ago) rename cinnamon star file, update link
+ | |           (local_repo/vegan_1)
+ | |
+ | * c8e3d72 - (3 hours ago) fix spelling mistake in README.md and cnemon_stars.txt
+ |/
+ * c85a553 - (28 hours ago) add link to table, add notes to recipe
+ |           (tag: v_0.2_second_vegan_gf_version)
+ |
+ * 93a0b93 - (28 hours ago) add replacement for honey
+   #+end_example
+3. and combine the two versions
+   #+begin_src shell-script
+git merge local_repo/vegan_1     # note how we use a remote branch to merge to
+   #+end_src
+   #+begin_example
+Auto-merging cinnamon_stars.txt
+CONFLICT (content): Merge conflict in cinnamon_stars.txt
+Automatic merge failed; fix conflicts and then commit the result.
+   #+end_example
+   #+begin_src shell-script
+git diff
+   #+end_src
+   #+begin_src diff
+diff --cc cinnamon_stars.txt
+index 6402c46,eeaa79b..0000000
+--- a/cinnamon_stars.txt
++++ b/cinnamon_stars.txt
+@@@ -1,4 -1,2 +1,10 @@@
+  - Prepare dough like written in [the biscuits recipe](biscuits.txt)
+++<<<<<<< HEAD:cinemon_stars.txt
+ +- Add 1/2 teaspoon of cinemon and 2 tsp of almond extract.
+ +
+ +Use a star-shaped biscuit-cutter to form the biscuits.
+++||||||| c85a553:cinemon_stars.txt
+++- Add 1/2 teaspoon of cinemon and 2 tsp of almond extract.
+++=======
++ - Add 1/2 teaspoon of cinnamon and 2 tsp of almond extract.
+++>>>>>>> local_repo/vegan_1:cinnamon_stars.txt
+   #+end_src
+4. At this point we have to resolve the /CONFLICT/ just like we learned before.
+   Here, it suffices to combine the correct spelling with the additional
+   biscuit-cutter comment:
+   #+begin_src markdown
+- Prepare dough like written in [the biscuits recipe](biscuits.txt)
+- Add 1/2 teaspoon of cinnamon and 2 tsp of almond extract.
+
+Use a star-shaped biscuit-cutter to form the biscuits.
+   #+end_src
+   and run ~git add cinnamon_stars.txt~.
+5. Before we finish the ~merge~, lets run a
+   #+begin_src shell-script
+git status
+   #+end_src
+   #+begin_example
+On branch vegan_1
+Your branch and 'local_repo/vegan_1' have diverged,
+and have 1 and 2 different commits each, respectively.
+  (use "git pull" to merge the remote branch into yours)
+
+All conflicts fixed but you are still merging.
+  (use "git commit" to conclude merge)
+
+Changes to be committed:
+        modified:   README.md
+        renamed:    cinemon_stars.txt -> cinnamon_stars.txt
+   #+end_example
+   Note how ~git~ just handled the rename without problems. This is because ~git~
+   tracks file content rather than files or changes.
+6. Note: The combination of ~git fetch~ and ~git merge~ is so common, that there is
+   a short-cut for doing both: ~git pull~.
+
+   Should you want to do ~git fetch~ followed by a ~git rebase~, then you can
+   configure ~git~ to do this on a ~git pull~ instead using ~git config
+   branch.autosetuprebase always~.
+7. Finally, we can finish our merge as before
+   #+begin_src shell script
+git commit
+   #+end_src
+   Note that your editor will open and suggest a commit message like
+   #+begin_example
+   Merge remote-tracking branch 'local_repo/vegan_1' into vegan_1
+   #+end_example
+   We leave it at that, save, and close the editor to see:
+   #+begin_example
+   [vegan_1 9118a00] Merge remote-tracking branch 'local_repo/vegan_1' into vegan_1
+   #+end_example
+   and our history now looks like
+   #+begin_src shell-script
+git graph -n 5
+   #+end_src
+   #+begin_example
+ *   9118a00 - (2 minutes ago) Merge remote-tracking branch 'local_repo/vegan_1' into vegan_1
+ |             (HEAD -> vegan_1)
+ |\
+ | * c484680 - (3 hours ago) rename cinnamon star file, update link
+ | |           (local_repo/vegan_1)
+ | |
+ | * c8e3d72 - (3 hours ago) fix spelling mistake in README.md and cnemon_stars.txt
+ * | 164f961 - (3 hours ago) add note on cookie-cutter
+ |/
+ * c85a553 - (29 hours ago) add link to table, add notes to recipe (tag: v_0.2_second_vegan_gf_version)
+   #+end_example
+8. Publish our changes. Now that our version (~vegan_1~) is a /fast-forward/ to
+   ~local_repo/vegan_1~, we can
+   #+begin_src shell-script
+git push
+   #+end_src
+   #+begin_example
+Enumerating objects: 10, done.
+Counting objects: 100% (10/10), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (6/6), done.
+Writing objects: 100% (6/6), 663 bytes | 82.00 KiB/s, done.
+Total 6 (delta 4), reused 0 (delta 0)
+To /home/martin/temp_dir_rse_course/recipe_book.git
+   c484680..9118a00  vegan_1 -> vegan_1
+   #+end_example
+
+We can now also go back to our first /working copy/ and synchronise the state there:
+#+begin_src shell-script
+cd ~/recipe_book
+git pull
+#+end_src
+#+begin_example
+remote: Enumerating objects: 10, done.
+remote: Counting objects: 100% (10/10), done.
+remote: Compressing objects: 100% (6/6), done.
+remote: Total 6 (delta 4), reused 0 (delta 0)
+Unpacking objects: 100% (6/6), 643 bytes | 107.00 KiB/s, done.
+From /home/martin/temp_dir_rse_course/recipe_book
+   c484680..9118a00  vegan_1    -> local/vegan_1
+Updating c484680..9118a00
+Fast-forward
+ cinnamon_stars.txt | 2 ++
+ 1 file changed, 2 insertions(+)
+#+end_example
+
+And with this, both copies are at the same state again!
 
 ** Your Task :task:
+
+Follow the above steps. Also try to ~git rebase~ and see what kind of history you
+get.
+
+What happens when during your merge your colleague pushes an even newer version?
+
 ([[file:README.org::*SDL - Rebase Branches][back to main document]])
 
 # Local Variables:

@@ -166,18 +166,26 @@ for example. Here, we do it both ways solely for educational purposes.
 
 For more information, see [[https://git-scm.com/book/en/v2/Git-Branching-Rebasing][Pro Git (book, online version)]].
 
-** TODO SDL - Working with Remotes
+** SDL - Working with Remotes
+This self-directed learning task will show you
+- what /remotes/ are and how to create one on your local computer
+- how to use a remote
+- how to create on on, e.g. [[https://github.com]]
 
 - SDL 07.01 :: [[file:sdl_remotes_01.org][The concepts of ~remotes~]]
 - SDL 07.02 :: [[file:sdl_remotes_02.org][Using Github]]
 
-** TODO SDL - Using Bisection to find Bugs
-
+** SDL - Using Bisection to find Bugs
 This is deeply linked to the subjects of having good, automated tests
 for your code.
 
 Our recipe example does not really live up to this type of problems
 due to its simplicity.
+
+Nevertheless, we want to show you how it works using a very artificial example.
+Feel free to use it with a more realistic example!
+
+- SDL 08.01 :: [[file:sdl_bisect.01.org][Searching for Errors using ~bisect~]]
 
 # Local Variables:
 # mode: org

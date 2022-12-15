@@ -1,0 +1,17 @@
+#+title: Searching for Errors using git bisect
+#+OPTIONS: <:nil d:nil timestamp:t ^:nil tags:nil toc:nil num:nil \n:t
+#+STARTUP: fninline inlineimages showall
+* Finding a Specific Commit which Introduced an Error
+
+Sometimes you realise …
+
+** Your Task :task:
+
+([[file:README.org::*SDL - Rebase Branches][back to main document]])
+
+# Local Variables:
+# mode: org
+# ispell-local-dictionary: "british"
+# eval: (flyspell-mode t)
+# eval: (flyspell-buffer)
+# End:

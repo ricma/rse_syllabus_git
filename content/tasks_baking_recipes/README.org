@@ -67,6 +67,12 @@ This self-directed learning task will show you
 - SDL 01.01 :: [[file:sdl_create_repo.01.org][Create a New Repository]]
 - SDL 01.02 :: [[file:sdl_create_repo.02.org][Add Some More Files]]
 
+- Note: In case you are stuck, try ~git <command> --help~, e.g. ~git add --help~ to
+  see the corresponding help. Furthermore, [[https://git-scm.com]] is a very good
+  source for help. Sometimes, the /manual pages/ can feel a bit daunting - up to
+  the point where you can find web sites mocking it
+  [[https://git-man-page-generator.lokaltog.net]] 😉
+
 ** SDL - Changing Files and Examining the History of Changes
 This self-directed learning task will show you
 - how to change files and register these changes in the repository

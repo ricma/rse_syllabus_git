@@ -539,6 +539,7 @@ get.
 What happens when during your merge your colleague pushes an even newer version?
 
 ([[file:README.org::*SDL - Rebase Branches][back to main document]])
+([[file:README.org::*SDL - Rebase Branches]])
 
 # Local Variables:
 # mode: org

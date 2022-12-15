@@ -183,12 +183,165 @@ Note that this does not delete the data where you pushed it to (in this case
 ~~/recipe_book_example_2.git~ - you have to delete this separately)
 
 ** Playing around: Clone to another Working Copy
+Having created a bare repository, we can now dive into what it means to
+collaborate with others or working on different computers.
 
+If none of that is for you, you can still use the above ~git remotes~ to create
+backups. In this case, your ~git remote~ would not be on the same computer but,
+for example, on an external drive or on a different computer (accessible via
+~ssh~, for example).
 
+But for the time being, we want to focus on how to use the bare repository and
+look at proper /remote/ storage later.
 
-** TODO Pretending to be Two Persons
+First, we ~git clone~ the repository again - that means we create another
+directory which also holds a working copy (and all the history):
+#+begin_src shell-script
+mkdir other
+cd other
+# the simplest command is
+#   git clone ~/recipe_book_example.git
+# alternatively, we could be more xplicit:
+git clone --origin local_repo --branch main ~/recipe_book.git ./second_copy_recipe_book
+#+end_src
+#+begin_example
+Cloning into './second_copy_recipe_book'...
+done.
+#+end_example
 
-** TODO Using what we learnt on CONFLICTs
+We can go into this repository and examine it
+#+begin_src shell-script
+cd ~/other/second_copy_recipe_book
+git graph
+#+end_src
+#+begin_example
+ * 04321c1 - (24 hours ago) fix typo in README.md
+ |           (tag: v_0.2_third_vegan_gf_version)
+ * d1d1966 - (24 hours ago) reformat cinemon recipe
+ * 00cbb59 - (24 hours ago) update README for gluten-free recipes
+ |           (based on vegan)
+ * f4e11d6 - (24 hours ago) make biscuits recipe gluten free
+ | * c85a553 - (25 hours ago) add link to table, add notes to recipe
+ | |           (tag: v_0.2_second_vegan_gf_version, local_repo/vegan_1)
+ | * 93a0b93 - (25 hours ago) add replacement for honey
+ | * 28e0a1a - (25 hours ago) add table of replacements in vegan recipes
+ | | * 3525589 - (11 months ago) merge gluten-free and vegan recipes
+ | |/|           (tag: v_0.2_first_vegan_gf_version, local_repo/vegan_and_gf)
+ |/|/
+ | *   716409e - (11 months ago) Merge branch 'fix_typo' into gluten_free
+ | |\            (local_repo/gluten_free_1)
+ | | * 4a5c4eb - (11 months ago) fix typo in README.md
+ | * | 461de20 - (11 months ago) reformat cinemon recipe
+ | |/
+ | * 34f83d7 - (11 months ago) update README for gluten-free recipes
+ | * 01bb2d4 - (11 months ago) make biscuits recipe gluten free
+ * | e40def1 - (11 months ago) add link to table, add notes to recipe
+ * | ec39d14 - (11 months ago) add replacement for honey
+ * | 49e8505 - (11 months ago) add table of replacements in vegan recipes
+ |/            (tag: v_0.1_vegan_replacement)
+ | * 5755eba - (11 months ago) replace margarine with butter in biscuit recipe
+ |/            (HEAD -> main, local_repo/main)
+ * 7d4a511 - (11 months ago) add link in cinemon star recipe
+ * bd180d6 - (11 months ago) restructure biscuit recipe
+ * ad7f952 - (11 months ago) add recipe overview to README.md
+ * 957e0f7 - (11 months ago) add biscuit recipe
+ * 7dae468 - (11 months ago) add a cinemon star recipe
+ * efa0975 - (11 months ago) initial commit for recipes
+#+end_example
+We see that it reflects the same history as in ~~/recipe_book~. To also have the
+same /working copy/ (i.e. the same version checked out), we can do
+#+begin_src shell-script
+git checkout -b vegan_1 local_repo/vegan_1
+#+end_src
+#+begin_example
+Branch 'vegan_1' set up to track remote branch 'vegan_1' from 'local_repo'.
+Switched to a new branch 'vegan_1'
+#+end_example
+
+** Pretending to be Two Persons
+
+Let us know pretend, that one of the copies is on one of your computers and the
+other one on either another computer you work on (e.g. the HPC, a workstation,
+or a laptop, …) or that it is someone else all together.
+
+For simplicity, let us assume both copies have the branch ~vegan_1~ checked out,
+both are where the /tag/ ~v_0.2_second_vegan_gf_version~ is.
+
+Let us introduce different changes to different parts in both cases:
+- ~~/recipe_book~ :: Let us fix the spelling mistake in ~README.md~ and
+  ~cinemon_stars.txt~, i.e. /cinemon/ → /cinnamon/, ~git add~ and ~git commit~.
+
+  As it also means renaming a file we can do ~git mv cinemon_stars.txt
+  cinnamon_stars.txt~ and, at the same time, update the link in ~README.md~ to read
+  #+begin_src markdown
+## Recipes
+So far we have:
+1. Biscuits (see [here](biscuits.txt), based on using buckwheat flour, banana, and margarine)
+2. Cinnamon Stars (see [here](cinnamon_stars.txt))
+  #+end_src
+  ~git add~ and ~git commit~ these changes as well:
+  #+begin_src shell-script
+  git commit -a -m'rename cinnamon star file, update link'
+  #+end_src
+  #+begin_example
+[vegan_1 c484680] rename cinnamon star file, update link
+ 2 files changed, 1 insertion(+), 1 deletion(-)
+ rename cinemon_stars.txt => cinnamon_stars.txt (100%)
+  #+end_example
+
+- ~~/other/second_copy_recipe_book~ :: Change into this directory and change
+  something else. For example add a sentence on using an appropriate
+  cookie-cutter:
+  #+begin_src shell-script
+git diff
+  #+end_src
+  #+begin_src diff
+diff --git a/cinemon_stars.txt b/cinemon_stars.txt
+index 5ccf5d5..7d91066 100644
+--- a/cinemon_stars.txt
++++ b/cinemon_stars.txt
+@@ -1,2 +1,4 @@
+ Prepare dough like written in [the biscuits recipe](biscuits.txt) but add 1/2 teaspoon of
+ cinemon and 2 tsp of almond extract.
++
++Use a star-shaped biscuit-cutter to form the biscuits.
+  #+end_src
+  We ~git commit -a -m'add note on cookie-cutter'~ to commit these changes in the
+  second repository.
+
+Now, both repositories have a different state and both differ from the bare
+repository they are both linked to. We can see this if we look at the most
+recent commits on ~vegan_1~ in all of them:
+- original working copy :: ~git -C ~/recipe_book graph -n 3 vegan_1~
+  #+begin_example
+ * c484680 - (14 minutes ago) rename cinnamon star file, update link (HEAD -> vegan_1)
+ * c8e3d72 - (17 minutes ago) fix spelling mistake in README.md and cnemon_stars.txt
+ * c85a553 - (26 hours ago) add link to table, add notes to recipe
+ |           (tag: v_0.2_second_vegan_gf_version, local/vegan_1, github/vegan_1)
+  #+end_example
+- other working copy :: ~git -C ~/other/second_copy_recipe_book graph -n 3 vegan_1~
+  #+begin_example
+ * 164f961 - (3 minutes ago) add note on cookie-cutter (vegan_1)
+ * c85a553 - (26 hours ago) add link to table, add notes to recipe
+ |           (tag: v_0.2_second_vegan_gf_version, local_repo/vegan_1)
+ * 93a0b93 - (26 hours ago) add replacement for honey
+  #+end_example
+- "central" bare repository :: ~git -C ~/recipe_book.git graph -n 3 vegan_1~
+  #+begin_example
+ * 04321c1 - (24 hours ago) fix typo in README.md
+ |           (tag: v_0.2_third_vegan_gf_version)
+ * d1d1966 - (24 hours ago) reformat cinemon recipe
+ * 00cbb59 - (24 hours ago) update README for gluten-free recipes (based on vegan)
+  #+end_example
+
+*** Your Task :task:
+Add some changes yourself. These could be similar changes to the ones above, or
+others. We will use the interactive session to see whether we can go through a
+few examples.
+
+** Synchronising the Work
+
+** Using what we learnt on CONFLICTs
 
 ** Your Task :task:
 ([[file:README.org::*SDL - Rebase Branches][back to main document]])

@@ -160,8 +160,31 @@ pushing to). In this case you can use
 #+begin_src shell-script
 git push local gluten_free_2:gluten_free_2
 #+end_src
+to be more explicit which of your branches you want to be pushed to which names.
 
-** TODO Playing around: Clone to another Working Copy
+*** Your Task :task:
+Create your own bare repository and register it as ~git remote~.
+
+You can either follow the above (~git clone --bare~ and register it) or you can
+create a new empty, bare repository
+#+begin_src shell-script
+git init --bare ~/recipe_book_example_2.git
+cd recipe_book_example    # this is the working copy we operate on
+git remote add local2 ~/recipe_book_example_2.git
+git push --all local2
+git push --tags local2    # tags have to be moved explicitly
+#+end_src
+
+You can forget a remote to a repository by calling
+#+begin_src shell-script
+git remote rm local2
+#+end_src
+Note that this does not delete the data where you pushed it to (in this case
+~~/recipe_book_example_2.git~ - you have to delete this separately)
+
+** Playing around: Clone to another Working Copy
+
+
 
 ** TODO Pretending to be Two Persons
 

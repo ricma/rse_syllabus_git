@@ -3,9 +3,269 @@
 #+STARTUP: fninline inlineimages showall
 * Finding a Specific Commit which Introduced an Error
 
-Sometimes you realise …
+Sometimes you realise that a certain feature does not work anymore. But you have no idea what (or who) broke your code.
+
+In the best of cases, you have
+1) a simple way of checking if a certain version works as expected and
+2) know a very early version where your code was still working as expected.
+
+If you have these two points, then ~git~ efficiently find the commit which broke
+the feature. It uses [[https://en.wikipedia.org/wiki/Bisection_method][the bisection method]] to minimize the number of tests
+necessary.
+
+** An Example Search for the Recipe Book
+
+The simplicity of our recipe book means that we cannot easily check for
+correctness of our 'code'.
+
+In order to /fake/ an error, let us assume that the presence of the word *banana* is
+our error. And we want to find which commit "caused this error", i.e. introduced
+the word banana into our code.
+
+We already know a method to do this efficiently, namely ~git log -S banana~. This gives us
+#+begin_example
+commit c85a55395eb67c537d14b845cad9a7d3b3206fd3 (tag: v_0.2_second_vegan_gf_version)
+Author: Martin Richter <martin.richter@nottingham.ac.uk>
+Date:   Wed Jan 12 17:46:56 2022 +0000
+
+    add link to table, add notes to recipe
+
+    Use banana instead of egg for biscuits.
+
+commit 28e0a1aff1fb7b992300790d1a6d2e573721fe95
+Author: Martin Richter <martin.richter@nottingham.ac.uk>
+Date:   Wed Jan 12 11:36:39 2022 +0000
+
+    add table of replacements in vegan recipes
+#+end_example
+
+But let us assume we would be chasing something more subtle like a function not
+returning a correct answer – then this clearly would not be that easy!
+
+*** Create a Test Case
+In our case, we can use the following as a simple test:
+#+begin_src shell-script
+grep --ignore-case --files-with-match banana *
+#+end_src
+#+begin_example
+biscuits.txt
+README.md
+substitutes.rst
+#+end_example
+
+For later, we want to make it even a bit more convenient: Let us create a
+/shell-script/ ~test.sh~ with the content
+#+begin_src shell-script
+#!/usr/bin/env sh
+# Test the presence of the word 'banana' in all files
+
+grep --ignore-case --files-with-match "banana" * > /dev/null
+
+# the above is 'success' (i.e. returns 0) when there are 'banana' matches.
+# However, we want it to fail as long as there are 'banana' matches:
+if [ $? -eq 0 ]; then
+  false
+else
+  true
+fi
+#+end_src
+and make it executable and place it _outside_ our repository:
+#+begin_src shell-script
+chmod a+x test.sh
+mv test.sh ../      # to avoid that we find 'banana' in test.sh
+#+end_src
+The shell script works such that it will return an error code if the word ~banana~
+is not present anymore:
+#+begin_src shell-script
+../test.sh && echo 'no banana mention anymore' || echo 'banana is still there'
+#+end_src
+#+begin_example
+banana is still there
+#+end_example
+
+Note that you can also write a ~python~ script for this - in our case, a
+/shell-script/ is just a bit more conveniet.
+
+*** Finding an Old Commit Which Works
+
+We know that our initial commit for sure worked, so we will use this one. In our
+case, the commit is ~efa0975~.
+
+#+begin_src shell-script
+git checkout efa0975       # ignore the warning -- we are not going to commit anything here
+../test.sh && echo 'banana is still there' || echo 'no banana mention anymore'
+#+end_src
+#+begin_example
+no banana mention anymore
+#+end_example
+
+Now that we have all we need, let us go back to ~vegan_1~:
+#+begin_src shell-script
+git checkout vegan_1
+#+end_src
+
+*** Finding the Culprit
+
+With the above we can find our offending commit. Let us start the ~git bisect~ session:
+#+begin_src shell-script
+git bisect start
+git bisect bad vegan_1
+git bisect good efa0975
+#+end_src
+#+begin_example
+Bisecting: 8 revisions left to test after this (roughly 3 steps)
+[716409e0022ef3118227bce05594e2aaecdb46f8] Merge branch 'fix_typo' into gluten_free
+#+end_example
+
+~git bisect~ provides us with a commit in the 'middle' between the /good/ and the
+/bad/ one. More specifically, it put us onto commit ~716409e~ as we can also see via
+~git show --oneline~:
+#+begin_example
+716409e (HEAD, local/gluten_free_1, github/gluten_free_1, gluten_free_1) Merge branch 'fix_typo' into gluten_free
+#+end_example
+
+Now we can execute our test:
+#+begin_src shell-script
+../test.sh && echo 'no banana mention anymore' || echo 'banana is still there'
+#+end_src
+#+begin_example
+no banana mention anymore
+#+end_example
+This means that this commit is /good/ and we mark it as such
+#+begin_src shell-script
+git bisect good
+#+end_src
+#+begin_example
+Bisecting: 4 revisions left to test after this (roughly 2 steps)
+[c8e3d727b9b67bcbe4d1e672b37ccb55a5209304] fix spelling mistake in README.md and cnemon_stars.txt
+#+end_example
+
+Now ~git bisect~ gave us a commit in the 'middle' between the last /good/ one and
+the /bad/ one.
+
+If we call ~gitk --all~ or ~git graph~, they will show us this:
+#+name: fig:bisect_example_step_02
+#+caption: Example session for ~git bisect~ after two steps.
+[[file:./figures/task_08_010.png]]
+
+From here on, we can continue to /test/ and mark the commit as either /good/ or /bad/
+depending on the outcome:
+#+begin_src shell-script
+../test.sh && echo 'no banana mention anymore' || echo 'banana is still there'
+#+end_src
+#+begin_example
+banana is still there
+#+end_example
+#+begin_src shell-script
+git bisect bad
+#+end_src
+#+begin_example
+Bisecting: 1 revision left to test after this (roughly 1 step)
+[93a0b934d4f40925c0e0441ddbed7ad3ac6cd202] add replacement for honey
+#+end_example
+#+begin_src shell-script
+../test.sh && echo 'no banana mention anymore' || echo 'banana is still there'
+#+end_src
+#+begin_example
+banana is still there
+#+end_example
+#+begin_src shell-script
+git bisect bad
+#+end_src
+#+begin_example
+Bisecting: 0 revisions left to test after this (roughly 0 steps)
+[28e0a1aff1fb7b992300790d1a6d2e573721fe95] add table of replacements in vegan recipes
+#+end_example
+#+begin_src shell-script
+../test.sh && echo 'no banana mention anymore' || echo 'banana is still there'
+#+end_src
+#+begin_example
+banana is still there
+#+end_example
+#+begin_src shell-script
+git bisect bad
+#+end_src
+#+begin_example
+28e0a1aff1fb7b992300790d1a6d2e573721fe95 is the first bad commit
+commit 28e0a1aff1fb7b992300790d1a6d2e573721fe95
+Author: Martin Richter <martin.richter@nottingham.ac.uk>
+Date:   Wed Jan 12 11:36:39 2022 +0000
+
+    add table of replacements in vegan recipes
+
+ substitutes.rst | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+ create mode 100644 substitutes.rst
+#+end_example
+
+And indeed, we have found the same commit as above!
+
+We now know where the "error" entered and can end our session:
+#+begin_src shell-script
+git bisect reset
+#+end_src
+#+begin_example
+Previous HEAD position was 28e0a1a add table of replacements in vegan recipes
+Switched to branch 'vegan_1'
+#+end_example
+
+*** Finding the Culprit – Automatically
+
+The above works but can be automated! Because our test script returns an error
+code on error, we can use it like so:
+#+begin_src shell-script
+git bisect start
+git bisect bad vegan_1
+git bisect good efa0975
+#+end_src
+#+begin_example
+Bisecting: 8 revisions left to test after this (roughly 3 steps)
+[716409e0022ef3118227bce05594e2aaecdb46f8] Merge branch 'fix_typo' into gluten_free
+#+end_example
+#+begin_src
+git bisect run ../test.sh
+#+end_src
+#+begin_example
+running ../test.sh
+Bisecting: 4 revisions left to test after this (roughly 2 steps)
+[c8e3d727b9b67bcbe4d1e672b37ccb55a5209304] fix spelling mistake in README.md and cnemon_stars.txt
+running ../test.sh
+Bisecting: 1 revision left to test after this (roughly 1 step)
+[93a0b934d4f40925c0e0441ddbed7ad3ac6cd202] add replacement for honey
+running ../test.sh
+Bisecting: 0 revisions left to test after this (roughly 0 steps)
+[28e0a1aff1fb7b992300790d1a6d2e573721fe95] add table of replacements in vegan recipes
+running ../test.sh
+28e0a1aff1fb7b992300790d1a6d2e573721fe95 is the first bad commit
+commit 28e0a1aff1fb7b992300790d1a6d2e573721fe95
+Author: Martin Richter <martin.richter@nottingham.ac.uk>
+Date:   Wed Jan 12 11:36:39 2022 +0000
+
+    add table of replacements in vegan recipes
+
+ substitutes.rst | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+ create mode 100644 substitutes.rst
+bisect run success
+#+end_example
+and ~git bisect~ does all the manual foot work for you!
+
+Do not forget to ~git bisect reset~.
 
 ** Your Task :task:
+
+Try the above yourself. First, without ~git bisect run~ – you can inspect the
+state of the repository manually. Later, you can try using, e.g. ~python~ script
+to do that. You only have to make sure that they return a non-zero exit code on
+failure:
+#+begin_src python
+import sys
+
+if failure_happened:
+    sys.exit(1234)    # some non-zero number 0 < status ≤ 255
+else:
+    sys.exit(0)
+#+end_src
 
 ([[file:README.org::*SDL - Rebase Branches][back to main document]])
 

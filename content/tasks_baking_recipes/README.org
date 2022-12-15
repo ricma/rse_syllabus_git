@@ -185,7 +185,7 @@ due to its simplicity.
 Nevertheless, we want to show you how it works using a very artificial example.
 Feel free to use it with a more realistic example!
 
-- SDL 08.01 :: [[file:sdl_bisect.01.org][Searching for Errors using ~bisect~]]
+- SDL 08.01 :: [[file:sdl_bisect.01.org][Using ~git bisect~ to find which commit introduced an error]]
 
 # Local Variables:
 # mode: org

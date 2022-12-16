@@ -127,4 +127,53 @@ will be very different even if the working tree is an exact copy!
 However, both commits, say if they only differ in the time and the log message,
 will refer to the same ~tree~ object as the content did not change.
 
+Also note, there is another type of entries in the database for ~tags~ but that is
+less interesting for our below point. For more details, see
+[[https://git-scm.com/book/en/v2/Git-Internals-Git-Objects][git-scm.com here for objects]] and [[https://git-scm.com/book/en/v2/Git-Internals-Git-References][here for references]].
+
+*** Your Task :task:
+Find out what a ~merge~ looks like.
+
+What happens if you look at commits done on [[https://github.com]]?
+
+** Check Integrity of a Repository
+Another advantage of this is that the database can notice when it suffers
+file-system or hardware problems and the database gets corrupted.
+#+begin_src shell-script
+git fsck
+#+end_src
+#+begin_example
+Checking object directories: 100% (256/256), done.
+dangling blob 35fa587716c18361c78f5f92fc79e6d6b43282c6
+dangling blob 42dec7f65fb2236bf924a5e5beb7618609cce7fa
+dangling blob b2f07b4e9ca9b43c8f593d055afd233eed9709f3
+dangling blob c26cb158f9fb815c71496761201320eaa4e920b1
+#+end_example
+
+Note that this even tells us about items in the database we are no longer need!
+In this case, it is all files (/blobs/).
+
+*** Your Task :task:
+
+Try to 'mess' with the database to see what happens.
+#+begin_src shell-script
+mv .git/objects/6f/d9ae46dad7d2bf7339cc9968a7803be50dc985 ./
+#+end_src
+
+What does ~git fsck~ report now?
+
+Note: This is the type of error we would get if we check out something which
+relies on the above:
+#+begin_src shell-script
+git checkout vegan_1
+#+end_src
+#+begin_example
+error: unable to read sha1 file of README.md (6fd9ae46dad7d2bf7339cc9968a7803be50dc985)
+error: invalid object 100644 6fd9ae46dad7d2bf7339cc9968a7803be50dc985 for 'README.md'
+#+end_example
+so better repairing our malicious behaviour:
+#+begin_src shell-script
+mv ./d9ae46dad7d2bf7339cc9968a7803be50dc985 .git/objects/6f/
+#+end_src
+
 ** Branches

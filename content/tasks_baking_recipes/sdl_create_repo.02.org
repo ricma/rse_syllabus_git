@@ -11,13 +11,16 @@ Ingredients: 250g flour, 125g margarine, 60g sugar, 3tsp vanilla extract, pinch 
 Mix everything, let rest for 30 min in fridge, roll out and cut into shape.
 Bake for 10 - 12 minutes (200 degrees)
 #+end_example
-Furthermore, create another file called =cinnamon_stars.txt=:
+Furthermore, create another file called =cinemon_stars.txt=:
 #+begin_example
 Prepare dough like written in biscuits.txt but add 1/2 teaspoon of
-cinnamon and 2 tsp of almond extract.
+cinemon and 2 tsp of almond extract.
 #+end_example
 You can choose any text editor you want but please ensure you are
 storing the information as simple text files, not Word documents.
+
+(Note: The spelling mistake 'cinemon' instead of 'cinnamon' done
+intentionally, we will fix it later)
 
 *** Using the Command Line
 Once the above file exists and are placed inside our ~recipe_book~
@@ -31,7 +34,7 @@ On branch master
 Untracked files:
   (use "git add <file>..." to include in what will be committed)
         biscuits.txt
-        cinnamon_stars.txt
+        cinemon_stars.txt
 
 nothing added to commit but untracked files present (use "git add" to track)
 #+end_example
@@ -67,7 +70,7 @@ git add biscuits.txt
 Before you proceed with the second file: Have a look at the output of
 ~git status~ now! Then continue:
 #+begin_src shell-script
-git add cinnamon_stars.txt
+git add cinemon_stars.txt
 #+end_src
 Now the status of the repository looks like this:
 #+begin_src shell-script
@@ -78,7 +81,7 @@ On branch master
 Changes to be committed:
   (use "git restore --staged <file>..." to unstage)
         new file:   biscuits.txt
-        new file:   cinnamon_stars.txt
+        new file:   cinemon_stars.txt
 #+end_example
 
 Note the above hint about the ~git restore~ -- apparently we can take
@@ -92,7 +95,7 @@ and we get:
 On branch master
 Changes to be committed:
   (use "git restore --staged <file>..." to unstage)
-        new file:   cinnamon_stars.txt
+        new file:   cinemon_stars.txt
 
 Untracked files:
   (use "git add <file>..." to include in what will be committed)

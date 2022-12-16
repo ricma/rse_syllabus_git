@@ -34,7 +34,7 @@ index 21f7c73..a134858 100644
  So far we have:
 -1. Biscuits (see [here](biscuits.txt), basd on buckwheat flour)
 +1. Biscuits (see [here](biscuits.txt))
- 2. Cinnamon Stars (see [here](cinnamon_stars.txt))
+ 2. Cinemon Stars (see [here](cinemon_stars.txt))
 diff --git a/biscuits.txt b/biscuits.txt
 index f16e658..50decd5 100644
 --- a/biscuits.txt
@@ -87,7 +87,7 @@ index 21f7c73..a134858 100644
  So far we have:
 -1. Biscuits (see [here](biscuits.txt), basd on buckwheat flour)
 +1. Biscuits (see [here](biscuits.txt))
- 2. Cinnamon Stars (see [here](cinnamon_stars.txt))
+ 2. Cinemon Stars (see [here](cinemon_stars.txt))
 diff --git a/biscuits.txt b/biscuits.txt
 index f16e658..50decd5 100644
 --- a/biscuits.txt

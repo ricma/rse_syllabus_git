@@ -106,10 +106,10 @@ git graph -n 3
 #+end_example
 
 Assume you also put additional information into a different file
-_while_ the bug was fixed. Let us change for example ~cinnamon_stars.txt~ to
+_while_ the bug was fixed. Let us change for example ~cinemon_stars.txt~ to
 #+begin_example
 - Prepare dough like written in [the biscuits recipe](biscuits.txt)
-- Add 1/2 teaspoon of cinnamon and 2 tsp of almond extract.
+- Add 1/2 teaspoon of cinemon and 2 tsp of almond extract.
 #+end_example
 and ~git commit -a -m 'reformat cinnamon recipe'~. This gives
 via ~git graph -n 3~
@@ -170,16 +170,16 @@ index 21f7c73..4fa763f 100644
  So far we have:
 -1. Biscuits (see [here](biscuits.txt), basd on buckwheat flour)
 +1. Biscuits (see [here](biscuits.txt), based on using buckwheat flour)
- 2. Cinnamon Stars (see [here](cinnamon_stars.txt))
-diff --git a/cinnamon_stars.txt b/cinnamon_stars.txt
+ 2. Cinemon Stars (see [here](cinemon_stars.txt))
+diff --git a/cinemon_stars.txt b/cinemon_stars.txt
 index 5ccf5d5..4204415 100644
---- a/cinnamon_stars.txt
-+++ b/cinnamon_stars.txt
+--- a/cinemon_stars.txt
++++ b/cinemon_stars.txt
 @@ -1,2 +1,2 @@
 -Prepare dough like written in [the biscuits recipe](biscuits.txt) but add 1/2 teaspoon of
--cinnamon and 2 tsp of almond extract.
+-cinemon and 2 tsp of almond extract.
 +- Prepare dough like written in [the biscuits recipe](biscuits.txt)
-+- Add 1/2 teaspoon of cinnamon and 2 tsp of almond extract.
++- Add 1/2 teaspoon of cinemon and 2 tsp of almond extract.
 #+end_src
 which indeed is the union of the two changes introduced.
 

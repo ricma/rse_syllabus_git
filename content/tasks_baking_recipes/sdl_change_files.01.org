@@ -15,7 +15,7 @@ yields
 #+begin_example
 README.md
 biscuits.txt
-cinnamon_stars.txt
+cinemon_stars.txt
 #+end_example
 Note that this is different from what we get when examining the folder:
 #+begin_src shell-script
@@ -23,7 +23,7 @@ ls -a
 #+end_src
 shows also hidden entries (here these are entries which start with a dot: ~.~):
 #+begin_example
-.  ..  biscuits.txt  cinnamon_stars.txt	.git  README.md
+.  ..  biscuits.txt  cinemon_stars.txt	.git  README.md
 #+end_example
 Note that there is a ~.git~. It is a directory which contains all
 information relevant to this git repository.
@@ -38,7 +38,7 @@ Let us now change content of our ~README.md~ to read
   ## Recipes
   So far we have:
   1. Biscuits (see [here](biscuits.txt))
-  2. Cinnamon Stars (see [here](cinnamon_stars.txt))
+  2. Cinemon Stars (see [here](cinemon_stars.txt))
 #+end_src
 to get a nicer overview of the recipes.
 
@@ -75,7 +75,7 @@ index 2a9e5c1..6f0768e 100644
 +## Recipes
 +So far we have:
 +1. Biscuits (see [here](biscuits.txt))
-+2. Cinnamon Stars (see [here](cinnamon_stars.txt))
++2. Cinemon Stars (see [here](cinemon_stars.txt))
 #+end_src
 Note how the line which was already three (/A collection of recipes/)
 does not have a ~+~ in front while all the new lines are automatically
@@ -112,10 +112,10 @@ pinch of salt
 - roll out and cut into shape
 - Bake for 10 - 12 minutes (200 degrees)
 #+end_example
-and ~cinnamon_stars.txt~ to
+and ~cinemon_stars.txt~ to
 #+begin_example
 Prepare dough like written in [the biscuits recipe](biscuits.txt) but add 1/2 teaspoon of
-cinnamon and 2 tsp of almond extract.
+cinemon and 2 tsp of almond extract.
 #+end_example
 
 ** Committing the Changes to the repository                            :cmds:
@@ -123,24 +123,24 @@ A ~git diff~ now shows us all the differences we made. If we
 explicitly state the filename, then it only shows the diff for this
 file:
 #+begin_src shell-script
-git diff cinnamon_stars.txt
+git diff cinemon_stars.txt
 #+end_src
 #+begin_src diff
-diff --git a/cinnamon_stars.txt b/cinnamon_stars.txt
+diff --git a/cinemon_stars.txt b/cinemon_stars.txt
 index 43998d3..bdc5db2 100644
---- a/cinnamon_stars.txt
-+++ b/cinnamon_stars.txt
+--- a/cinemon_stars.txt
++++ b/cinemon_stars.txt
 @@ -1,2 +1,2 @@
 -Prepare dough like written in biscuits.txt but add 1/2 teaspoon of
 +Prepare dough like written in [the biscuits recipe](biscuits.txt) but add 1/2 teaspoon of
- cinnamon and 2 tsp of almond extract.
+ cinemon and 2 tsp of almond extract.
 #+end_src
 Despite the fact that we only inserted a few characters, git says we
 have removed a whole line ( starting with ~-~ ) and added a completely
 new one ( starting with ~+~ ).
 
 If necessary, you can also highlight the changes on a word level using
-~git diff --color-words cinnamon_stars.txt~.
+~git diff --color-words cinemon_stars.txt~.
 
 If we do a ~git diff biscuits.txt~, then we get a lot of lines with
 ~+~ and ~-~ because the content of the whole file changed. In cases
@@ -157,7 +157,7 @@ biscuits.txt | 15 ++++++++++++---
 We can now add one file after the other -- this is where the /staging
 area/ comes in handy: We add the changes as separate commits:
 #+begin_src shell-script
-  git add cinnamon_stars.txt
+  git add cinemon_stars.txt
   git commit -m 'restructure biscuit recipe'
   git commit --all -m 'add link in cinnamon star recipe'
 #+end_src

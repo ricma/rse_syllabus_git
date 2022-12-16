@@ -124,7 +124,7 @@ with the ~git --local ...~ above.
 Examine your repository and the configuration you have.
 
 Try to add a custom command /wdiff/ which highlights changes in
-/words/ using the above ~git diff --color-words cinnamon_stars.txt~
+/words/ using the above ~git diff --color-words …~
 command.
 
 ([[file:README.org::*SDL - Changing Files and Examining the History of Changes][back to main document]])

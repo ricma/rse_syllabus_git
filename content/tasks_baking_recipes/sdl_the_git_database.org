@@ -1,0 +1,121 @@
+#+title: Behind the Scenes: The git Database
+
+In order to understand the technical details behind ~git~, we have to first
+understand the concepts of /hash/ functions: Given a input (a text), these return
+a numerical value which has the property that slight changes in the input create
+very different outputs. Git uses ~sha1~ for this:
+#+begin_src shell-script
+echo "Hello World" | sha1sum
+#+end_src
+#+begin_example
+648a6a6ffffdaa0badb23b8baf90b6168dd16b3a  -
+#+end_example
+
+* Git Tracks Content not Individual Files or Changes
+
+If we look into the ~.git/objects~ folder, we see subfolders (given of two
+characters each) and within them there are files whose names look like the hash
+above.
+
+** Looking at File Objects (/blobs/)
+It turns out, that every file we hand over to git has a hash value created for
+it:
+#+begin_src shell-script
+git hash-object README.md
+#+end_src
+#+begin_example
+6fd9ae46dad7d2bf7339cc9968a7803be50dc985
+#+end_example
+
+We can find the corresponding file under
+#+begin_src shell-script
+ls -l .git/objects/6f/d9ae46dad7d2bf7339cc9968a7803be50dc985
+#+end_src
+#+begin_example
+.r--r--r-- 217 martin 15 Dec 13:24 .git/objects/6f/d9ae46dad7d2bf7339cc9968a7803be50dc985
+#+end_example
+#+begin_src shell-script
+git cat-file -p 6fd9ae46dad7d2bf7339cc9968a7803be50dc985
+#+end_src
+which should return exactly the content of the file.
+
+If we want, we can even do the unpacking ourselves, for example using this:
+#+begin_src python
+#!/usr/bin/env python3
+import sys
+import zlib
+
+try:
+    with open(sys.argv[1], "rb") as fp:
+        content = zlib.decompress(fp.read())
+except IndexError:
+    raise RuntimeError(f"{sys.argv[0]}: No filename given!")
+except FileNotFoundError:
+    raise
+else:
+    print(content.decode())
+#+end_src
+
+This also means that if we copy a file in ~git~, it is only presence once in the
+database! But it also means that even a tiny change to a file creates a complete copy of that file. This is meant by git tracking /content/ not /changes/ or /files/. In particular, note that there is no information about that the file is called ~README.md~ or in which sub-directory it would be!
+
+** Putting Files into Folders (/tree/ objects)
+
+In order to also store the information about where something is, there are so called /tree/ objects. They are not so important for us here as we want to focus on commits. But here is an example of how they look like:
+#+begin_src shell-script
+git cat-file -p dd4e69f913150aca5c671442eb7db781b3bd43ab
+#+end_src
+#+begin_example
+100644 blob 6fd9ae46dad7d2bf7339cc9968a7803be50dc985    README.md
+100644 blob 0d57f07e46f8f768e29c1e57f6003063a2105b0b    biscuits.txt
+100644 blob 4480f260750e193491e2d3a793724470ecee0628    cinnamon_stars.txt
+100644 blob e6338ea2ecbcaf8b31c92deaa3a454f3948c3057    substitutes.rst
+#+end_example
+
+Note that if we had a directory created in our repository, it would be listed as a another /tree/ object here and we could call ~git cat-file -p …~ on it.
+
+Note that the /README.md/ file has exactly the /hash/ we have used above and we can find it under ~/.git/objects/6f/d9ae…~.
+
+Note that by this recursive definition of content, it suffices to know one has (the one of the root folder) to get all content of the current commit by getting the appropriate files from ~.git/objects~!
+
+** Tracking History (/commit/ objects)
+
+The one thing we are missing, is taking the one has of the /root folder/ and add our log message etc. to it and call it a /commit/. And this is exactly what the /hashes/ have been we have been seeing all the time!
+
+Example: We are currently on this commit
+#+begin_src shell-script
+git show
+#+end_src
+#+begin_example
+commit 164f96156dda42867b1ac937223f973cea72a0f8
+#+end_example
+So there is a file in our database
+#+begin_src shell-script
+ls -l .git/objects/16/4f96156dda42867b1ac937223f973cea72a0f8
+#+end_src
+and we can look at its content – either using our own ~deflate~ from above or
+#+begin_src shell-script
+git cat-file -p 164f96156dda42867b1ac937223f973cea72a0f8
+#+end_src
+#+begin_example
+tree 8c483c3541ce4bd55d1fe158f37ccf152af3e137
+parent c85a55395eb67c537d14b845cad9a7d3b3206fd3
+author Martin Richter <martin.richter@nottingham.ac.uk> 1671110936 +0000
+committer Martin Richter <martin.richter@nottingham.ac.uk> 1671111334 +0000
+
+add note on cookie-cutter
+#+end_example
+
+Here, the ~tree~ line references the /tree/ object (from which we can recursively
+retrieve the full content of this version) and the ~parent~ line references
+another ~commit~ object in the database - the previous version. Then, we have
+information about the author, a time stamp, and the log message.
+
+Note that the hash of this ~commit~ object highly depends on all of this! If we
+commit as someone else or at another time or with a nother log message the hash
+will be very different even if the working tree is an exact copy!
+
+However, both commits, say if they only differ in the time and the log message,
+will refer to the same ~tree~ object as the content did not change.
+
+** Branches

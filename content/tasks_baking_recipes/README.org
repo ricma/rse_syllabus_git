@@ -187,6 +187,16 @@ Feel free to use it with a more realistic example!
 
 - SDL 08.01 :: [[file:sdl_bisect.01.org][Using ~git bisect~ to find which commit introduced an error]]
 
+** SDL - Background: Behind the Scenes of Commits and Branches
+
+We want to give a few insights into how ~git~ works behind the scenes in order to
+demystify some of the things we have used above. In particular, we hope that
+after this task you feel more familiar with freely switching branches, creating
+new branches, deleting them, renaming them etc.
+
+- *SDL 09.01 :: [[file:sdl_the_git_database.org][Behind the Scenes: The git database]]
+
+
 # Local Variables:
 # mode: org
 # ispell-local-dictionary: "british"

@@ -56,8 +56,14 @@ else:
     print(content.decode())
 #+end_src
 
-This also means that if we copy a file in ~git~, it is only presence once in the
-database! But it also means that even a tiny change to a file creates a complete copy of that file. This is meant by git tracking /content/ not /changes/ or /files/. In particular, note that there is no information about that the file is called ~README.md~ or in which sub-directory it would be!
+The remarkable thing is that the only key to retrieve a file from the database
+is a hash solely based on the conent of the file!
+
+This also means that if we copy a file in ~git~, it is only present once in the
+database! But it also means that even a tiny change to a file creates a complete
+copy of that file. This is meant by git tracking /content/ not /changes/ or /files/.
+In particular, note that there is no information about that the file is called
+~README.md~ or in which sub-directory it would be!
 
 ** Putting Files into Folders (/tree/ objects)
 

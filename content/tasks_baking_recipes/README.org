@@ -194,8 +194,7 @@ demystify some of the things we have used above. In particular, we hope that
 after this task you feel more familiar with freely switching branches, creating
 new branches, deleting them, renaming them etc.
 
-- *SDL 09.01 :: [[file:sdl_the_git_database.org][Behind the Scenes: The git database]]
-
+- SDL 09.01 :: [[file:sdl_the_git_database.org][Behind the Scenes: The git database]]
 
 # Local Variables:
 # mode: org

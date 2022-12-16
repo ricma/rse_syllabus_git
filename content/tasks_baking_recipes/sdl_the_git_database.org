@@ -252,3 +252,81 @@ Use the above ~git --reset~ and ~git branch~ to create new brances and move arou
 
 The aim is to realize that there is always a way back to where you came from and
 it is almost impossible to break it.
+
+** Remote Branches
+
+As a last follow up, you might have realized that
+#+begin_src shell-script
+git branch --all
+#+end_src
+#+begin_example
+   gluten_free_1
+   main
+ * vegan_1
+   vegan_and_gf
+   remotes/github/gluten_free
+   remotes/github/gluten_free_1
+   remotes/github/gluten_free_2
+   remotes/github/main
+   remotes/github/vegan
+   remotes/github/vegan_1
+   remotes/github/vegan_2
+   remotes/github/vegan_and_gf
+   remotes/local/gluten_free_1
+   remotes/local/main
+   remotes/local/vegan_1
+   remotes/local/vegan_and_gf
+#+end_example
+also shows the /remote/ branches.
+
+These are also just files with one /hash/ value in them:
+#+begin_src shell-script
+tree .git/refs/remotes/
+#+end_src
+#+begin_example
+.git/refs/remotes/
+├── github
+│   ├── gluten_free
+│   ├── gluten_free_1
+│   ├── gluten_free_2
+│   ├── main
+│   ├── vegan
+│   ├── vegan_1
+│   ├── vegan_2
+│   └── vegan_and_gf
+└── local
+    ├── gluten_free_1
+    ├── main
+    ├── vegan_1
+    └── vegan_and_gf
+
+2 directories, 12 files
+#+end_example
+
+The configuration of the /remotes/ is here:
+#+begin_src shell-script
+less .git/config
+#+end_src
+#+begin_src conf
+[core]
+        repositoryformatversion = 0
+        filemode = true
+        bare = false
+        logallrefupdates = true
+[branch "main"]
+        rebase = true
+[user]
+        name = Martin Richter
+        email = martin.richter@nottingham.ac.uk
+[remote "github"]
+        url = git@github.com:ricma/recipe_book_example.git
+        fetch = +refs/heads/*:refs/remotes/github/*
+[remote "local"]
+        url = /home/martin/recipe_book.git
+        fetch = +refs/heads/*:refs/remotes/local/*
+[branch "vegan_1"]
+        remote = local
+        merge = refs/heads/vegan_1
+[branch]
+        autosetuprebase = always
+#+end_src

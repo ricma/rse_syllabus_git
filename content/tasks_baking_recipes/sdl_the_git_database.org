@@ -67,7 +67,10 @@ In particular, note that there is no information about that the file is called
 
 ** Putting Files into Folders (/tree/ objects)
 
-In order to also store the information about where something is, there are so called /tree/ objects. They are not so important for us here as we want to focus on commits. But here is an example of how they look like:
+In order to also store the information about where something is, there are so
+called /tree/ objects. They are not so important for us here as we want to focus
+on commits. But here is an example of how they look like. We will see in a
+moment where you would know this ~tree~ hash number from:
 #+begin_src shell-script
 git cat-file -p dd4e69f913150aca5c671442eb7db781b3bd43ab
 #+end_src

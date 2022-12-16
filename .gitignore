@@ -278,3 +278,4 @@ TSWLatexianTemp*
 
 # Ignore emacs backup files
 *~
+/content/first_steps_git/

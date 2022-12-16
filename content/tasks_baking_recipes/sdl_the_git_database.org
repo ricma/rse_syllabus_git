@@ -97,6 +97,7 @@ git show
 #+end_src
 #+begin_example
 commit 164f96156dda42867b1ac937223f973cea72a0f8
+⋮
 #+end_example
 So there is a file in our database
 #+begin_src shell-script
@@ -177,3 +178,77 @@ mv ./d9ae46dad7d2bf7339cc9968a7803be50dc985 .git/objects/6f/
 #+end_src
 
 ** Branches
+
+We learned above that the only thing needed to get the complete history (!) of a
+given repository - including all merges, commit messages, files which were there
+but are now deleted. All of it.
+
+Therefore, a branch is nothing more like a variable name containing a value. And
+as ~git~ stores everything as files, this is what we have:
+#+begin_src shell-script
+git log --oneline -n1
+#+end_src
+#+begin_example
+9118a00 (HEAD -> vegan_1) Merge remote-tracking branch 'local_repo/vegan_1' into vegan_1
+#+end_example
+or
+#+begin_src shell-script
+git show HEAD
+#+end_src
+#+begin_example
+commit 9118a007a3442cd18d8242d5c0f0260bab78e6cf (HEAD -> vegan_1)
+⋮
+#+end_example
+
+Our branch ~vegan_1~ is here in our ~.git~ repository:
+#+begin_src shell-script
+cat .git/refs/heads/vegan_1
+#+end_src
+#+begin_example
+9118a007a3442cd18d8242d5c0f0260bab78e6cf
+#+end_example
+
+For us, this means that we can easily move branches around – it necer actually
+changes the content of the repository!
+
+- Create a new branch :: ~git branch new_branch HEAD~
+- Move the current branch somewhere :: ~git reset --hard HEAD^^~
+- Look at the repository :: ~git graph~
+
+As long we still have a reference (here: ~new_branch~), we can always go back
+there, nothing about the database ever changed!
+
+Even if we loose this reference (or forgot to create one before we left!) there
+is a command showing you which items you have been working with in the past:
+#+begin_src shell-script
+git branch -D new_branch   # -D forces deletion as git sees that you
+                           # 'loose' a reference
+#+end_src
+#+begin_example
+Deleted branch new_branch (was 9118a00).
+#+end_example
+Note that ~git~ even tells you the commit once more - so you could create a new
+branch there or move your current working directory there (~git reset --hard
+9118a00~).
+
+But even if you don't have that, you can use
+#+begin_src shell-script
+git reflog
+#+end_src
+#+begin_example
+93a0b93 (HEAD -> vegan_1) HEAD@{0}: reset: moving to HEAD~~~
+9118a00 HEAD@{1}: checkout: moving from vegan_1 to vegan_1
+⋮
+#+end_example
+The first line is where we are now. The second line would have been where we
+were before. As indicated, you can even use ~git reset --hard HEAD@{1}~ to get
+back there.
+
+All this emphasises, that once you handed something to ~git~, it is very hard to
+loose it.
+
+*** Your Task :task:
+Use the above ~git --reset~ and ~git branch~ to create new brances and move around.
+
+The aim is to realize that there is always a way back to where you came from and
+it is almost impossible to break it.

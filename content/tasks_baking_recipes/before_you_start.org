@@ -41,6 +41,16 @@ For a list of possible UIs for git, see:
 
 (I personally use [[https://desktop.github.com]] )
 
+** Other Helpful Things to Set
+We will cover these later but let's mention them here to have them at one point
+#+begin_src shell-script
+git config --core.editor nano   # if you want to set a specific editor
+# To get more context when encountering conflicts
+git config --global merge.conflictstyle diff3
+# To have a colourful graph representation of your history
+git config --global alias.graph "log --graph --all --pretty=format:'%Cred%h%Creset - %Cgreen(%cr)%Creset %s%C(yellow)%d%Creset' --abbrev-commit --date=relative --decorate"
+#+end_src
+
 ** Basic command-line usage
 The session relies on some basic command-line usage. If you can use the command line to move around directories, create files and delete files then you will have enough for this part of the course. If you've never used the command-line before, you can open the command-line as follows:
 	1. Windows - follow the installing git instructions above
@@ -62,15 +72,7 @@ https://appletree.or.kr/quick_reference_cards/Unix-Linux/CLI-Cheat-Sheet.pdf
 
 
 
-** Other Helpful Things to Set
-We will cover these later but let's mention them here to have them at one point
-#+begin_src shell-script
-git config --core.editor nano   # if you want to set a specific editor
-# To get more context when encountering conflicts
-git config --global merge.conflictstyle diff3
-# To have a colourful graph representation of your history
-git config --global alias.graph "log --graph --all --pretty=format:'%Cred%h%Creset - %Cgreen(%cr)%Creset %s%C(yellow)%d%Creset' --abbrev-commit --date=relative --decorate"
-#+end_src
+
 
 ([[file:README.org::*Before you start][back to main document]])
 

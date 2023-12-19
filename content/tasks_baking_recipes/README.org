@@ -46,11 +46,11 @@ By the end of these tasks, you will be able to
    (SDLs 2)
 4. How to work on different aspects of a problem (branches)
    (SDLs 3, 4, and 5)
-5. Know the difference between /merging/ and /rebasing/
+5. [Optional - advanced] Know the difference between /merging/ and /rebasing/
    (SDLs 4 and 6)
-6. How to work with different remote repositories
+6. [Optional - advanced] How to work with different remote repositories
    (SDLs 7)
-7. Extra: How to quickly find a commit which introduced a bug (~git bisect~)
+7. [Optional - very advanced] How to quickly find a commit which introduced a bug (~git bisect~)
    (SDLs 8)
 
 ** Before you start

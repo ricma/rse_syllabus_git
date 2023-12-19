@@ -27,8 +27,8 @@ The tasks will be all hands-on and you are encouraged to open your
 installation of git and type along.
 
 We will view the material presented here from three angles:
-- a) :: Why are we doing a special thing?
-- b) :: How are we doing it practically?
+- a) :: Why are we carrying out each steop?
+- b) :: How are we doing each step practically?
 - c) :: What are some of the technical details behind the scenes?
 
 You can mainly focus on point *b)* if you prefer. Some of you will find

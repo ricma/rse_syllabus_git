@@ -101,8 +101,7 @@ git checkout master
 #+end_src
 the file is back to its /non-gluten-free/ state using wheat flour!
 
-If we decide to change the recipe here to, for example, increase the
-amount of sugar to, say, replace the "125g margarine" with "125g butter" and then
+If we decide to change the recipe here to, for example, replace the "125g margarine" with "125g butter" and then
 #+begin_src shell-script
 git commit -a -m 'replace margarine with butter in biscuit recipe'
 #+end_src

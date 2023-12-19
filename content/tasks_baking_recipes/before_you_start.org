@@ -50,9 +50,9 @@ The session relies on some basic command-line usage. If you can use the command 
 To learn basic commands below are some videos introducing the key concepts or, if you prefer, there's a webpage with this information. Finally, there's a link to a crib sheet, which you might find useful in the session to help you remember the command-line commands.
 
 *** Videos
-Moving around: [[https://www.youtube.com/watch?v=b93ehHTCZAE]] [7mins]
-Making files: [[https://www.youtube.com/watch?v=Q9EeK5_QfvI]] [7mins]
-Moving and copying files: [[https://www.youtube.com/watch?v=6ylJ9ocj29w]] [9mins]
+	1. Moving around: [[https://www.youtube.com/watch?v=b93ehHTCZAE]] [7mins]
+	2. Making files: [[https://www.youtube.com/watch?v=Q9EeK5_QfvI]] [7mins]
+	3. Moving and copying files: [[https://www.youtube.com/watch?v=6ylJ9ocj29w]] [9mins]
 
 *** Webpage
 [[https://ubuntu.com/tutorials/command-line-for-beginners#4-creating-folders-and-files]] [up to and including  section 5- Manipulating files]

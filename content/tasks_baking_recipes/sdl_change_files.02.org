@@ -56,7 +56,7 @@ the repository.
 
 Git log even allows you to specify a custom format like this:
 #+begin_src shell-script
-git log --graph --all --pretty=format:'%Cred%h%Creset - %Cgreen(%cr)%Creset %s%C(yellow)%d%Creset' --abbrev-commit --date=relative --decorate'
+git log --graph --all --pretty=format:'%Cred%h%Creset - %Cgreen(%cr)%Creset %s%C(yellow)%d%Creset' --abbrev-commit --date=relative --decorate
 #+end_src
 which sets the color as shown in [[fig:example_output_custom_log][the figure below]].
 #+name: fig:example_output_custom_log

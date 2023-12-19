@@ -79,7 +79,7 @@ index 0000000..9beca6a
 +Bake for 10 - 12 minutes (200 degrees)
 #+end_src
 
-This ~-S~ only shows when the total number of occurrence changed. If
+This ~-S~ only shows when the total number of occurrences changed but not other changes (for example if flour was moved within the text file). If
 you want to see all additions and deletions, you can use ~-G~:
 #+begin_src shell-script
 git log --patch -G flour

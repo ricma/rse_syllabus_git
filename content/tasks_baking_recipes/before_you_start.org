@@ -39,7 +39,7 @@ https://rdweb.wvd.microsoft.com/arm/webclient
 For a list of possible UIs for git, see:
 [[https://git-scm.com/download/gui/windows]]
 
-(I personally use [[https://magit.vc]] (runs inside [[https://emacs.org]]).)
+(I personally use [[https://desktop.github.com]] )
 
 ** Other Helpful Things to Set
 We will cover these later but let's mention them here to have them at one point

@@ -84,7 +84,7 @@ This self-directed learning task will show you
 
 - SDL 02.01 :: [[file:sdl_change_files.01.org][Changing existing files]]
 - SDL 02.02 :: [[file:sdl_change_files.02.org][Examining what we have done so far]]
-- SDL 02.03 :: [[file:sdl_change_files.03.org][Examining single commits in more detail and Find Changes]]
+- SDL 02.03 [Optional] :: [[file:sdl_change_files.03.org][Examining single commits in more detail and Find Changes]]
 
 ** SDL - Branching
 This self directed learning task will introduce the concept of

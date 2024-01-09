@@ -117,7 +117,7 @@ We will use the typo (deliberately) introduced in [[file:sdl_branching.01.org::s
   SDL, [[*SDL - Merge Conflicts][SDL - Merge Conflicts]]
 
 - SDL 04.01 :: [[file:sdl_merging_01.org][Fixing a bug in a separate branch - and merge back]]
-- SDL 04.02 :: [[file:sdl_merging_02.org][A more complicated example and how to abort a merge]]
+- SDL 04.02 [optional] :: [[file:sdl_merging_02.org][A more complicated example and how to abort a merge]]
 
 ** SDL - Merge Conflicts
 In this example we will create a proper conflict -- and looks at ways

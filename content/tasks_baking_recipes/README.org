@@ -102,7 +102,7 @@ others.
 
 - SDL 03.01 :: [[file:sdl_branching.01.org][Creating new Branches]]
 - SDL 03.02 :: [[file:sdl_branching.02.org][Showing differences between branches]]
-- SDL 03.03 :: [[file:sdl_branching.03.org][Creating tags to have permanent names]]
+- SDL 03.03 [optional] :: [[file:sdl_branching.03.org][Creating tags to have permanent names]]
 
 ** SDL - Merging Branches
 Branches introduced a concept which allows for a diverging

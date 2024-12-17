@@ -34,7 +34,7 @@ A method to track chanes as you develop code
 * Example of Branching
 ** Branching Example: Writing Paper (Draft)
 #+name: branching_010_paper_draft
-#+begin_src ditaa :file figures/main_branch_010.png :cmdline -r -T :exports results
+#+begin_src ditaa :file figures/main_branch_010.png :cmdline -r -T :exports code
    main
    +-----------+   +-----------+   +-----------+
    | Commit A1 |-->| Commit A2 |-->| Commit A3 |

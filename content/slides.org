@@ -32,16 +32,160 @@ A method to track chanes as you develop code
 - and why to use it?
 
 * Example of Branching
-
-#+begin_src ditaa :file figures/main_branch_00.svg :cmdline -r -T :exports results
-   +---------+
-   | cBLU    |
-   |         |
-   |    +----+
-   |    |cPNK|
-   |    |    |
-   +----+----+
+** Branching Example: Writing Paper (Draft)
+#+name: branching_010_paper_draft
+#+begin_src ditaa :file figures/main_branch_010.png :cmdline -r -T :exports results
+   main
+   +-----------+   +-----------+   +-----------+
+   | Commit A1 |-->| Commit A2 |-->| Commit A3 |
+   | cBLU      |   | cBLU      |   | cBLU      |
+   +-----------+   +-----------+   +-----------+
 #+end_src
 
-#+RESULTS:
-[[file:figures/main_branch_00.svg]]
+#+RESULTS: branching_010_paper_draft
+[[file:figures/main_branch_010.png]]
+
+** Branching Example: Submit Paper
+#+name: branching_020_submit_paper
+#+begin_src ditaa :file figures/main_branch_020.png :cmdline -r -T :exports results
+   main
+   +-----------+   +-----------+   +-----------+
+   | Commit A1 |-->| Commit A2 |-->| Commit A3 |
+   | cBLU      |   | cBLU      |   | cBLU      |
+   +-----------+   +-----------+   +-----------+
+                                     ^
+                                     |
+                                     |
+                          Paper submitted
+#+end_src
+
+#+RESULTS: branching_020_submit_paper
+[[file:figures/main_branch_020.png]]
+
+** Branching Example: New Idea!
+#+name: branching_30_develop_new_idea
+#+begin_src ditaa :file figures/main_branch_030.png :cmdline -r -T :exports results
+                                                        +-----------+   +-----------+   +-----------+
+                                                    +-->| Commit B1 |-->| Commit B2 |-->| ????      |
+                                                    |   | cRED      |   | cRED      |   | cRED      |
+                                Major new feature!  |   +-----------+   +-----------+   +-----------+
+                                            +-------+
+                                            |
+                                            |
+   main                                     |
+   +-----------+   +-----------+   +-----------+
+   | Commit A1 |-->| Commit A2 |-->| Commit A3 |
+   | cBLU      |   | cBLU      |   | cBLU      |
+   +-----------+   +-----------+   +-----------+
+                                     ^
+                                     |
+                                     |
+                          Paper submitted
+#+end_src
+
+#+RESULTS: branching_30_develop_new_idea
+[[file:figures/main_branch_030.png]]
+
+** Branching Example: Referee Changes!
+#+name: branching_40_referee_changes
+#+begin_src ditaa :file figures/main_branch_040.png :cmdline -r -T :exports results
+                                                        +-----------+   +-----------+   +-----------+
+                                                    +-->| Commit B1 |-->| Commit B2 |-->| ????      |
+                                                    |   | cRED      |   | cRED      |   | cRED      |
+                                Major new feature!  |   +-----------+   +-----------+   +-----------+
+                                            +-------+
+                                            |
+                                            |
+   main                                     |
+   +-----------+   +-----------+   +-----------+
+   | Commit A1 |-->| Commit A2 |-->| Commit A3 |
+   | cBLU      |   | cBLU      |   | cBLU      |
+   +-----------+   +-----------+   +-----------+
+                                     ^      |
+                                     |      |                                    Paper resubmitted!
+                                     |      |                                      |
+                          Paper submitted   +-------+                              v
+                                                    |   +-----------+   +-----------+
+                                                    +-->| Commit C1 |-->| Commit C2 |
+                                                        | cGRE      |   | cGRE      |
+                                                        +-----------+   +-----------+
+#+end_src
+
+#+RESULTS: branching_40_referee_changes
+[[file:figures/main_branch_040.png]]
+
+** Branching Example: Paper Accepted
+#+name: branching_50_paper_accepted
+#+begin_src ditaa :file figures/main_branch_050.png :cmdline -r -T :exports results
+                                                        +-----------+   +-----------+   +-----------+
+                                                    +-->| Commit B1 |-->| Commit B2 |-->| ????      |
+                                                    |   | cRED      |   | cRED      |   | cRED      |
+                                Major new feature!  |   +-----------+   +-----------+   +-----------+
+                                            +-------+
+                                            |
+                                            |
+   main                                     |
+   +-----------+   +-----------+   +-----------+        +-----------+   +-----------+
+   | Commit A1 |-->| Commit A2 |-->| Commit A3 |------->| Commit C1 |-->| Commit C2 |
+   | cBLU      |   | cBLU      |   | cBLU      |        | cBLU      |   | cBLU      |
+   +-----------+   +-----------+   +-----------+        +-----------+   +-----------+
+                                     ^      |                 ^               ^
+                                     |      |                 :         paper :  Paper resubmitted!
+                                     |      |                 :      accepted :    |
+                          Paper submitted   +-------+         |               |    v
+                                                    |   +-----------+   +-----------+
+                                                    +-->| Commit C1 |-->| Commit C2 |
+                                                        | cGRE      |   | cGRE      |
+                                                        +-----------+   +-----------+
+#+end_src
+
+#+RESULTS: branching_50_paper_accepted
+[[file:figures/main_branch_050.png]]
+
+** Branching Example: Feature Complete
+#+name: branching_60_feature_complete
+#+begin_src ditaa :file figures/main_branch_060.png :cmdline -r -T :exports results
+                                                        +-----------+   +-----------+   +-----------+
+                                                    +-->| Commit B1 |-->| Commit B2 |-->| Commit B3 |
+                                                    |   | cRED      |   | cRED      |   | cRED      |
+                                Major new feature!  |   +-----------+   +-----------+   +-----------+
+                                            +-------+                                             ^
+                                            |                                                     |
+                                            |                                                   New feature complete
+   main                                     |
+   +-----------+   +-----------+   +-----------+        +-----------+   +-----------+
+   | Commit A1 |-->| Commit A2 |-->| Commit A3 |------->| Commit C1 |-->| Commit C2 |
+   | cBLU      |   | cBLU      |   | cBLU      |        | cBLU      |   | cBLU      |
+   +-----------+   +-----------+   +-----------+        +-----------+   +-----------+
+                                     ^                                        ^
+                                     |                                  paper :
+                                     |                               accepted :
+                          Paper submitted                                     |
+#+end_src
+
+#+RESULTS: branching_60_feature_complete
+[[file:figures/main_branch_060.png]]
+
+** Branching Example: Merge
+#+name: branching_70_merge
+#+begin_src ditaa :file figures/main_branch_070.png :cmdline -r -T :exports results
+                                                        +-----------+   +-----------+   +-----------+
+                                                    +-->| Commit B1 |-->| Commit B2 |-->| Commit B3 |
+                                                    |   | cRED      |   | cRED      |   | cRED      |
+                                Major new feature!  |   +-----------+   +-----------+   +-----------+
+                                            +-------+                                        |    ^
+                                            |                                                :    |
+                                            |                                                :  New feature complete
+   main                                     |                                                v
+   +-----------+   +-----------+   +-----------+        +-----------+   +-----------+    +----------+
+   | Commit A1 |-->| Commit A2 |-->| Commit A3 |------->| Commit C1 |-->| Commit C2 |-=->| merge    |
+   | cBLU      |   | cBLU      |   | cBLU      |        | cBLU      |   | cBLU      |    | cPNK     |
+   +-----------+   +-----------+   +-----------+        +-----------+   +-----------+    +----------+
+                                     ^                                        ^
+                                     |                                  paper :
+                                     |                               accepted :
+                          Paper submitted                                     |
+#+end_src
+
+#+RESULTS: branching_70_merge
+[[file:figures/main_branch_070.png]]

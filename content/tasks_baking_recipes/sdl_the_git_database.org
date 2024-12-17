@@ -1,0 +1,332 @@
+#+title: Behind the Scenes: The git Database
+
+In order to understand the technical details behind ~git~, we have to first
+understand the concepts of /hash/ functions: Given a input (a text), these return
+a numerical value which has the property that slight changes in the input create
+very different outputs. Git uses ~sha1~ for this:
+#+begin_src shell-script
+echo "Hello World" | sha1sum
+#+end_src
+#+begin_example
+648a6a6ffffdaa0badb23b8baf90b6168dd16b3a  -
+#+end_example
+
+* Git Tracks Content not Individual Files or Changes
+
+If we look into the ~.git/objects~ folder, we see subfolders (given of two
+characters each) and within them there are files whose names look like the hash
+above.
+
+** Looking at File Objects (/blobs/)
+It turns out, that every file we hand over to git has a hash value created for
+it:
+#+begin_src shell-script
+git hash-object README.md
+#+end_src
+#+begin_example
+6fd9ae46dad7d2bf7339cc9968a7803be50dc985
+#+end_example
+
+We can find the corresponding file under
+#+begin_src shell-script
+ls -l .git/objects/6f/d9ae46dad7d2bf7339cc9968a7803be50dc985
+#+end_src
+#+begin_example
+.r--r--r-- 217 martin 15 Dec 13:24 .git/objects/6f/d9ae46dad7d2bf7339cc9968a7803be50dc985
+#+end_example
+#+begin_src shell-script
+git cat-file -p 6fd9ae46dad7d2bf7339cc9968a7803be50dc985
+#+end_src
+which should return exactly the content of the file.
+
+If we want, we can even do the unpacking ourselves, for example using this:
+#+begin_src python
+#!/usr/bin/env python3
+import sys
+import zlib
+
+try:
+    with open(sys.argv[1], "rb") as fp:
+        content = zlib.decompress(fp.read())
+except IndexError:
+    raise RuntimeError(f"{sys.argv[0]}: No filename given!")
+except FileNotFoundError:
+    raise
+else:
+    print(content.decode())
+#+end_src
+
+The remarkable thing is that the only key to retrieve a file from the database
+is a hash solely based on the conent of the file!
+
+This also means that if we copy a file in ~git~, it is only present once in the
+database! But it also means that even a tiny change to a file creates a complete
+copy of that file. This is meant by git tracking /content/ not /changes/ or /files/.
+In particular, note that there is no information about that the file is called
+~README.md~ or in which sub-directory it would be!
+
+** Putting Files into Folders (/tree/ objects)
+
+In order to also store the information about where something is, there are so
+called /tree/ objects. They are not so important for us here as we want to focus
+on commits. But here is an example of how they look like. We will see in a
+moment where you would know this ~tree~ hash number from:
+#+begin_src shell-script
+git cat-file -p dd4e69f913150aca5c671442eb7db781b3bd43ab
+#+end_src
+#+begin_example
+100644 blob 6fd9ae46dad7d2bf7339cc9968a7803be50dc985    README.md
+100644 blob 0d57f07e46f8f768e29c1e57f6003063a2105b0b    biscuits.txt
+100644 blob 4480f260750e193491e2d3a793724470ecee0628    cinnamon_stars.txt
+100644 blob e6338ea2ecbcaf8b31c92deaa3a454f3948c3057    substitutes.rst
+#+end_example
+
+Note that if we had a directory created in our repository, it would be listed as a another /tree/ object here and we could call ~git cat-file -p …~ on it.
+
+Note that the /README.md/ file has exactly the /hash/ we have used above and we can find it under ~/.git/objects/6f/d9ae…~.
+
+Note that by this recursive definition of content, it suffices to know one has (the one of the root folder) to get all content of the current commit by getting the appropriate files from ~.git/objects~!
+
+** Tracking History (/commit/ objects)
+
+The one thing we are missing, is taking the one has of the /root folder/ and add our log message etc. to it and call it a /commit/. And this is exactly what the /hashes/ have been we have been seeing all the time!
+
+Example: We are currently on this commit
+#+begin_src shell-script
+git show
+#+end_src
+#+begin_example
+commit 164f96156dda42867b1ac937223f973cea72a0f8
+⋮
+#+end_example
+So there is a file in our database
+#+begin_src shell-script
+ls -l .git/objects/16/4f96156dda42867b1ac937223f973cea72a0f8
+#+end_src
+and we can look at its content – either using our own ~deflate~ from above or
+#+begin_src shell-script
+git cat-file -p 164f96156dda42867b1ac937223f973cea72a0f8
+#+end_src
+#+begin_example
+tree 8c483c3541ce4bd55d1fe158f37ccf152af3e137
+parent c85a55395eb67c537d14b845cad9a7d3b3206fd3
+author Martin Richter <martin.richter@nottingham.ac.uk> 1671110936 +0000
+committer Martin Richter <martin.richter@nottingham.ac.uk> 1671111334 +0000
+
+add note on cookie-cutter
+#+end_example
+
+Here, the ~tree~ line references the /tree/ object (from which we can recursively
+retrieve the full content of this version) and the ~parent~ line references
+another ~commit~ object in the database - the previous version. Then, we have
+information about the author, a time stamp, and the log message.
+
+Note that the hash of this ~commit~ object highly depends on all of this! If we
+commit as someone else or at another time or with a nother log message the hash
+will be very different even if the working tree is an exact copy!
+
+However, both commits, say if they only differ in the time and the log message,
+will refer to the same ~tree~ object as the content did not change.
+
+Also note, there is another type of entries in the database for ~tags~ but that is
+less interesting for our below point. For more details, see
+[[https://git-scm.com/book/en/v2/Git-Internals-Git-Objects][git-scm.com here for objects]] and [[https://git-scm.com/book/en/v2/Git-Internals-Git-References][here for references]].
+
+*** Your Task :task:
+Find out what a ~merge~ looks like.
+
+What happens if you look at commits done on [[https://github.com]]?
+
+** Check Integrity of a Repository
+Another advantage of this is that the database can notice when it suffers
+file-system or hardware problems and the database gets corrupted.
+#+begin_src shell-script
+git fsck
+#+end_src
+#+begin_example
+Checking object directories: 100% (256/256), done.
+dangling blob 35fa587716c18361c78f5f92fc79e6d6b43282c6
+dangling blob 42dec7f65fb2236bf924a5e5beb7618609cce7fa
+dangling blob b2f07b4e9ca9b43c8f593d055afd233eed9709f3
+dangling blob c26cb158f9fb815c71496761201320eaa4e920b1
+#+end_example
+
+Note that this even tells us about items in the database we are no longer need!
+In this case, it is all files (/blobs/).
+
+*** Your Task :task:
+
+Try to 'mess' with the database to see what happens.
+#+begin_src shell-script
+mv .git/objects/6f/d9ae46dad7d2bf7339cc9968a7803be50dc985 ./
+#+end_src
+
+What does ~git fsck~ report now?
+
+Note: This is the type of error we would get if we check out something which
+relies on the above:
+#+begin_src shell-script
+git checkout vegan_1
+#+end_src
+#+begin_example
+error: unable to read sha1 file of README.md (6fd9ae46dad7d2bf7339cc9968a7803be50dc985)
+error: invalid object 100644 6fd9ae46dad7d2bf7339cc9968a7803be50dc985 for 'README.md'
+#+end_example
+so better repairing our malicious behaviour:
+#+begin_src shell-script
+mv ./d9ae46dad7d2bf7339cc9968a7803be50dc985 .git/objects/6f/
+#+end_src
+
+** Branches
+
+We learned above that the only thing needed to get the complete history (!) of a
+given repository - including all merges, commit messages, files which were there
+but are now deleted. All of it.
+
+Therefore, a branch is nothing more like a variable name containing a value. And
+as ~git~ stores everything as files, this is what we have:
+#+begin_src shell-script
+git log --oneline -n1
+#+end_src
+#+begin_example
+9118a00 (HEAD -> vegan_1) Merge remote-tracking branch 'local_repo/vegan_1' into vegan_1
+#+end_example
+or
+#+begin_src shell-script
+git show HEAD
+#+end_src
+#+begin_example
+commit 9118a007a3442cd18d8242d5c0f0260bab78e6cf (HEAD -> vegan_1)
+⋮
+#+end_example
+
+Our branch ~vegan_1~ is here in our ~.git~ repository:
+#+begin_src shell-script
+cat .git/refs/heads/vegan_1
+#+end_src
+#+begin_example
+9118a007a3442cd18d8242d5c0f0260bab78e6cf
+#+end_example
+
+For us, this means that we can easily move branches around – it necer actually
+changes the content of the repository!
+
+- Create a new branch :: ~git branch new_branch HEAD~
+- Move the current branch somewhere :: ~git reset --hard HEAD^^~
+- Look at the repository :: ~git graph~
+
+As long we still have a reference (here: ~new_branch~), we can always go back
+there, nothing about the database ever changed!
+
+Even if we loose this reference (or forgot to create one before we left!) there
+is a command showing you which items you have been working with in the past:
+#+begin_src shell-script
+git branch -D new_branch   # -D forces deletion as git sees that you
+                           # 'loose' a reference
+#+end_src
+#+begin_example
+Deleted branch new_branch (was 9118a00).
+#+end_example
+Note that ~git~ even tells you the commit once more - so you could create a new
+branch there or move your current working directory there (~git reset --hard
+9118a00~).
+
+But even if you don't have that, you can use
+#+begin_src shell-script
+git reflog
+#+end_src
+#+begin_example
+93a0b93 (HEAD -> vegan_1) HEAD@{0}: reset: moving to HEAD~~~
+9118a00 HEAD@{1}: checkout: moving from vegan_1 to vegan_1
+⋮
+#+end_example
+The first line is where we are now. The second line would have been where we
+were before. As indicated, you can even use ~git reset --hard HEAD@{1}~ to get
+back there.
+
+All this emphasises, that once you handed something to ~git~, it is very hard to
+loose it.
+
+*** Your Task :task:
+Use the above ~git --reset~ and ~git branch~ to create new brances and move around.
+
+The aim is to realize that there is always a way back to where you came from and
+it is almost impossible to break it.
+
+** Remote Branches
+
+As a last follow up, you might have realized that
+#+begin_src shell-script
+git branch --all
+#+end_src
+#+begin_example
+   gluten_free_1
+   main
+ * vegan_1
+   vegan_and_gf
+   remotes/github/gluten_free
+   remotes/github/gluten_free_1
+   remotes/github/gluten_free_2
+   remotes/github/main
+   remotes/github/vegan
+   remotes/github/vegan_1
+   remotes/github/vegan_2
+   remotes/github/vegan_and_gf
+   remotes/local/gluten_free_1
+   remotes/local/main
+   remotes/local/vegan_1
+   remotes/local/vegan_and_gf
+#+end_example
+also shows the /remote/ branches.
+
+These are also just files with one /hash/ value in them:
+#+begin_src shell-script
+tree .git/refs/remotes/
+#+end_src
+#+begin_example
+.git/refs/remotes/
+├── github
+│   ├── gluten_free
+│   ├── gluten_free_1
+│   ├── gluten_free_2
+│   ├── main
+│   ├── vegan
+│   ├── vegan_1
+│   ├── vegan_2
+│   └── vegan_and_gf
+└── local
+    ├── gluten_free_1
+    ├── main
+    ├── vegan_1
+    └── vegan_and_gf
+
+2 directories, 12 files
+#+end_example
+
+The configuration of the /remotes/ is here:
+#+begin_src shell-script
+less .git/config
+#+end_src
+#+begin_src conf
+[core]
+        repositoryformatversion = 0
+        filemode = true
+        bare = false
+        logallrefupdates = true
+[branch "main"]
+        rebase = true
+[user]
+        name = Martin Richter
+        email = martin.richter@nottingham.ac.uk
+[remote "github"]
+        url = git@github.com:ricma/recipe_book_example.git
+        fetch = +refs/heads/*:refs/remotes/github/*
+[remote "local"]
+        url = /home/martin/recipe_book.git
+        fetch = +refs/heads/*:refs/remotes/local/*
+[branch "vegan_1"]
+        remote = local
+        merge = refs/heads/vegan_1
+[branch]
+        autosetuprebase = always
+#+end_src

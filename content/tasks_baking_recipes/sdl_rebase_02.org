@@ -1,0 +1,336 @@
+#+OPTIONS: <:nil d:nil timestamp:t ^:nil tags:nil toc:nil num:nil \n:t
+#+STARTUP: fninline inlineimages showall
+
+* SDL - Rebase a branch onto another branch - Example 2
+In order to combine the content from the gluten-free and the vegan
+branches in this example we will rebase ~gluten-free~ onto ~vegan~.
+The [[file:sdl_rebase_01.org::*SDL - Rebase a branch onto another branch - Example 1][first example SDL]] a similar result but by rebasing the other way
+around.
+
+Just like we rebased our changes of ~vegan~ onto ~gluten_free~, we can do it the
+other way around:
+
+#+begin_src shell-script
+# Create two new branches to start all over again with the rebase
+git branch vegan_2 e40def1
+git branch gluten_free_2 716409e
+git graph -n 14
+#+end_src
+#+begin_example
+ * c85a553 - (7 minutes ago) add link to table, add notes to recipe
+ |           (tag: v_0.2_second_vegan_gf_version, vegan_1)
+ * 93a0b93 - (9 minutes ago) add replacement for honey
+ * 28e0a1a - (9 minutes ago) add table of replacements in vegan recipes
+ | *   3525589 - (11 months ago) merge gluten-free and vegan recipes
+ | |             (tag: v_0.2_first_vegan_gf_version)
+ | |\
+ | |/
+ |/|
+ * |   716409e - (11 months ago) Merge branch 'fix_typo' into gluten_free
+ | |             (HEAD -> gluten_free_2, gluten_free_1)
+ |\ \
+ | * | 4a5c4eb - (11 months ago) fix typo in README.md
+ * | | 461de20 - (11 months ago) reformat cinemon recipe
+ |/ /
+ * | 34f83d7 - (11 months ago) update README for gluten-free recipes
+ | |           (gluten_free)
+ * | 01bb2d4 - (11 months ago) make biscuits recipe gluten free
+ | * e40def1 - (11 months ago) add link to table, add notes to recipe (vegan_2)
+ | * ec39d14 - (11 months ago) add replacement for honey
+ | |           (vegan)
+ | * 49e8505 - (11 months ago) add table of replacements in vegan recipes
+ | |           (tag: v_0.1_vegan_replacement)
+ |/
+ | * 5755eba - (11 months ago) replace margarine with butter in biscuit recipe
+ | |           (main)
+ |/
+ * 7d4a511 - (11 months ago) add link in cinemon star recipe
+#+end_example
+In particular note the above ~HEAD -> gluten_free_2~ which indicates the branch we
+have checked out.
+
+This time we check out the ~gluten_free~ branch and we rebase it onto ~vegan~:
+#+begin_src shell-script
+git checkout gluten_free_2
+git rebase vegan_2
+#+end_src
+#+begin_example
+Switched to branch 'gluten_free_2'
+usuki% git rebase vegan_2
+Auto-merging biscuits.txt
+CONFLICT (content): Merge conflict in biscuits.txt
+error: could not apply 01bb2d4... make biscuits recipe gluten free
+hint: Resolve all conflicts manually, mark them as resolved with
+hint: "git add/rm <conflicted_files>", then run "git rebase --continue".
+hint: You can instead skip this commit: run "git rebase --skip".
+hint: To abort and get back to the state before "git rebase", run "git rebase --abort".
+Could not apply 01bb2d4... make biscuits recipe gluten free
+#+end_example
+
+Like before, we get a conflict. Examining the situation further
+#+begin_src shell-script
+git status
+#+end_src
+#+begin_example
+interactive rebase in progress; onto e40def1
+Last command done (1 command done):
+   pick 01bb2d4 make biscuits recipe gluten free
+Next commands to do (3 remaining commands):
+   pick 34f83d7 update README for gluten-free recipes
+   pick 461de20 reformat cinemon recipe
+  (use "git rebase --edit-todo" to view and edit)
+You are currently rebasing branch 'gluten_free_2' on 'e40def1'.
+  (fix conflicts and then run "git rebase --continue")
+  (use "git rebase --skip" to skip this patch)
+  (use "git rebase --abort" to check out the original branch)
+
+Unmerged paths:
+  (use "git restore --staged <file>..." to unstage)
+  (use "git add <file>..." to mark resolution)
+        both modified:   biscuits.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+#+end_example
+
+Weirdly enough, only the /biscuits.txt/ file seems to be affected. Looking at ~git log --graph~ shows:
+#+begin_src shell-script
+git graph -n 11
+#+end_src
+#+begin_example
+ * c85a553 - (13 minutes ago) add link to table, add notes to recipe
+ |           (tag: v_0.2_second_vegan_gf_version, vegan_1)
+ * 93a0b93 - (15 minutes ago) add replacement for honey
+ * 28e0a1a - (15 minutes ago) add table of replacements in vegan recipes
+ | *   3525589 - (11 months ago) merge gluten-free and vegan recipes
+ | |             (tag: v_0.2_first_vegan_gf_version)
+ | |\
+ | |/
+ |/|
+ * |   716409e - (11 months ago) Merge branch 'fix_typo' into gluten_free
+ | |             (gluten_free_2, gluten_free_1)
+ |\ \
+ | * | 4a5c4eb - (11 months ago) fix typo in README.md
+ * | | 461de20 - (11 months ago) reformat cinemon recipe
+ |/ /
+ * | 34f83d7 - (11 months ago) update README for gluten-free recipes
+ * | 01bb2d4 - (11 months ago) make biscuits recipe gluten free
+ | * e40def1 - (11 months ago) add link to table, add notes to recipe (HEAD, vegan_2)
+ | * ec39d14 - (11 months ago) add replacement for honey (vegan)
+#+end_example
+Note that ~HEAD~ is now somewhere else - and compare it with the above message from ~git rebase~: It says
+#+begin_example
+Last command done (1 command done):
+   pick 01bb2d4 make biscuits recipe gluten free
+#+end_example
+Can you spot this number, ~01bb2d4~ in the output? It is the one next to where ~HEAD~ now is.
+
+So as we are rebasing /onto/ ~vegan~, we are already stuck in the first commit (~01bb2d4~) leading towards ~gluten_free~!
+
+More specifically, the conflict in question shows as
+#+begin_src shell-script
+git diff
+#+end_src
+#+begin_src diff
+diff --cc biscuits.txt
+index e10f1f0,f16e658..0000000
+--- a/biscuits.txt
++++ b/biscuits.txt
+@@@ -1,13 -1,15 +1,25 @@@
+  # Ingredients
+++<<<<<<< HEAD
+ +250g very fine flour
+ +125g margarine (do not use butter!)
+ +60g sugar
+++||||||| parent of 01bb2d4 (make biscuits recipe gluten free)
+++250g flour
+++125g margarine
+++60g sugar
+++=======
++ 150g buckwheat flour
++ 1/2 tsp baking powder
++ 110g butter
++ 110g sugar
+++>>>>>>> 01bb2d4 (make biscuits recipe gluten free)
+  3tsp vanilla extract
+  pinch of salt
+ -1 egg.
+ +1/2 banana
+
+  # Steps
+- - Mix everything
++ - Mix butter and sugar, then whisk in egg
++ - add flour, baking powder, salt and stri until comes together
+  - let rest for 30 min in fridge
+  - roll out and cut into shape
+- - Bake for 10 - 12 minutes (200 degrees)
++ - Bake for 12 - 15 minutes (180 degrees)
+#+end_src
+
+What we can see here is:
+- /HEAD/ :: This is where ~HEAD~ is in the above graph, i.e. the point onto which we are trying to apply our first change from ~gluten_free~.
+- /parent of 01bb2d4/ :: This was the state of the file when putting the first
+  commit in ~gluten_free~ in. Note that it is missing the "/(do not use butter!)/".
+  The absence of this is the main reason the patch could not be applied without
+  problems (no automatic resolving).
+- /01bb2d4/ :: This is the change introduced by the first commit in ~gluten_free~
+
+Just as before, let's come up with a joint "/truth/" and replace ~biscuits.txt~ with
+#+begin_src markdown
+# Ingredients
+150g buckwheat flour
+1/2 tsp baking powder
+110g margarine (do not use butter!)
+60g sugar (reduced because of banana)
+3tsp vanilla extract
+pinch of salt
+1/2 banana
+
+# Steps
+- Mix butter and sugar, then whisk in egg
+- add flour, baking powder, salt and stri until comes together
+- let rest for 30 min in fridge
+- roll out and cut into shape
+- Bake for 12 - 15 minutes (180 degrees)
+#+end_src
+
+Note that we added a few descriptions for example justifying the use of less
+sugar. As before, it might be that you cannot simply use one of the two
+versions - you have to think about what the combined right thing is.
+
+Now we can continue:
+#+begin_src shell-script
+git add biscuits.txt
+git rebase --continue
+#+end_src
+Note: This will open your editor and allow you to change the log message for
+this commit.
+
+But then ~git~ struggles again!
+#+begin_example
+[detached HEAD f4e11d6] make biscuits recipe gluten free
+ 1 file changed, 7 insertions(+), 5 deletions(-)
+Auto-merging README.md
+CONFLICT (content): Merge conflict in README.md
+error: could not apply 34f83d7... update README for gluten-free recipes
+hint: Resolve all conflicts manually, mark them as resolved with
+hint: "git add/rm <conflicted_files>", then run "git rebase --continue".
+hint: You can instead skip this commit: run "git rebase --skip".
+hint: To abort and get back to the state before "git rebase", run "git rebase --abort".
+Could not apply 34f83d7... update README for gluten-free recipes
+#+end_example
+
+So unlike the previous ~git rebase~ where we put ~vegan~ onto ~gluten_free~, here, we
+need to fix more commits. Let's see the graph to understand where we are:
+#+begin_src shell-script
+git graph -n 15
+#+end_src
+#+begin_example
+ * f4e11d6 - (3 minutes ago) make biscuits recipe gluten free (HEAD)
+ | * c85a553 - (83 minutes ago) add link to table, add notes to recipe
+ | |           (tag: v_0.2_second_vegan_gf_version, vegan_1)
+ | * 93a0b93 - (85 minutes ago) add replacement for honey
+ | * 28e0a1a - (85 minutes ago) add table of replacements in vegan recipes
+ | | * 3525589 - (11 months ago) merge gluten-free and vegan recipes (tag: v_0.2_first_vegan_gf_version)
+ | |/|
+ |/|/
+ | *   716409e - (11 months ago) Merge branch 'fix_typo' into gluten_free (gluten_free_2, gluten_free_1)
+ | |\
+ | | * 4a5c4eb - (11 months ago) fix typo in README.md
+ | * | 461de20 - (11 months ago) reformat cinemon recipe
+ | |/
+ | * 34f83d7 - (11 months ago) update README for gluten-free recipes
+ | * 01bb2d4 - (11 months ago) make biscuits recipe gluten free
+ * | e40def1 - (11 months ago) add link to table, add notes to recipe (vegan_2)
+ * | ec39d14 - (11 months ago) add replacement for honey (vegan)
+ * | 49e8505 - (11 months ago) add table of replacements in vegan recipes (tag: v_0.1_vegan_replacement)
+ |/
+ | * 5755eba - (11 months ago) replace margarine with butter in biscuit recipe
+ |/
+ * 7d4a511 - (11 months ago) add link in cinemon star recipe
+#+end_example
+
+See how ~HEAD~ is now at the top - at the commit we just crafted during our first
+step (~fae11d6~). The changes we look at can be seen using ~git diff~:
+#+begin_src diff
+diff --cc README.md
+index 68a50d7,21f7c73..0000000
+--- a/README.md
++++ b/README.md
+@@@ -1,10 -1,7 +1,16 @@@
+  # Overview
+++<<<<<<< HEAD
+ +A collection of vegan recipes
+++||||||| parent of 34f83d7 (update README for gluten-free recipes)
+++A collection of recipes
+++=======
++ A collection of gluten-free recipes
+++>>>>>>> 34f83d7 (update README for gluten-free recipes)
+
+  ## Recipes
+  So far we have:
+- 1. Biscuits (see [here](biscuits.txt))
++ 1. Biscuits (see [here](biscuits.txt), basd on buckwheat flour)
+  2. Cinemon Stars (see [here](cinemon_stars.txt))
+ +
+ +## Common replacements
+ +See this [table](substitutes.rst)
+#+end_src
+
+Let's replace this with a version we are happy with and continue:
+#+begin_src shell-script
+nano README.md    # ← fix the merge, create a good combined version
+git add README.md
+git rebase --continue
+#+end_src
+This time, let's change the commit message from
+#+begin_src text
+update README for gluten-free recipes
+#+end_src
+to
+#+begin_src text
+update README for gluten-free recipes (based on vegan)
+#+end_src
+
+This time ~git rebase~ continues to the end and we see:
+#+begin_example
+[detached HEAD 00cbb59] update README for gluten-free recipes (based on vegan)
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+Successfully rebased and updated refs/heads/gluten_free_2.
+#+end_example
+
+In order to be able to see what we have done, let's create a new ~tag~:
+#+begin_src shell-script
+git tag --annotate --message 'combined vegan and gf using rebase onto vegan' v_0.2_third_vegan_gf_version
+#+end_src
+
+Using ~gitk --all~ gives the following view:
+#+name: fig:gitk_after_conflict_resolution_rebase_2
+#+caption: History after resolving the conflicts from rebasing ~gluten_free~
+#+caption: onto ~vegan~.
+#+caption: Note the different order of the commit messages between
+#+caption: ~vegan_1~ (where we rebased ~vegan~ onto ~gluten_free~),
+#+caption: the ~tag…~ above ~gluten_free_1~ (the merged version), and
+#+caption: ~gluten_free_2~ (where we rebased ~gluten_free~ onto ~vegan~).
+[[file:figures/task_06_020.png]]
+
+The history shows the log after resolving the conflicts from rebasing
+~gluten_free~ onto ~vegan~. Note the different order of the commit messages between
+~vegan_1~ (where we rebased ~vegan~ onto ~gluten_free~), the ~tag…~ above ~gluten_free_1~
+(the merged version), and ~gluten_free_2~ (where we rebased ~gluten_free~ onto
+~vegan~).
+
+The overall summary is: ~git merge~ is less trouble as you only have to combine
+versions once. The cost it comes with is a /non-linear history/ as shown above.
+
+** Your Task                                                           :task:
+Like before, play around with the above situation. Don't be afraid of getting
+into conflicts. You can always get out again by ~git rebase --abort~.
+
+([[file:README.org::*SDL - Rebase Branches][back to main document]])
+
+# Local Variables:
+# mode: org
+# ispell-local-dictionary: "british"
+# eval: (flyspell-mode t)
+# eval: (flyspell-buffer)
+# End:

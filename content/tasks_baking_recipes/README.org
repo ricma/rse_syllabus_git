@@ -1,0 +1,204 @@
+#+AUTHOR: Martin Richter
+#+TITLE: Self-directed Learning Tasks: Create a Recipe Book
+#+EMAIL: martin.richter@nottingham.ac.uk
+
+#+OPTIONS: <:nil d:nil timestamp:t ^:nil tags:nil toc:nil num:nil \n:t
+#+STARTUP: fninline inlineimages showall
+
+# Comment: In order to start with a clean shell, I used this to set up the
+# recipe example locally:
+#   HOME=~/temp_dir_rse_course zsh -l
+# And then (if recipe book not yet present)
+#   % git -C ~/ clone git@github.com:ricma/recipe_book_example.git
+
+This folder contains step-by-step examples on how to use git.
+
+In order to keep in language agnostic, we will use baking recipes as
+an example. We will create simple text files with recipes and then
+modify their content. To mimic more complicated situations, we will
+ask you to pretend to be a second person as well.
+
+* Overview
+
+We assume that you have already set-up ~git~ so that you are able to
+create new, empty repositories.
+
+The tasks will be all hands-on and you are encouraged to open your
+installation of git and type along.
+
+We will view the material presented here from three angles:
+- a) :: Why are we carrying out each step?
+- b) :: How are we doing each step practically?
+- c) :: What are some of the technical details behind the scenes?
+
+You can mainly focus on point *b)* if you prefer. Some of you will find
+*a)* and *c)* helpful to understand what is going on - everyone's style of
+learning is different!
+
+** Learning Outcomes :LOs:
+
+By the end of these tasks, you will be able to
+1. Know how to put files under version control
+   (SDLs 1)
+2. Know the difference between the /index/ and the /repository/
+   (SDLs 1 and 2)
+3. Be able to look at the history of a repository
+   (SDLs 2)
+4. How to work on different aspects of a problem (branches)
+   (SDLs 3, 4, and 5)
+5. [Optional - advanced] Know the difference between /merging/ and /rebasing/
+   (SDLs 4 and 6)
+6. [Optional - advanced] How to work with different remote repositories
+   (SDLs 7)
+7. [Optional - very advanced] How to quickly find a commit which introduced a bug (~git bisect~)
+   (SDLs 8)
+
+** Before you start
+
+   [[file:before_you_start.org][Please follow these steps]] to set up your configuration.
+
+* Tasks
+
+** SDL - Creating a Repository and Adding Content
+This self-directed learning task will show you
+- how to create a new, empty repository (~git init~)
+- how to add files to it (~git add~ and ~git commit~)
+
+- SDL 01.01 :: [[file:sdl_create_repo.01.org][Create a New Repository]]
+- SDL 01.02 :: [[file:sdl_create_repo.02.org][Add Some More Files]]
+
+- Note: In case you are stuck, try ~git <command> --help~, e.g. ~git add --help~ to
+  see the corresponding help. Furthermore, [[https://git-scm.com]] is a very good
+  source for help. Sometimes, the /manual pages/ can feel a bit daunting - up to
+  the point where you can find web sites mocking it
+  [[https://git-man-page-generator.lokaltog.net]] 😉
+
+** SDL - Changing Files and Examining the History of Changes
+This self-directed learning task will show you
+- how to change files and register these changes in the repository
+  (~git add~, ~git commit~)
+- how to see how the repository is growing as we go along (~git
+  status~, ~git diff~, ~git log~, ~git show~)
+- If there are files you don't care about, then you tell git to ignore
+  them (~git ignore~)
+
+- SDL 02.01 :: [[file:sdl_change_files.01.org][Changing existing files]]
+- SDL 02.02 :: [[file:sdl_change_files.02.org][Examining what we have done so far]]
+- SDL 02.03 [Optional] :: [[file:sdl_change_files.03.org][Examining single commits in more detail and Find Changes]]
+
+** SDL - Branching
+This self directed learning task will introduce the concept of
+/branches/: Ways of keeping different versions of a software under one
+hood and allow for easy switching between them.
+
+We will introduce them first in our local repository and later
+highlight [[*SDL - Working with Remotes][in a later SDL]] how to do the same when collaborating with
+others.
+
+- You will learn how to use ~git branch~ to create new branches and see
+  the available ones.
+- The command ~git checkout~ is used to change branches.
+- The command ~git tag~ allows to permanently mark specific versions.
+
+- SDL 03.01 :: [[file:sdl_branching.01.org][Creating new Branches]]
+- SDL 03.02 :: [[file:sdl_branching.02.org][Showing differences between branches]]
+- SDL 03.03 [optional] :: [[file:sdl_branching.03.org][Creating tags to have permanent names]]
+
+** SDL - Merging Branches
+Branches introduced a concept which allows for a diverging
+history. But especially with /bug-fixes/ in software we want to get
+them back into our main version!
+
+We will use the typo (deliberately) introduced in [[file:sdl_branching.01.org::src:add_typo][an earlier step]].
+
+- You will learn how to merge branches together thereby combining
+  there changes. This is done using ~git merge~
+- We will look at a simple and a more difficult example in the next
+  SDL, [[*SDL - Merge Conflicts][SDL - Merge Conflicts]]
+
+- SDL 04.01 :: [[file:sdl_merging_01.org][Fixing a bug in a separate branch - and merge back]]
+- SDL 04.02 [optional] :: [[file:sdl_merging_02.org][A more complicated example and how to abort a merge]]
+
+** SDL - Merge Conflicts
+In this example we will create a proper conflict -- and looks at ways
+to resolve it.
+
+To get a feeling of how complicated it can get, let us combine our
+~vegan~ and ~gluten_free~ recipes into a ~vegan_and_gf~ branch.
+
+At the end of this task, you will be able to
+- understand what the words and markers in a merge conflict mean and
+- how to resolve them
+But let there be a warning ahead: Merge conflicts mainly mean finding
+a common ground for opposite views. When you work with colleagues, it
+is necessary to talk to them at this stage!
+
+- SDL 05.01 :: [[file:sdl_merge_conflict_01.org][Examining Merge CONFLICTs]]
+- SDL 05.02 :: [[file:sdl_merge_conflict_02.org][Solving Merge CONFLICTs]]
+
+For more information, see [[https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging][Pro Git (book, online version)]].
+
+** SDL - Rebase Branches
+The above method of resolving conflicts via /merges/ has a
+disadvantage: It leaves the history of the repository in a very
+non-linear state (see [[file:sdl_merge_conflict_02.org::fig:gitk_after_conflict_resolution][the screenshot]]).
+
+Instead of these merges, which take two branches and bundle them back
+together to form a combined, resolved new state, we can use
+/rebases/. They detach the current branch from the last common
+ancestor and try to reattach it _on top_ of the other branch - a bit
+like [[https://en.wikipedia.org/wiki/Grafting][grafting]] a branch of an apple tree onto a different trunk.
+
+We will re-visit our above conflict situation and use ~git rebase~.
+
+At the end of this task you will be able to
+- understand the differences between /merge/ and /rebase/
+- point out the advantages and disadvantages of /rebase/.
+
+Because we already examined the merge conflict [[*SDL - Merge Conflicts][above]], we can start
+right away: First, we will rebase the ~vegan~ branch onto the
+~gluten_free~ one. Second, we will do it the other way around. In
+reality, you would rebase _your_ changes onto other peoples work,
+for example. Here, we do it both ways solely for educational purposes.
+
+- SDL 06.01 :: [[file:sdl_rebase_01.org][Rebase ~vegan~ onto ~gluten-free~ to combine content]]
+- SDL 06.02 :: [[file:sdl_rebase_02.org][Rebase ~gluten-free~ onto ~vegan~ to combine content]]
+
+For more information, see [[https://git-scm.com/book/en/v2/Git-Branching-Rebasing][Pro Git (book, online version)]].
+
+** SDL - Working with Remotes
+This self-directed learning task will show you
+- what /remotes/ are and how to create one on your local computer
+- how to use a remote
+- how to create on on, e.g. [[https://github.com]]
+
+- SDL 07.01 :: [[file:sdl_remotes_01.org][The concepts of ~remotes~]]
+- SDL 07.02 :: [[file:sdl_remotes_02.org][Using Github]]
+
+** SDL - Using Bisection to find Bugs
+This is deeply linked to the subjects of having good, automated tests
+for your code.
+
+Our recipe example does not really live up to this type of problems
+due to its simplicity.
+
+Nevertheless, we want to show you how it works using a very artificial example.
+Feel free to use it with a more realistic example!
+
+- SDL 08.01 :: [[file:sdl_bisect.01.org][Using ~git bisect~ to find which commit introduced an error]]
+
+** SDL - Background: Behind the Scenes of Commits and Branches
+
+We want to give a few insights into how ~git~ works behind the scenes in order to
+demystify some of the things we have used above. In particular, we hope that
+after this task you feel more familiar with freely switching branches, creating
+new branches, deleting them, renaming them etc.
+
+- SDL 09.01 :: [[file:sdl_the_git_database.org][Behind the Scenes: The git database]]
+
+# Local Variables:
+# mode: org
+# ispell-local-dictionary: "british"
+# eval: (flyspell-mode t)
+# eval: (flyspell-buffer)
+# End:

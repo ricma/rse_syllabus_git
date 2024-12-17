@@ -1,0 +1,285 @@
+#+OPTIONS: <:nil d:nil timestamp:t ^:nil tags:nil toc:nil num:nil \n:t
+#+STARTUP: fninline inlineimages showall
+
+* SDL - A more complicated example and how to abort a merge
+Let us re-visit the last example and look at it in more detail.
+
+The main reason for this is to lay a foundation for the
+[[file:README.org::*SDL - Merge Conflicts][more complicated merge case later]].
+
+We will learn that /merging/ and /committing/ a merge commit are two
+separate steps. The gap between the two allow us to amend necessary
+changes.
+
+** Revisit the merge situation
+Just like [[file:sdl_merging_01.org::*Fixing the bug - Non-Fast Forwards][before]] we could use ~git reset --hard 461de20~ to force our
+~gluten_free~ branch back to before our merge.
+
+However, it is easier to just create a new branch and play around with
+that instead:
+#+begin_src shell-script
+  git branch fix_typo 4a5c4eb   # we deleted that branch at the end of last SDL
+  git checkout -b gluten_free_merge_again 461de20
+#+end_src
+This leaves us at
+#+begin_src shell-script
+  git graph -n 4
+#+end_src
+#+begin_example
+ *   716409e - (3 hours ago) Merge branch 'fix_typo' into gluten_free (gluten_free)
+ |\
+ | * 4a5c4eb - (3 hours ago) fix typo in README.md (fix_typo)
+ * | 461de20 - (3 hours ago) reformat cinnamon recipe (HEAD -> gluten_free_merge_again)
+ |/
+ * 34f83d7 - (5 hours ago) update README for gluten-free recipes
+#+end_example
+We are on ~gluten_free_merge_again~ and ~git status~ reports
+#+begin_example
+On branch gluten_free_merge_again
+nothing to commit, working tree clean
+#+end_example
+and we can have a look at the merge situation in more detail.
+
+** Merging but don't commit yet
+Almost identical to [[file:sdl_merging_01.org::src:cmd_merge_fix_typo_example][last time]], we now write
+#+begin_src shell-script
+git merge --no-commit fix_typo
+#+end_src
+#+begin_example
+Automatic merge went well; stopped before committing as requested
+#+end_example
+
+Now ~git status~ looks like this:
+#+begin_example
+On branch gluten_free_merge_again
+All conflicts fixed but you are still merging.
+  (use "git commit" to conclude merge)
+
+Changes to be committed:
+        modified:   README.md
+#+end_example
+To see which changes are in the staging area (note that the above says
+"to be committed" - so just like after having ~git add~ a file!), we can
+#+begin_src shell-script
+git diff --staged
+#+end_src
+#+begin_src diff
+diff --git a/README.md b/README.md
+index 21f7c73..4fa763f 100644
+--- a/README.md
++++ b/README.md
+@@ -3,5 +3,5 @@ A collection of gluten-free recipes
+
+ ## Recipes
+ So far we have:
+-1. Biscuits (see [here](biscuits.txt), basd on buckwheat flour)
++1. Biscuits (see [here](biscuits.txt), based on using buckwheat flour)
+ 2. Cinemon Stars (see [here](cinemon_stars.txt))
+#+end_src
+which is indeed our bug fix!
+
+But let us assume we don't quite like the wording. We like that the
+'bug' is fixed but we want to get rid of the 'using'. So simply edit
+the file ~README.md~ and delete the word. Now ~git status~ reports
+changes in the index and changes "not staged for commit":
+#+begin_example
+On branch gluten_free_merge_again
+All conflicts fixed but you are still merging.
+  (use "git commit" to conclude merge)
+
+Changes to be committed:
+        modified:   README.md
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   README.md
+#+end_example
+
+Just like before we can ~git add README.md~ to find ~git status~ to be
+#+begin_example
+On branch gluten_free_merge_again
+All conflicts fixed but you are still merging.
+  (use "git commit" to conclude merge)
+
+Changes to be committed:
+        modified:   README.md
+#+end_example
+and this time
+#+begin_src shell-script
+git diff --staged
+#+end_src
+#+begin_src diff
+diff --git a/README.md b/README.md
+index 21f7c73..57e1a29 100644
+--- a/README.md
++++ b/README.md
+@@ -3,5 +3,5 @@ A collection of gluten-free recipes
+
+ ## Recipes
+ So far we have:
+-1. Biscuits (see [here](biscuits.txt), basd on buckwheat flour)
++1. Biscuits (see [here](biscuits.txt), based on buckwheat flour)
+ 2. Cinemon Stars (see [here](cinemon_stars.txt))
+#+end_src
+
+We can finally commit. We could either type a ~-m 'merge fix'~ or we
+can use the default message the merge has created for us. But where is
+it? It turns out the message is stored in a text file called
+~.git/MERGE_MSG~ and we can tell git to just use the content of this file:
+#+begin_src shell-script
+  git commit -F .git/MERGE_MSG
+#+end_src
+#+begin_example
+[gluten_free_merge_again 3a8b32f] Merge branch 'fix_typo' into gluten_free_merge_again
+#+end_example
+
+At this point the commit history starts looking a bit complicated
+#+begin_src shell-script
+  git graph
+#+end_src
+#+begin_example
+ *   3a8b32f - (26 seconds ago) Merge branch 'fix_typo' into gluten_free_merge_again (HEAD -> gluten_free_merge_again)
+ |\
+ | | * 716409e - (3 hours ago) Merge branch 'fix_typo' into gluten_free (gluten_free)
+ | |/|
+ |/|/
+ | * 4a5c4eb - (3 hours ago) fix typo in README.md (fix_typo)
+ * | 461de20 - (3 hours ago) reformat cinnamon recipe
+ |/
+ * 34f83d7 - (6 hours ago) update README for gluten-free recipes
+ * 01bb2d4 - (6 hours ago) make biscuits recipe gluten free
+ | * ec39d14 - (4 hours ago) add replacement for honey (vegan)
+ | * 49e8505 - (5 hours ago) add table of replacements in vegan recipes (tag: v_0.1_vegan_replacement)
+ |/
+ | * 5755eba - (6 hours ago) replace margarine with butter in biscuit recipe (master)
+ |/
+ * 7d4a511 - (31 hours ago) add link in cinnamon star recipe
+ * bd180d6 - (31 hours ago) restructure biscuit recipe
+ * ad7f952 - (31 hours ago) add recipe overview to README.md
+ * 957e0f7 - (2 days ago) add biscuit recipe
+ * 7dae468 - (2 days ago) add a cinnamon star recipe
+ * efa0975 - (2 days ago) initial commit for recipes
+#+end_example
+This is mainly due to us having created a new branch to play around
+with.
+
+When viewed with ~gitk~, then we see, of course, the same:
+#+name: fig:gitk_two_merge_branches
+#+caption: A view on the current history of our repository
+#+caption: with ~gitk~: We have two merge commits.
+[[file:./figures/task_04_020.png]]
+
+Finally, let us have a look at both our merge conflicts:
+#+begin_src shell-script
+  git diff gluten_free gluten_free_merge_again
+#+end_src
+#+begin_src diff
+diff --git a/README.md b/README.md
+index 57e1a29..4fa763f 100644
+--- a/README.md
++++ b/README.md
+@@ -3,5 +3,5 @@ A collection of gluten-free recipes
+
+ ## Recipes
+ So far we have:
+-1. Biscuits (see [here](biscuits.txt), based on using buckwheat flour)
++1. Biscuits (see [here](biscuits.txt), based on buckwheat flour)
+ 2. Cinemon Stars (see [here](cinemon_stars.txt))
+#+end_src
+Note that this is exactly the change we introduced between the ~git
+merge --no-commit~ and the ~git commit -F~ above!
+
+** How to abort a merge
+Most times merges will be easy, but sometimes git will not be able to
+resolve the conflicts for you. In these cases, you have to fix the
+situation by hand. Note that it is you, the programmer, the human
+behind the keyboard who has to ensure that the *merge* *is* *what*
+*you* *wanted* (e.g. by removing the above 'using', for example - but
+we will see more compelling examples [[file:README.org::*SDL - Merge Conflicts][later]].
+
+Sometimes, you might not be able to answer this right away! Maybe a
+colleague introduced a new function and removed one of yours - but you
+changed your function -- how should both bits be combined into a "new,
+common truth"? You need to talk to each other! At this point it is a
+good idea to /abort/ a merge you just attempted. This can be done as
+follows.
+
+Let us simply merge our two merges:
+#+begin_src shell-script
+  git merge --no-commit gluten_free
+#+end_src
+#+begin_example
+  Already up-to-date!
+  Automatic merge went well; stopped before committing as requested
+#+end_example
+and a ~git status~ gives
+#+begin_example
+On branch gluten_free_merge_again
+All conflicts fixed but you are still merging.
+  (use "git commit" to conclude merge)
+#+end_example
+
+To bail out, do
+#+begin_src shell-script
+  git merge --abort
+#+end_src
+and we will find ourselves back at commit ~3a8b32fc~:
+#+begin_src shell-script
+  git show --oneline --stat HEAD
+#+end_src
+#+begin_example
+3a8b32f (HEAD -> gluten_free_merge_again) Merge branch 'fix_typo' into gluten_free_merge_again
+
+ README.md | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+#+end_example
+
+Finally, let us clean up:
+#+begin_src shell-script
+  git checkout gluten_free
+  git branch -d fix_typo
+  git branch -d gluten_free_merge_again
+#+end_src
+#+begin_example
+error: The branch 'gluten_free_merge_again' is not fully merged.
+If you are sure you want to delete it, run 'git branch -D gluten_free_merge_again'.
+#+end_example
+Interestingly, git does not let us simply delete branches which are
+not merged into other existing branches! If you look at ~git graph~
+you see, that ~gluten_free_merge_again~ is at the top of a branch in
+our tree. Therefore we need to use
+#+begin_src shell-script
+  git branch -D gluten_free_merge_again
+#+end_src
+#+begin_example
+Deleted branch gluten_free_merge_again (was 3a8b32f).
+#+end_example
+
+** Another comment on deleted branches etc.                      :background:
+Like already mentioned before: the above hash (~3a8b32f~) does allow
+us to bring this branch back to life even it is not part of our ~git
+graph~ output anymore! As long as we can remember this number, we can
+bring a deleted commit back. Git will not delete it for 90 days and
+only if the repository is getting too big.
+
+The take-home message is: Everything you have told git won't be lost
+easily. You only have to be careful with changes _not yet
+committed_. Git cannot help you there. But once you have committed
+something, it is protected and you can get it back!
+
+** Your Task                                                           :task:
+Repeat the above steps. Try to merge different branches with each
+other. If git answers with ~CONFLICT~, just abort the merge and try
+something else!
+
+We will treat these /CONFLICT/ situations in the next SDL.
+
+([[file:README.org::*SDL - Merging Branches][back to main document]])
+
+# Local Variables:
+# mode: org
+# ispell-local-dictionary: "british"
+# eval: (flyspell-mode t)
+# eval: (flyspell-buffer)
+# End:

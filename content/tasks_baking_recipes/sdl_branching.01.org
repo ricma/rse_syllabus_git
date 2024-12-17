@@ -1,0 +1,279 @@
+#+OPTIONS: <:nil d:nil timestamp:t ^:nil tags:nil toc:nil num:nil \n:t
+#+STARTUP: fninline inlineimages showall
+
+* SDL - Creating new Branches
+We will mimic different versions of a piece of software by introducing
+different versions of recipes: We will create a vegan and a gluten
+free version.
+
+We do this by creating new /branches/. In simple terms, a branch is
+just a name of a variable which references a point in our repository
+history and which allows us to continue development from there.
+
+** Create new branches                                                 :cmds:
+To create a new branch at the current state, we can type ~git branch
+gluten_free~. This creates a new branch called =gluten_free=
+referencing the same point as the current state of the repository.
+
+Now, a call to ~git log~ tells us that there is another branch:
+#+begin_src shell-script
+git log --oneline --max-count 2
+#+end_src
+#+begin_example
+7d4a511 (HEAD -> master, gluten_free) add link in cinnamon star recipe
+bd180d6 restructure biscuit recipe
+#+end_example
+
+The line ~HEAD -> master~ tells us that our current working directory
+is still on the old, original branch called =master=. Note that both
+branches reference the same commit (~7d4a511~ in this case) and
+therefore represent the same state of the repository.
+
+To switch to the new branch, we can use
+#+begin_src shell-script
+git checkout gluten_free
+#+end_src
+and now the above ~git log~ would give
+#+begin_example
+7d4a511 (HEAD -> gluten_free, master) add link in cinnamon star recipe
+bd180d6 restructure biscuit recipe
+#+end_example
+
+We can see which branch we are on by calling ~git branch~ without any
+further arguments:
+#+begin_src shell-script
+git branch
+#+end_src
+#+begin_example
+ * gluten_free
+   master
+#+end_example
+We get a list of all available branches and the one we are on is
+marked with an asterisk.
+
+** Add content to the new branch
+To see the full benefit of branches, let us change some of the
+contents to make the recipe gluten free:
+#+begin_example
+# Ingredients
+150g buckwheat flour
+1/2 tsp baking powder
+110g butter
+110g sugar
+3tsp vanilla extract
+pinch of salt
+1 egg.
+
+# Steps
+- Mix butter and sugar, then whisk in egg
+- add flour, baking powder, salt and stir until comes together
+- let rest for 30 min in fridge
+- roll out and cut into shape
+- Bake for 12 - 15 minutes (180 degrees)
+#+end_example
+
+With the file ~biscuits.txt~ changed like this we can add it to the
+staging area and commit it (see [[file:sdl_change_files.01.org::*SDL - Changing existing files][SDL - Changing existing files]]):
+#+begin_src shell-script
+  git add biscuits.txt
+  git commit -m 'make biscuits recipe gluten free'
+#+end_src
+#+begin_example
+[gluten_free 01bb2d4] make biscuits recipe gluten free
+ 1 file changed, 7 insertions(+), 5 deletions(-)
+#+end_example
+
+If we now have a look at
+#+begin_src shell-script
+git log --oneline --max-count=3
+#+end_src
+#+begin_example
+01bb2d4 (HEAD -> gluten_free) make biscuits recipe gluten free
+7d4a511 (master) add link in cinnamon star recipe
+bd180d6 restructure biscuit recipe
+#+end_example
+we see that our old branch, =master=, has not moved.
+
+If we examine the file ~biscuits.txt~ on the file system, it will show
+the /gluten-free/ version. However, if we switch back to our old branch,
+#+begin_src shell-script
+git checkout master
+#+end_src
+the file is back to its /non-gluten-free/ state using wheat flour!
+
+If we decide to change the recipe here to, for example, replace the "125g margarine" with "125g butter" and then
+#+begin_src shell-script
+git commit -a -m 'replace margarine with butter in biscuit recipe'
+#+end_src
+#+begin_example
+[master 5755eba] replace margarine with butter in biscuit recipe
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+#+end_example
+then our ~git log --oneline~ does not show the ~gluten_free~ anymore
+because it has diverged from the ~master~ branch:
+#+begin_src shell-script
+git log --oneline --all
+#+end_src
+#+begin_example
+5755eba (HEAD -> master) replace margarine with butter in biscuit recipe
+01bb2d4 (gluten_free) make biscuits recipe gluten free
+7d4a511 add link in cinnamon star recipe
+bd180d6 restructure biscuit recipe
+ad7f952 add recipe overview to README.md
+957e0f7 add biscuit recipe
+7dae468 add a cinnamon star recipe
+efa0975 initial commit for recipes
+#+end_example
+
+At this point, we can use our user-defined ~git graph~ command
+introduced here: [[file:sdl_change_files.02.org::*Examine the Commit History][Examine the Commit History]]:
+#+begin_src shell-script
+git graph --max-count 4
+#+end_src
+#+begin_example
+ * 5755eba - (61 seconds ago) replace margarine with butter in biscuit recipe (HEAD -> master)
+ | * 01bb2d4 - (11 minutes ago) make biscuits recipe gluten free (gluten_free)
+ |/
+ * 7d4a511 - (25 hours ago) add link in cinnamon star recipe
+ * bd180d6 - (25 hours ago) restructure biscuit recipe
+#+end_example
+
+Note that we see the same when invoking ~gitk --all~, see
+Fig. [[fig:gitk_first_branch][fig:gitk_first_branch]].
+#+name: fig:gitk_first_branch
+#+caption: A view on our repository using ~gitk~ after having
+#+caption: introduced a first branch =gluten_free=.
+[[file:./figures/task_03_060.png]]
+
+Let us quickly update the description in ~README.md~ for our
+gluten-free version:
+#+begin_src shell-script
+  git checkout gluten_free
+#+end_src
+and replace the content of ~README.md~ such that
+#+begin_src shell-script
+  git diff
+#+end_src
+#+name: src:add_typo
+#+begin_src diff
+diff --git a/README.md b/README.md
+index a134858..21f7c73 100644
+--- a/README.md
++++ b/README.md
+@@ -1,7 +1,7 @@
+ # Overview
+-A collection of recipes
++A collection of gluten-free recipes
+
+ ## Recipes
+ So far we have:
+-1. Biscuits (see [here](biscuits.txt))
++1. Biscuits (see [here](biscuits.txt), basd on buckwheat flour)
+ 2. Cinemon Stars (see [here](cinemon_stars.txt))
+#+end_src
+Note that we introduced a typo in "basd on" - this is on purpose and
+we will correct it later. For now we can
+#+begin_src shell-script
+  git commit -a -m 'update README for gluten-free recipes'
+#+end_src
+
+Now ~git graph --max-count 4~ gives
+#+begin_example
+ * 34f83d7 - (2 minutes ago) update README for gluten-free recipes (HEAD -> gluten_free)
+ * 01bb2d4 - (26 minutes ago) make biscuits recipe gluten free
+ | * 5755eba - (16 minutes ago) replace margarine with butter in biscuit recipe (master)
+ |/
+ * 7d4a511 - (25 hours ago) add link in cinnamon star recipe
+#+end_example
+so we only advanced ~gluten_free~ and kept ~master~ where it is. By
+this use of /branches/ we can follow different development ideas in
+the same repository.
+
+** Create new branches at an earlier stage                             :cmds:
+At this point, we might want to also add our vegan version. But the
+~master~ branch just replaced "margarine" with "butter" - so that is
+not a good starting point! Let's go to an earlier stage in history and
+branch off there.
+#+begin_src shell-script
+  git branch vegan 7d4a511
+#+end_src
+Note that the number (the commit hash) will be different in your
+case. It is the one just before ~gluten_free~ diverged from
+~master~. Or where ~master~ diverged from ~gluten_free~ - both views
+are correct.
+
+Let us change to the new branch (~git checkout vegan~) and add a new
+file ~substitutes.rst~ to list typical substitutes for non-vegan
+ingredients:
+#+begin_src rst
+Typical replacements for Ingregients
+------------------------------------
+
+List of typical replacements for recipes:
+
++--------------+------------------------+
+| Ingredient   | Replacement            |
++==============+========================+
+| milk         | soy, almond, oat milk  |
++--------------+------------------------+
+| egg          | chickpea water, banana |
++--------------+------------------------+
+#+end_src
+and then
+#+begin_src shell-script
+  git add substitutes.rst
+  git commit -m 'add table of replcements in vegan recipes'
+#+end_src
+#+begin_example
+[vegan eddd880] add table of replcements in vegan recipes
+ 1 file changed, 12 insertions(+)
+ create mode 100644 substitutes.rst
+#+end_example
+
+Oh no! This commit message also had a typo in it! If you want to
+change the last commit message, then this can be done by
+#+begin_src shell-script
+  git commit --amend -m 'add table of replacements in vegan recipes'
+#+end_src
+#+begin_example
+[vegan 49e8505] add table of replacements in vegan recipes
+ Date: Wed Jan 12 11:36:39 2022 +0000
+ 1 file changed, 12 insertions(+)
+ create mode 100644 substitutes.rst
+#+end_example
+
+Note how the commit time was not updated! When /amending/ we create a
+new commit taking certain aspects of the previous commit into account.
+There can be pitfalls with this, see later: [[file:README.org::*SDL - Working with Remotes][SDL - Working with Remotes]].
+So best not to use it too often.
+
+Our overall history now looks like this:
+#+begin_src shell-script
+git graph --max-count 6
+#+end_src
+#+begin_example
+ * 49e8505 - (4 minutes ago) add table of replacements in vegan recipes (HEAD -> vegan)
+ | * 34f83d7 - (24 minutes ago) update README for gluten-free recipes (gluten_free)
+ | * 01bb2d4 - (48 minutes ago) make biscuits recipe gluten free
+ |/
+ | * 5755eba - (38 minutes ago) replace margarine with butter in biscuit recipe (master)
+ |/
+ * 7d4a511 - (26 hours ago) add link in cinnamon star recipe
+ * bd180d6 - (26 hours ago) restructure biscuit recipe
+#+end_example
+
+
+** Your Task                                                           :task:
+Repeat the above steps and add a branch to your repository. Can you
+examine the history with the commands we have learned before?
+
+Feel free to add more steps to either of the two branches.
+
+([[file:README.org::*SDL - Changing Files and Examining the History of Changes][back to main document]])
+
+# Local Variables:
+# mode: org
+# ispell-local-dictionary: "british"
+# eval: (flyspell-mode t)
+# eval: (flyspell-buffer)
+# End:

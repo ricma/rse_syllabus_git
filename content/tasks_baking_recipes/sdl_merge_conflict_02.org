@@ -1,0 +1,226 @@
+#+OPTIONS: <:nil d:nil timestamp:t ^:nil tags:nil toc:nil num:nil \n:t
+#+STARTUP: fninline inlineimages showall
+
+* SDL - Solving Merge CONFLICTs
+After we investigated what a /conflict/ looks like in
+[[file:sdl_merge_conflict_01.org][Examining Merge CONFLICTs]], we can now solve it.
+
+This SDL assumes the repository is back at a stage before all
+conflicts:
+#+begin_src shell-script
+  git checkout vegan
+  git graph -n 5
+#+end_src
+#+begin_example
+ * e40def1 - (67 seconds ago) add link to table, add notes to recipe (HEAD -> vegan)
+ * ec39d14 - (5 hours ago) add replacement for honey
+ * 49e8505 - (6 hours ago) add table of replacements in vegan recipes (tag: v_0.1_vegan_replacement)
+ | *   716409e - (4 hours ago) Merge branch 'fix_typo' into gluten_free (gluten_free)
+ | |\
+ | | * 4a5c4eb - (4 hours ago) fix typo in README.md
+#+end_example
+
+** Create and solve a merge conflict
+
+We create our conflict:
+#+begin_src shell-script
+  git merge gluten_free
+#+end_src
+Then proceed step by step:
+
+- Let us look at ~README.md~ first:
+  #+begin_src shell-script
+    git diff README.md
+  #+end_src
+  #+begin_src diff
+diff --cc README.md
+index 68a50d7,4fa763f..0000000
+--- a/README.md
++++ b/README.md
+@@@ -1,10 -1,7 +1,16 @@@
+  # Overview
+++<<<<<<< HEAD
+++A collection of vegan recipes
+++||||||| 7d4a511
+++A collection of recipes
+++=======
++ A collection of gluten-free recipes
+++>>>>>>> gluten_free
+
+  ## Recipes
+  So far we have:
+- 1. Biscuits (see [here](biscuits.txt))
++ 1. Biscuits (see [here](biscuits.txt), based on using buckwheat flour)
+  2. Cinemon Stars (see [here](cinemon_stars.txt))
++
++ ## Common replacements
++ See this [table](substitutes.rst)
+  #+end_src
+- Replace the content with
+  #+name: code:merge_conflic_solved
+  #+begin_src markdown
+# Overview
+A collection of vegan, gluten-free recipes
+
+## Recipes
+So far we have:
+1. Biscuits (see [here](biscuits.txt), based on using buckwheat flour, banana, and margarine)
+2. Cinemon Stars (see [here](cinemon_stars.txt))
+
+## Common replacements
+See this [table](substitutes.rst)
+  #+end_src
+- In order to include it in the merge, call
+  #+begin_src shell-script
+    git add README.md     # add resolved version to index for committing
+  #+end_src
+- Now the ~git status~ is
+  #+begin_example
+git status
+On branch vegan
+You have unmerged paths.
+  (fix conflicts and run "git commit")
+  (use "git merge --abort" to abort the merge)
+
+Changes to be committed:
+        modified:   README.md
+        modified:   cinemon_stars.txt
+
+Unmerged paths:
+  (use "git add <file>..." to mark resolution)
+        both modified:   biscuits.txt
+  #+end_example
+- Next let us look at ~biscuits.txt~:
+  #+begin_src shell-script
+    git diff biscuits.txt
+  #+end_src
+  #+begin_src diff
+diff --cc biscuits.txt
+index e10f1f0,f16e658..0000000
+--- a/biscuits.txt
++++ b/biscuits.txt
+@@@ -1,13 -1,15 +1,25 @@@
+  # Ingredients
+++<<<<<<< HEAD
+ +250g very fine flour
+ +125g margarine (do not use butter!)
+ +60g sugar
+++||||||| 7d4a511
+++250g flour
+++125g margarine
+++60g sugar
+++=======
++ 150g buckwheat flour
++ 1/2 tsp baking powder
++ 110g butter
++ 110g sugar
+++>>>>>>> gluten_free
+  3tsp vanilla extract
+  pinch of salt
+ -1 egg.
+ +1/2 banana
+
+  # Steps
+- - Mix everything
++ - Mix butter and sugar, then whisk in egg
++ - add flour, baking powder, salt and stri until comes together
+  - let rest for 30 min in fridge
+  - roll out and cut into shape
+- - Bake for 10 - 12 minutes (200 degrees)
++ - Bake for 12 - 15 minutes (180 degrees)
+  #+end_src
+- Based on these information, we can put in this resolved file:
+  #+begin_src markdown
+# Ingredients
+150g buckwheat flour
+1/2 tsp baking powder
+125g margarine (do not use butter!)
+110g sugar
+3tsp vanilla extract
+pinch of salt
+1/2 banana
+
+# Steps
+- Mix butter, sugar and banana
+- add flour, baking powder, salt and stirr until comes together
+- let rest for 30 min in fridge
+- roll out and cut into shape
+- Bake for 12 - 15 minutes (180 degrees)
+  #+end_src
+- In order to include it in the merge, call
+  #+begin_src shell-script
+    git add biscuits.txt
+  #+end_src
+
+At this point, we resolved all conflicts and we can do:
+#+begin_src shell-script
+  git commit -m 'merge gluten-free and vegan recipes
+
+  The biscuit recipe has been changed to be both vegan and gf.'
+#+end_src
+#+begin_example
+[vegan 3525589] merge gluten-free and vegan recipes
+#+end_example
+
+** Clean up branches
+
+Now that the information of gluten-free and vegan branches have been
+merged, we can rename one branch and remove the other:
+#+begin_src shell-script
+  git branch -m vegan_and_gf
+  git branch -d gluten_free
+  git tag v_0.2_first_vegan_gf_version
+#+end_src
+Now the history looks like (~git graph~)
+#+begin_example
+ *   3525589 - (5 minutes ago) merge gluten-free and vegan recipes (HEAD -> vegan_and_gf, tag: v_0.2_first_vegan_gf_version)
+ |\
+ | *   716409e - (6 hours ago) Merge branch 'fix_typo' into gluten_free
+ | |\
+ | | * 4a5c4eb - (6 hours ago) fix typo in README.md
+ | * | 461de20 - (6 hours ago) reformat cinemon recipe
+ | |/
+ | * 34f83d7 - (8 hours ago) update README for gluten-free recipes
+ | * 01bb2d4 - (9 hours ago) make biscuits recipe gluten free
+ * | e40def1 - (2 hours ago) add link to table, add notes to recipe
+ * | ec39d14 - (7 hours ago) add replacement for honey
+ * | 49e8505 - (8 hours ago) add table of replacements in vegan recipes (tag: v_0.1_vegan_replacement)
+ |/
+ | * 5755eba - (9 hours ago) replace margarine with butter in biscuit recipe (master)
+ |/
+ * 7d4a511 - (34 hours ago) add link in cinemon star recipe
+ * bd180d6 - (34 hours ago) restructure biscuit recipe
+ * ad7f952 - (34 hours ago) add recipe overview to README.md
+ * 957e0f7 - (2 days ago) add biscuit recipe
+ * 7dae468 - (2 days ago) add a cinemon star recipe
+ * efa0975 - (2 days ago) initial commit for recipes
+#+end_example
+
+Using ~gitk --all~ gives the following view:
+#+name: fig:gitk_after_conflict_resolution
+#+caption: History after resolving the merge conflict.
+[[file:./figures/task_04_030.png]]
+
+** Your Task                                                           :task:
+
+Repeat the above steps. Come up with your own version about how a
+combined recipe could look like!
+
+Once done, create a new branch at the old points from before the merge
+and repeat the merge, using a different resolution recipe.
+
+Note that in real examples, one solution will suffice. But there might
+be more than one way of correctly resolving conflicts and talking to
+your colleagues is key!
+
+Furthermore, make sure not to miss things git fixed for your. A
+typical example is missing documentation or comments.
+
+([[file:README.org::*SDL - Merge Conflicts][back to main document]])
+
+# Local Variables:
+# mode: org
+# ispell-local-dictionary: "british"
+# eval: (flyspell-mode t)
+# eval: (flyspell-buffer)
+# End:

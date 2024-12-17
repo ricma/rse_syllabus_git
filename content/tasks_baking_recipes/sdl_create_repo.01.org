@@ -1,0 +1,41 @@
+#+OPTIONS: <:nil d:nil timestamp:t ^:nil tags:nil toc:nil num:nil \n:t
+#+STARTUP: fninline inlineimages showall
+
+* SDL - Create a New Repository
+First we need to create a new repository. It will start out as empty
+and we will add a first file.
+
+** Using the Command Line                                              :cmds:
+#+begin_src shell-script
+  cd ~/                   # Go to your home directory
+  mkdir recipe_book       # create a folder named "recipe_book"
+  git init recipe_book    # create an empty git repository
+  cd recipe_book
+                          # set name and email if we don't want to
+                          # use global default (optional)
+  git config --local user.name "Martin Richter"
+  git config --local user.email "martin.richter@nottingham.ac.uk"
+  # create a README file (good practice!)
+  echo "A collection of recipes" > README.md
+  # and add it to the index (= mark it for being saved in the repo)
+  git add README.md
+  # register the marked changes in the repository
+  git commit -m 'initial commit for recipes'
+#+end_src
+
+** Your Task                                                           :task:
+Repeat the above steps and create our own repository with an initial
+commit. Feel free to change the names of the repository, the content
+of the ~README.md~, and, of course, the name and email.
+
+Keep the name of the ~README.md~ file though - /github/ will later use
+the format of this file to display its content nicely.
+
+([[file:README.org::*SDL - Creating a Repository and Adding Content][back to main document]])
+
+# Local Variables:
+# mode: org
+# ispell-local-dictionary: "british"
+# eval: (flyspell-mode t)
+# eval: (flyspell-buffer)
+# End:

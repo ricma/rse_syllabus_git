@@ -1,0 +1,548 @@
+#+title: An Introduction to Remotes
+#+OPTIONS: <:nil d:nil timestamp:t ^:nil tags:nil toc:nil num:nil \n:t
+#+STARTUP: fninline inlineimages showall
+There are two reasons why you do not only want to have your code in the one ~git~
+repository you are working in. One reason to copy it somewhere else is to have a
+/backup/ as well as to be able to work on /different computers/ (e.g. using your
+code on your laptop as well as on the HPC or a workstation). The other main
+reason is /collaboration/.
+
+* Using Local Directories
+The first thing we are going to look at is creating a /remote/ on the very same
+computer. It sounds a bit odd - but will allow us to play around with remotes
+and get used to the concepts without having to set up complicated things on,
+e.g. [[https://github.com]].
+
+** Set up a bare Repository
+If you have a look at your repository, you might have realised, that there is a
+~.git~ folder at its base level:
+#+begin_src shell script
+ls -la
+#+end_src
+#+begin_example
+total 28
+drwxrwxr-x 3 martin martin 4096 Dec 14 13:29 .
+drwxrwxr-x 5 martin martin 4096 Dec 14 13:34 ..
+-rw-rw-r-- 1 martin martin  394 Dec 14 13:18 biscuits.txt
+-rw-rw-r-- 1 martin martin  127 Dec 14 13:29 cinemon_stars.txt
+drwxrwxr-x 8 martin martin 4096 Dec 14 13:45 .git
+-rw-rw-r-- 1 martin martin  261 Dec 14 13:29 README.md
+-rw-rw-r-- 1 martin martin  496 Dec 14 13:12 substitutes.rst
+#+end_example
+This folder contains all the database files for your repository, all the
+history, local configuration etc.
+
+Having all the actual files also there makes this folder a so called /working copy/.
+
+In what follows, we will use so called /bare repositories/: These are essentially
+only the ~.git~ folder without a working version of the files being present.
+
+If you already have a repository (like we do), there are two ways of creating a
+/bare/ version:
+
+1. Clone your repository somewhere :: We use ~git clone~ using our /working copy/:
+   #+begin_src shell-script
+# let's go to the folder where our repository resides -- in my case in $HOME
+cd ~/
+git clone --bare recipe_book_example recipe_book_example.git
+Cloning into bare repository 'recipe_book_example.git'...
+done.
+   #+end_src
+It is common to call the folder for a /bare/ repository with a trailing ~.git~.
+
+Now we have to folders here and the content of the ~.git~ folder inside our
+/working copy/ looks similar to the /bare/ repository:
+#+begin_src shell-script
+ls recipe_book_example.git recipe_book_example/.git
+#+end_src
+#+begin_example
+recipe_book_example.git:
+branches  config  description  HEAD  hooks  info  objects  packed-refs  refs
+
+recipe_book_example/.git:
+AUTO_MERGE  COMMIT_EDITMSG  description  gitk.cache  hooks  info  objects    packed-refs  TAG_EDITMSG
+branches    config          FETCH_HEAD   HEAD        index  logs  ORIG_HEAD  refs
+#+end_example
+We are not going to go into any detail about what this all is -- we just want to
+emphasise that we won't be doing any actual work in the /bare/ repository.
+
+Now with this repository in place, we can register it as a /remote/ in our working copy:
+#+begin_src shell-script
+cd ~/recipe_book_example
+git remote add local ~/recipe_book_example.git
+#+end_src
+This creates a new remote calling it ~local~ and having it refer to the /bare/
+repository we just created.
+
+You can see all remotes set up by using
+#+begin_src shell-script
+git remote --verbose
+#+end_src
+#+begin_example
+local   /home/martin/recipe_book_example.git (fetch)
+local   /home/martin/recipe_book_example.git (push)
+#+end_example
+
+But so far, we have only told git about it -- not actually connected to it. For
+getting the most current state of the /remote/ repository, you do
+#+begin_src shell-script
+git fetch local     # 'local' was the name of the remote we chose above
+#+end_src
+#+begin_example
+From /home/martin/recipe_book_example
+ * [new branch]      gluten_free_1 -> local/gluten_free_1
+ * [new branch]      gluten_free_2 -> local/gluten_free_2
+ * [new branch]      vegan         -> local/vegan
+ * [new branch]      vegan_1       -> local/vegan_1
+ * [new branch]      vegan_2       -> local/vegan_2
+#+end_example
+
+This tells us that there are several branches available on the /bare/ repository
+and that they will be called ~local/xyz~ here.
+
+If we call ~git log --all~ or ~gitk --all~, they will show the remote as well:
+#+begin_src shell-script
+git graph -n 5
+#+end_src
+#+begin_example
+ * 04321c1 - (79 minutes ago) fix typo in README.md
+ |           (HEAD -> gluten_free_2, tag: v_0.2_third_vegan_gf_version,
+ |            local/gluten_free_2)
+ * d1d1966 - (79 minutes ago) reformat cinemon recipe
+ * 00cbb59 - (79 minutes ago) update README for gluten-free recipes (based on vegan)
+ * f4e11d6 - (88 minutes ago) make biscuits recipe gluten free
+ | * c85a553 - (3 hours ago) add link to table, add notes to recipe
+ |             (tag: v_0.2_second_vegan_gf_version, vegan_1,
+ |              local/vegan_1)
+#+end_example
+
+If we now add another commit onto the branch checked out (see ~HEAD~ above), e.g. by adding this to the ~README.md~
+#+begin_src markdown
+## Future Ideas
+We should do more non-bakes!
+#+end_src
+and
+#+begin_src shell-script
+git commit -a -m 'add future ideas'
+#+end_src
+Now, ~gitk --all~ yields the below screenshot.
+
+#+name: fig:gitk_after_conflict_resolution_rebase_2
+#+caption: History after adding one more commit. Note the ~remote~ branches
+#+caption: being shown.
+[[file:figures/task_07_010.png]]
+
+Note that the branch ~gluten_free_2~ exists twice: Once locally, once on the
+remote.
+
+We mentioned ~git fetch~ above to get the current state of a remote into our local
+repositories database. To synchronise the other way around, use
+#+begin_src shell-script
+git push local
+#+end_src
+#+begin_example
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 443 bytes | 443.00 KiB/s, done.
+Total 3 (delta 1), reused 0 (delta 0), pack-reused 0
+To /home/martin/temp_dir_rse_course/recipe_book_example.git
+   04321c1..dd3b759  gluten_free_2 -> gluten_free_2
+#+end_example
+
+If you check with ~git log --all~ or ~gitk --all~, you will see that the remote
+~local/gluten_free_2~ is again at the same commit like ~gluten_free_2~.
+
+Note: Sometimes ~git~ will complain about not being able to deduce what to push
+where (names of branches might be different for you and the /remote/ you are
+pushing to). In this case you can use
+#+begin_src shell-script
+git push local gluten_free_2:gluten_free_2
+#+end_src
+to be more explicit which of your branches you want to be pushed to which names.
+
+*** Your Task :task:
+Create your own bare repository and register it as ~git remote~.
+
+You can either follow the above (~git clone --bare~ and register it) or you can
+create a new empty, bare repository
+#+begin_src shell-script
+git init --bare ~/recipe_book_example_2.git
+cd recipe_book_example    # this is the working copy we operate on
+git remote add local2 ~/recipe_book_example_2.git
+git push --all local2
+git push --tags local2    # tags have to be moved explicitly
+#+end_src
+
+You can forget a remote to a repository by calling
+#+begin_src shell-script
+git remote rm local2
+#+end_src
+Note that this does not delete the data where you pushed it to (in this case
+~~/recipe_book_example_2.git~ - you have to delete this separately)
+
+** Playing around: Clone to another Working Copy
+Having created a bare repository, we can now dive into what it means to
+collaborate with others or working on different computers.
+
+If none of that is for you, you can still use the above ~git remotes~ to create
+backups. In this case, your ~git remote~ would not be on the same computer but,
+for example, on an external drive or on a different computer (accessible via
+~ssh~, for example).
+
+But for the time being, we want to focus on how to use the bare repository and
+look at proper /remote/ storage later.
+
+First, we ~git clone~ the repository again - that means we create another
+directory which also holds a working copy (and all the history):
+#+begin_src shell-script
+mkdir other
+cd other
+# the simplest command is
+#   git clone ~/recipe_book_example.git
+# alternatively, we could be more xplicit:
+git clone --origin local_repo --branch main ~/recipe_book.git ./second_copy_recipe_book
+#+end_src
+#+begin_example
+Cloning into './second_copy_recipe_book'...
+done.
+#+end_example
+
+We can go into this repository and examine it
+#+begin_src shell-script
+cd ~/other/second_copy_recipe_book
+git graph
+#+end_src
+#+begin_example
+ * 04321c1 - (24 hours ago) fix typo in README.md
+ |           (tag: v_0.2_third_vegan_gf_version)
+ * d1d1966 - (24 hours ago) reformat cinemon recipe
+ * 00cbb59 - (24 hours ago) update README for gluten-free recipes
+ |           (based on vegan)
+ * f4e11d6 - (24 hours ago) make biscuits recipe gluten free
+ | * c85a553 - (25 hours ago) add link to table, add notes to recipe
+ | |           (tag: v_0.2_second_vegan_gf_version, local_repo/vegan_1)
+ | * 93a0b93 - (25 hours ago) add replacement for honey
+ | * 28e0a1a - (25 hours ago) add table of replacements in vegan recipes
+ | | * 3525589 - (11 months ago) merge gluten-free and vegan recipes
+ | |/|           (tag: v_0.2_first_vegan_gf_version, local_repo/vegan_and_gf)
+ |/|/
+ | *   716409e - (11 months ago) Merge branch 'fix_typo' into gluten_free
+ | |\            (local_repo/gluten_free_1)
+ | | * 4a5c4eb - (11 months ago) fix typo in README.md
+ | * | 461de20 - (11 months ago) reformat cinemon recipe
+ | |/
+ | * 34f83d7 - (11 months ago) update README for gluten-free recipes
+ | * 01bb2d4 - (11 months ago) make biscuits recipe gluten free
+ * | e40def1 - (11 months ago) add link to table, add notes to recipe
+ * | ec39d14 - (11 months ago) add replacement for honey
+ * | 49e8505 - (11 months ago) add table of replacements in vegan recipes
+ |/            (tag: v_0.1_vegan_replacement)
+ | * 5755eba - (11 months ago) replace margarine with butter in biscuit recipe
+ |/            (HEAD -> main, local_repo/main)
+ * 7d4a511 - (11 months ago) add link in cinemon star recipe
+ * bd180d6 - (11 months ago) restructure biscuit recipe
+ * ad7f952 - (11 months ago) add recipe overview to README.md
+ * 957e0f7 - (11 months ago) add biscuit recipe
+ * 7dae468 - (11 months ago) add a cinemon star recipe
+ * efa0975 - (11 months ago) initial commit for recipes
+#+end_example
+We see that it reflects the same history as in ~~/recipe_book~. To also have the
+same /working copy/ (i.e. the same version checked out), we can do
+#+begin_src shell-script
+git checkout -b vegan_1 local_repo/vegan_1
+#+end_src
+#+begin_example
+Branch 'vegan_1' set up to track remote branch 'vegan_1' from 'local_repo'.
+Switched to a new branch 'vegan_1'
+#+end_example
+
+** Pretending to be Two Persons
+
+Let us know pretend, that one of the copies is on one of your computers and the
+other one on either another computer you work on (e.g. the HPC, a workstation,
+or a laptop, …) or that it is someone else all together.
+
+For simplicity, let us assume both copies have the branch ~vegan_1~ checked out,
+both are where the /tag/ ~v_0.2_second_vegan_gf_version~ is.
+
+Let us introduce different changes to different parts in both cases:
+- ~~/recipe_book~ :: Let us fix the spelling mistake in ~README.md~ and
+  ~cinemon_stars.txt~, i.e. /cinemon/ → /cinnamon/, ~git add~ and ~git commit~.
+
+  As it also means renaming a file we can do ~git mv cinemon_stars.txt
+  cinnamon_stars.txt~ and, at the same time, update the link in ~README.md~ to read
+  #+begin_src markdown
+## Recipes
+So far we have:
+1. Biscuits (see [here](biscuits.txt), based on using buckwheat flour, banana, and margarine)
+2. Cinnamon Stars (see [here](cinnamon_stars.txt))
+  #+end_src
+  ~git add~ and ~git commit~ these changes as well:
+  #+begin_src shell-script
+  git commit -a -m'rename cinnamon star file, update link'
+  #+end_src
+  #+begin_example
+[vegan_1 c484680] rename cinnamon star file, update link
+ 2 files changed, 1 insertion(+), 1 deletion(-)
+ rename cinemon_stars.txt => cinnamon_stars.txt (100%)
+  #+end_example
+
+- ~~/other/second_copy_recipe_book~ :: Change into this directory and change
+  something else. For example add a sentence on using an appropriate
+  cookie-cutter:
+  #+begin_src shell-script
+git diff
+  #+end_src
+  #+begin_src diff
+diff --git a/cinemon_stars.txt b/cinemon_stars.txt
+index 5ccf5d5..7d91066 100644
+--- a/cinemon_stars.txt
++++ b/cinemon_stars.txt
+@@ -1,2 +1,4 @@
+ Prepare dough like written in [the biscuits recipe](biscuits.txt) but add 1/2 teaspoon of
+ cinemon and 2 tsp of almond extract.
++
++Use a star-shaped biscuit-cutter to form the biscuits.
+  #+end_src
+  We ~git commit -a -m'add note on cookie-cutter'~ to commit these changes in the
+  second repository.
+
+Now, both repositories have a different state and both differ from the bare
+repository they are both linked to. We can see this if we look at the most
+recent commits on ~vegan_1~ in all of them:
+- original working copy :: ~git -C ~/recipe_book graph -n 3 vegan_1~
+  #+begin_example
+ * c484680 - (14 minutes ago) rename cinnamon star file, update link (HEAD -> vegan_1)
+ * c8e3d72 - (17 minutes ago) fix spelling mistake in README.md and cnemon_stars.txt
+ * c85a553 - (26 hours ago) add link to table, add notes to recipe
+ |           (tag: v_0.2_second_vegan_gf_version, local/vegan_1, github/vegan_1)
+  #+end_example
+- other working copy :: ~git -C ~/other/second_copy_recipe_book graph -n 3 vegan_1~
+  #+begin_example
+ * 164f961 - (3 minutes ago) add note on cookie-cutter (vegan_1)
+ * c85a553 - (26 hours ago) add link to table, add notes to recipe
+ |           (tag: v_0.2_second_vegan_gf_version, local_repo/vegan_1)
+ * 93a0b93 - (26 hours ago) add replacement for honey
+  #+end_example
+- "central" bare repository :: ~git -C ~/recipe_book.git graph -n 3 vegan_1~
+  #+begin_example
+ * 04321c1 - (24 hours ago) fix typo in README.md
+ |           (tag: v_0.2_third_vegan_gf_version)
+ * d1d1966 - (24 hours ago) reformat cinemon recipe
+ * 00cbb59 - (24 hours ago) update README for gluten-free recipes (based on vegan)
+  #+end_example
+
+*** Your Task :task:
+Add some changes yourself. These could be similar changes to the ones above, or
+others. We will use the interactive session to see whether we can go through a
+few examples.
+
+** Synchronising the Work
+We have seen what happens when you are updating a remote using ~git push~. If we
+know that we will mostly push a given branch to a specific location, we can
+#+begin_src shell-script
+git push --set-upstream local vegan_1
+#+end_src
+#+begin_example
+Enumerating objects: 9, done.
+Counting objects: 100% (9/9), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (7/7), done.
+Writing objects: 100% (7/7), 969 bytes | 138.00 KiB/s, done.
+Total 7 (delta 2), reused 0 (delta 0)
+To /home/martin/temp_dir_rse_course/recipe_book.git
+   c85a553..c484680  vegan_1 -> vegan_1
+Branch 'vegan_1' set up to track remote branch 'vegan_1' from 'local'.
+#+end_example
+If we do that, then the next time a simple ~git push~ suffices.
+
+If we go to our other repository and try the same, it fails:
+#+begin_src shell-script
+cd ~/other/second_copy_recipe_book
+git branch --set-upstream-to local_repo/vegan_1
+git push
+#+end_src
+#+begin_example
+To ~/recipe_book.git
+ ! [rejected]        vegan_1 -> vegan_1 (non-fast-forward)
+error: failed to push some refs to '~/recipe_book.git'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. Integrate the remote changes (e.g.
+hint: 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+#+end_example
+
+~git~ won't allow us to move the branch to /our/ version of ~vegan_1~, as there is a more recent one!
+To fix this, we have to
+1. first get the new version over:
+   #+begin_src shell-script
+git fetch
+   #+end_src
+   #+begin_example
+From /home/martin/temp_dir_rse_course/recipe_book
+   c85a553..c484680  vegan_1    -> local_repo/vegan_1
+   #+end_example
+2. examine the situation
+   #+begin_src shell-script
+git graph -n 5
+   #+end_src
+   #+begin_example
+ * 164f961 - (3 hours ago) add note on cookie-cutter
+ |           (HEAD -> vegan_1)
+ |
+ | * c484680 - (3 hours ago) rename cinnamon star file, update link
+ | |           (local_repo/vegan_1)
+ | |
+ | * c8e3d72 - (3 hours ago) fix spelling mistake in README.md and cnemon_stars.txt
+ |/
+ * c85a553 - (28 hours ago) add link to table, add notes to recipe
+ |           (tag: v_0.2_second_vegan_gf_version)
+ |
+ * 93a0b93 - (28 hours ago) add replacement for honey
+   #+end_example
+3. and combine the two versions
+   #+begin_src shell-script
+git merge local_repo/vegan_1     # note how we use a remote branch to merge to
+   #+end_src
+   #+begin_example
+Auto-merging cinnamon_stars.txt
+CONFLICT (content): Merge conflict in cinnamon_stars.txt
+Automatic merge failed; fix conflicts and then commit the result.
+   #+end_example
+   #+begin_src shell-script
+git diff
+   #+end_src
+   #+begin_src diff
+diff --cc cinnamon_stars.txt
+index 6402c46,eeaa79b..0000000
+--- a/cinnamon_stars.txt
++++ b/cinnamon_stars.txt
+@@@ -1,4 -1,2 +1,10 @@@
+  - Prepare dough like written in [the biscuits recipe](biscuits.txt)
+++<<<<<<< HEAD:cinemon_stars.txt
+ +- Add 1/2 teaspoon of cinemon and 2 tsp of almond extract.
+ +
+ +Use a star-shaped biscuit-cutter to form the biscuits.
+++||||||| c85a553:cinemon_stars.txt
+++- Add 1/2 teaspoon of cinemon and 2 tsp of almond extract.
+++=======
++ - Add 1/2 teaspoon of cinnamon and 2 tsp of almond extract.
+++>>>>>>> local_repo/vegan_1:cinnamon_stars.txt
+   #+end_src
+4. At this point we have to resolve the /CONFLICT/ just like we learned before.
+   Here, it suffices to combine the correct spelling with the additional
+   biscuit-cutter comment:
+   #+begin_src markdown
+- Prepare dough like written in [the biscuits recipe](biscuits.txt)
+- Add 1/2 teaspoon of cinnamon and 2 tsp of almond extract.
+
+Use a star-shaped biscuit-cutter to form the biscuits.
+   #+end_src
+   and run ~git add cinnamon_stars.txt~.
+5. Before we finish the ~merge~, lets run a
+   #+begin_src shell-script
+git status
+   #+end_src
+   #+begin_example
+On branch vegan_1
+Your branch and 'local_repo/vegan_1' have diverged,
+and have 1 and 2 different commits each, respectively.
+  (use "git pull" to merge the remote branch into yours)
+
+All conflicts fixed but you are still merging.
+  (use "git commit" to conclude merge)
+
+Changes to be committed:
+        modified:   README.md
+        renamed:    cinemon_stars.txt -> cinnamon_stars.txt
+   #+end_example
+   Note how ~git~ just handled the rename without problems. This is because ~git~
+   tracks file content rather than files or changes.
+6. Note: The combination of ~git fetch~ and ~git merge~ is so common, that there is
+   a short-cut for doing both: ~git pull~.
+
+   Should you want to do ~git fetch~ followed by a ~git rebase~, then you can
+   configure ~git~ to do this on a ~git pull~ instead using ~git config
+   branch.autosetuprebase always~.
+7. Finally, we can finish our merge as before
+   #+begin_src shell script
+git commit
+   #+end_src
+   Note that your editor will open and suggest a commit message like
+   #+begin_example
+   Merge remote-tracking branch 'local_repo/vegan_1' into vegan_1
+   #+end_example
+   We leave it at that, save, and close the editor to see:
+   #+begin_example
+   [vegan_1 9118a00] Merge remote-tracking branch 'local_repo/vegan_1' into vegan_1
+   #+end_example
+   and our history now looks like
+   #+begin_src shell-script
+git graph -n 5
+   #+end_src
+   #+begin_example
+ *   9118a00 - (2 minutes ago) Merge remote-tracking branch 'local_repo/vegan_1' into vegan_1
+ |             (HEAD -> vegan_1)
+ |\
+ | * c484680 - (3 hours ago) rename cinnamon star file, update link
+ | |           (local_repo/vegan_1)
+ | |
+ | * c8e3d72 - (3 hours ago) fix spelling mistake in README.md and cnemon_stars.txt
+ * | 164f961 - (3 hours ago) add note on cookie-cutter
+ |/
+ * c85a553 - (29 hours ago) add link to table, add notes to recipe (tag: v_0.2_second_vegan_gf_version)
+   #+end_example
+8. Publish our changes. Now that our version (~vegan_1~) is a /fast-forward/ to
+   ~local_repo/vegan_1~, we can
+   #+begin_src shell-script
+git push
+   #+end_src
+   #+begin_example
+Enumerating objects: 10, done.
+Counting objects: 100% (10/10), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (6/6), done.
+Writing objects: 100% (6/6), 663 bytes | 82.00 KiB/s, done.
+Total 6 (delta 4), reused 0 (delta 0)
+To /home/martin/temp_dir_rse_course/recipe_book.git
+   c484680..9118a00  vegan_1 -> vegan_1
+   #+end_example
+
+We can now also go back to our first /working copy/ and synchronise the state there:
+#+begin_src shell-script
+cd ~/recipe_book
+git pull
+#+end_src
+#+begin_example
+remote: Enumerating objects: 10, done.
+remote: Counting objects: 100% (10/10), done.
+remote: Compressing objects: 100% (6/6), done.
+remote: Total 6 (delta 4), reused 0 (delta 0)
+Unpacking objects: 100% (6/6), 643 bytes | 107.00 KiB/s, done.
+From /home/martin/temp_dir_rse_course/recipe_book
+   c484680..9118a00  vegan_1    -> local/vegan_1
+Updating c484680..9118a00
+Fast-forward
+ cinnamon_stars.txt | 2 ++
+ 1 file changed, 2 insertions(+)
+#+end_example
+
+And with this, both copies are at the same state again!
+
+** Your Task :task:
+
+Follow the above steps. Also try to ~git rebase~ and see what kind of history you
+get.
+
+What happens when during your merge your colleague pushes an even newer version?
+
+([[file:README.org::*SDL - Rebase Branches][back to main document]])
+
+# Local Variables:
+# mode: org
+# ispell-local-dictionary: "british"
+# eval: (flyspell-mode t)
+# eval: (flyspell-buffer)
+# End:

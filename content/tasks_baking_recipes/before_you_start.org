@@ -1,0 +1,84 @@
+#+OPTIONS: <:nil d:nil timestamp:t ^:nil tags:nil toc:nil num:nil \n:t
+#+STARTUP: fninline inlineimages showall
+
+* Before you start
+There are a few requirements. The most important one is, of course, having a ~git~ installation on your computer.
+
+You can get /git/ here: [[https://git-scm.com]].
+
+It mentions several download and install options. For example, if you
+are on /Windows/ but cannot install software, you might want to try the portable version here:
+https://git-scm.com/download/win (version ~v2.34.1~ at the time of writing).
+
+If you download this and unpack it, then there is a ~PortableGit/git-bash-exe~.
+If you start this, it will give you a command line like shown [[fig:git_bash_windows_01][below]] in which you can
+
+#+name: fig:git_bash_windows_01
+#+caption: Screenshot of a ~bash~ shell on /Windows/ for
+#+caption: entering the below command line steps.
+#+caption: Note: The steps shown here are the first steps of
+#+caption: [[*SDL 01 - Creating a Repository and Adding Content][the first SDL 01 below]].
+[[file:figures/task_00_010.png]]
+
+#+name: fig:git_bash_windows_02
+#+caption: If you want to get rid of the warning shown in
+#+caption: the above, you can do this instead.
+[[file:figures/task_00_020.png]]
+
+In order to be independent from specific UIs or IDEs, we will mainly
+focus on the command line here. Usually, the options in UIs and IDEs
+are names very similar to the options here.
+
+For computers at the University of Nottingham you can either use the
+above portable version of ~git~ or see here:
+[[https://workspace.nottingham.ac.uk/display/Software/Git+for+Windows]]
+
+NB: For Computer Science it is available on the remote desktops:
+https://rdweb.wvd.microsoft.com/arm/webclient
+
+For a list of possible UIs for git, see:
+[[https://git-scm.com/download/gui/windows]]
+
+(I personally use [[https://desktop.github.com]] )
+
+** Other Helpful Things to Set
+We will cover these later but let's mention them here to have them at one point
+#+begin_src shell-script
+git config --core.editor nano   # if you want to set a specific editor
+# To get more context when encountering conflicts
+git config --global merge.conflictstyle diff3
+# To have a colourful graph representation of your history
+git config --global alias.graph "log --graph --all --pretty=format:'%Cred%h%Creset - %Cgreen(%cr)%Creset %s%C(yellow)%d%Creset' --abbrev-commit --date=relative --decorate"
+#+end_src
+
+** Basic command-line usage
+The session relies on some basic command-line usage. If you can use the command line to move around directories, create files and delete files then you will have enough for this part of the course. If you've never used the command-line before, you can open the command-line as follows:
+	1. Windows - follow the installing git instructions above
+	2. Mac - open the Terminal application, which is usually in /Applications/Utilities (or use spotlight or launchpad to search).
+	3. Linux - search menus for the Terminal application.
+	
+To learn basic commands below are some videos introducing the key concepts or, if you prefer, there's a webpage with this information. Finally, there's a link to a crib sheet, which you might find useful in the session to help you remember the command-line commands.
+
+*** Videos
+	1. Moving around: [[https://www.youtube.com/watch?v=b93ehHTCZAE]] [7mins]
+	2. Making files: [[https://www.youtube.com/watch?v=Q9EeK5_QfvI]] [7mins]
+	3. Moving and copying files: [[https://www.youtube.com/watch?v=6ylJ9ocj29w]] [9mins]
+
+*** Webpage
+[[https://ubuntu.com/tutorials/command-line-for-beginners#4-creating-folders-and-files]] [up to and including  section 5- Manipulating files]
+
+*** Crib sheet
+https://appletree.or.kr/quick_reference_cards/Unix-Linux/CLI-Cheat-Sheet.pdf
+
+
+
+
+
+([[file:README.org::*Before you start][back to main document]])
+
+# Local Variables:
+# mode: org
+# ispell-local-dictionary: "british"
+# eval: (flyspell-mode t)
+# eval: (flyspell-buffer)
+# End:

@@ -1,0 +1,375 @@
+#+OPTIONS: <:nil d:nil timestamp:t ^:nil tags:nil toc:nil num:nil \n:t
+#+STARTUP: fninline inlineimages showall
+
+* SDL - Rebase a branch onto another branch - Example 1
+In order to combine the content from the gluten-free and the vegan
+branches in this example we will rebase ~vegan~ onto ~gluten-free~.
+The [[file:sdl_rebase_02.org::*SDL - Rebase a branch onto another branch - Example 2][second example SDL]] achieves a similar result but by rebasing the
+other way around.
+
+** Getting back to before the merge
+In order to compare what we are achieving with a rebase, let us go back to where
+we were before the merge in [[file:sdl_merge_conflict_01.org::*Creating a merge conflict][a previous SDL]]:
+
+1. Introduce new branches called ~gluten_free_1~ and ~vegan_1~ at the states where their originals were before we merged them into ~vegan_and_gf~. Note that the original branches might be gone if you deleted / renamed them [[file:sdl_merge_conflict_02.org::*Clean up branches][earlier]].
+   #+begin_src shell-script
+git branch gluten_free_1 716409e
+git branch vegan_1 e40def1
+   #+end_src
+   Note that your numbers will be different and you have to take them from your
+   repository.
+
+   Your repository should look like this (where you can ignore the merge at the
+   top (~3525589~) for this SDL.
+   #+begin_src shell-script
+git graph -n 11
+   #+end_src
+   #+begin_example
+ *   3525589 - (11 months ago) merge gluten-free and vegan recipes
+ |       (HEAD -> vegan_and_gf, tag: v_0.2_first_vegan_gf_version, github/vegan_and_gf)
+ |\
+ | *   716409e - (11 months ago) Merge branch 'fix_typo' into gluten_free (gluten_free_1)
+ | |\
+ | | * 4a5c4eb - (11 months ago) fix typo in README.md
+ | * | 461de20 - (11 months ago) reformat cinemon recipe
+ | |/
+ | * 34f83d7 - (11 months ago) update README for gluten-free recipes
+ | * 01bb2d4 - (11 months ago) make biscuits recipe gluten free
+ * | e40def1 - (11 months ago) add link to table, add notes to recipe (vegan_1)
+ * | ec39d14 - (11 months ago) add replacement for honey
+ * | 49e8505 - (11 months ago) add table of replacements in vegan recipes (tag: v_0.1_vegan_replacement)
+ |/
+ | * 5755eba - (11 months ago) replace margarine with butter in biscuit recipe (master)
+ |/
+ * 7d4a511 - (11 months ago) add link in cinemon star recipe
+   #+end_example
+
+2. Checkout one of the branches you just created. (And also note that a branch
+   is nothing more than just a name for a point in the tree - pretty much like a
+   variable name in a program can contain a value)
+   #+begin_src shell-script
+git checkout vegan_1
+   #+end_src
+
+** Rebasing the Changes from ~vegan~ onto the ~gluten_free~ branch
+Now we are all set and we can put all the changes introduced in the branch ~vegan~
+since we branched off from ~master~ onto all the changes in ~gluten_free~:
+
+#+begin_src shell-script
+git rebase gluten_free_1
+#+end_src
+
+#+name: output:git_rebase_1
+#+begin_example
+First, rewinding head to replay your work on top of it...
+Applying: add table of replacements in vegan recipes
+Applying: add replacement for honey
+Applying: add link to table, add notes to recipe
+Using index info to reconstruct a base tree...
+M       README.md
+M       biscuits.txt
+Falling back to patching base and 3-way merge...
+Auto-merging biscuits.txt
+CONFLICT (content): Merge conflict in biscuits.txt
+Auto-merging README.md
+CONFLICT (content): Merge conflict in README.md
+error: Failed to merge in the changes.
+Patch failed at 0003 add link to table, add notes to recipe
+hint: Use 'git am --show-current-patch' to see the failed patch
+Resolve all conflicts manually, mark them as resolved with
+"git add/rm <conflicted_files>", then run "git rebase --continue".
+You can instead skip this commit: run "git rebase --skip".
+To abort and get back to the state before "git rebase", run "git rebase --abort".
+#+end_example
+
+Have a look at the first few lines of ths output: ~git~ is /Applying: …/ commits and
+for two of them, this works without problem. Only the third one makes trouble
+and results in /CONFLICT/.
+
+The most important bit first: If you don't feel comfortable finishing this task, then
+#+begin_src shell-script
+git rebase --abort
+#+end_src
+brings your right back to before you started your attempt.
+
+** Solving the CONFLICTs
+However, we do feel up for the task and we instead have a look at the
+repository:
+#+begin_src shell-script
+git status
+#+end_src
+#+begin_example
+rebase in progress; onto 716409e
+You are currently rebasing branch 'vegan_1' on '716409e'.
+  (fix conflicts and then run "git rebase --continue")
+  (use "git rebase --skip" to skip this patch)
+  (use "git rebase --abort" to check out the original branch)
+
+Unmerged paths:
+  (use "git restore --staged <file>..." to unstage)
+  (use "git add <file>..." to mark resolution)
+        both modified:   README.md
+        both modified:   biscuits.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+#+end_example
+
+More specifically, we have to investigate what is in this /both modified/ files:
+#+begin_src shell-script
+git diff README.md
+#+end_src
+#+begin_src diff
+diff --cc README.md
+index 4fa763f,68a50d7..0000000
+--- a/README.md
++++ b/README.md
+@@@ -1,7 -1,10 +1,16 @@@
+  # Overview
+++<<<<<<< HEAD
+ +A collection of gluten-free recipes
+++||||||| constructed merge base
+++A collection of recipes
+++=======
++ A collection of vegan recipes
+++>>>>>>> add link to table, add notes to recipe
+
+  ## Recipes
+  So far we have:
+ -1. Biscuits (see [here](biscuits.txt))
+ +1. Biscuits (see [here](biscuits.txt), based on using buckwheat flour)
+  2. Cinemon Stars (see [here](cinemon_stars.txt))
++
++ ## Common replacements
++ See this [table](substitutes.rst)
+#+end_src
+
+Before we continue, let us understand what are we seeing here.
+
+At the very bottom, there is a part of the change which just got applied. There
+was no conflict there as this was something which was only introduced in the
+commit at the very end of the branch ~vegan_1~ (in our case ~e40def1~).
+
+But there is more: Just like we had seen when solving the ~merge conflict~ [[file:sdl_merge_conflict_01.org::*Examining the merge conflict][earlier]],
+there are certain markers in between which we see different
+versions of the file (see [[file:sdl_merge_conflict_01.org::*Adding more information to merges: three-way-merges][here]]).
+
+Now, there are lines indicating conflicts
+1. *<<<<<<< HEAD*
+2. *||||||| constructed merge base*
+3. *=======*, and
+4. *>>>>>>> add link to table, add notes to recipe*
+
+Unlike when merging, the markers have different labels here. Between /HEAD/ and
+/constructed merge base/, we see the version which is present in branch
+~gluten_free_1~. You can check this by viewing a specific version of a file:
+#+begin_src shell-script
+git show gluten_free_1:README.md
+#+end_src
+
+The version between ~=======~ and ~>>>>>>>~ is the version at the commit with the
+indicated commit message (in our case this is the same as ~vegan_1~).
+
+The content between the two lines ~|||||||~ and ~=======~ is from the commit where
+the two branches we are looking at diverged from. In our case this commit
+happens to be the ancestor of the most recent commit in ~master~. We can therefore
+either address it as ~7d4a511~ or ~master^~. So you can see the whole file by
+calling
+#+begin_src shell-script
+git show master^:README.md
+#+end_src
+
+Just like before with ~git merge~, we have to decide what content we want. It
+might be one of the three or a mix of them or none of them at all. You have to
+decide what the correct answer is.
+
+Let us enter [[file:sdl_merge_conflict_02.org::code:merge_conflic_solved][the same resolution like before]]: Copy the new content into the
+~README.md~ /markdown/ file.
+
+Now, we need to resolve the conflict in ~biscuits.txt~. For the sake of brevity,
+we just do the same changes as earlier. We could use the merge we already
+created for this. To see it, we can type ~git show
+v_0.2_first_vegan_gf_version:biscuits.txt~. We can use this directly as our
+version here as well:
+#+begin_src shell-script
+rm biscuits.txt
+git show v_0.2_first_vegan_gf_version:biscuits.txt > biscuits.txt
+#+end_src
+
+After having put a version into both files we like, we commit and continue the
+rebase:
+#+begin_src shell-script
+git add README.md biscuits.txt
+git rebase --continue
+#+end_src
+#+begin_example
+applying: add link to table, add notes to recipe
+#+end_example
+
+The line /Applying: …/ informs us that the change from this very commit is now
+apply on top of the commits before, compare to the lines [[output:git_rebase_1][above]].
+
+** Resulting History after the Rebase
+
+The resulting state looks like this:
+#+begin_src shell
+git graph -n 14
+#+end_src
+#+begin_example
+ * 078e2b8 - (46 seconds ago) add link to table, add notes to recipe (HEAD -> vegan_1)
+ * 70001cc - (25 hours ago) add replacement for honey
+ * 726de4d - (25 hours ago) add table of replacements in vegan recipes
+ | *   3525589 - (11 months ago) merge gluten-free and vegan recipes
+ | |\            (tag: v_0.2_first_vegan_gf_version, github/vegan_and_gf, vegan_and_gf)
+ | |/
+ |/|
+ * |   716409e - (11 months ago) Merge branch 'fix_typo' into gluten_free
+ |\ \            (gluten_free_1)
+ | * | 4a5c4eb - (11 months ago) fix typo in README.md
+ * | | 461de20 - (11 months ago) reformat cinemon recipe
+ |/ /
+ * | 34f83d7 - (11 months ago) update README for gluten-free recipes
+ * | 01bb2d4 - (11 months ago) make biscuits recipe gluten free
+ | * e40def1 - (11 months ago) add link to table, add notes to recipe
+ | * ec39d14 - (11 months ago) add replacement for honey
+ | * 49e8505 - (11 months ago) add table of replacements in vegan recipes
+ | /           (tag: v_0.1_vegan_replacement)
+ | * 5755eba - (11 months ago) replace margarine with butter in biscuit recipe
+ | /           (master)
+ * 7d4a511 - (11 months ago) add link in cinemon star recipe
+#+end_example
+
+Using ~gitk --all~ gives the following view:
+#+name: fig:gitk_after_conflict_resolution_rebase_1
+#+caption: History after resolving the conflicts from rebasing ~vegan~
+#+caption: onto ~gluten_free~.
+#+caption: The last commit of the ones being rebased is selected.
+#+caption: Note how the /Author/ and the time is the old time but the
+#+caption: /Committer/ is the one who did the rebase including the current time.
+[[file:figures/task_06_010.png]]
+
+The main difference to merges is that the resulting history is linear: Instead
+of combining two branches together, we cut a branch off and position it on top
+of an existing one. Also note in the ~gitk --all~ screenshot: The last commit of
+the ones being rebased is selected. Note how the /Author/ and the time is the old
+time but the /Committer/ is the one who did the rebase including the current time.
+
+- Benefits :: You will get a linear version history which might be easier to understand later
+- Drawbacks :: Rebases can be more complicated than merges as you can have
+  /CONFLICTs/ in every commit you rebase. Above, we were lucky that it only
+  happened at the last one. But it could have happened at every single /Applying …/ step.
+- Caution with already published commits :: If you are working with others,
+  rebasing might be less desirable if you have already shared your commits with
+  others. Note how the commit with the label /add replacement for honey/ changed
+  from ~ec39d14~ to ~70001cc~ – in fact, the commit with that description can
+  therefore be seen twice in the above screenshot / history! If you have already
+  copied ("/pushed/") it to a server, then you might not be able to easily copy
+  your rebased version as this could lead to a loss of work.
+- Advidse :: If you work on a separate part of code / text, create your own
+  branch. This will reduce the amount of /rebases/ and /merges/ while copying your
+  work to others. Only once your and/or their work is done, you combine it using
+  a /merge/.
+
+Finally, let us create a new tag to mark the rebased version:
+#+begin_src shell-script
+git tag --annotate --message 'combined vegan and gf using rebase' v_0.2_second_vegan_gf_version
+#+end_src
+
+** Your Task                                                           :task:
+Play around with the above situation. Don't be afraid of getting into
+conflicts. You can always get out again by ~git rebase --abort~.
+
+If you get stuck and want to start this task from the beginning, you can always
+#+begin_src shell-script
+# This is how you force your currently checked out branch to be somewhere else
+git checkout vegan_1
+git reset --hard  e40def1
+# This is how you force a different branch to be somewhere else
+git branch -f gluten_free_1 716409e
+#+end_src
+
+Alternatively, you could also start with two new branches ~vegan_1b~ and
+~gluten_free_1b~ in all the above.
+
+You only have to be careful in the same sense as for ~git merge~: If you call ~git
+rebase~ and start adding changes, those changes will be lost when you abort. Git
+can only protect things you committed. Before this, you might loose what you
+have just done.
+
+*** Subtask :task:
+Try deliberately to loose data. The aim of this almost /counter exercise/ is to
+give you a feeling for when you are doing things which are potentially
+dangerous.
+
+#+begin_src shell-script
+# Create two new branches to start all over again with the rebase
+git branch vegan_2 e40def1
+git branch gluten_free_2 716409e
+git checkout vegan_2
+git rebase gluten_free_2
+git status
+#+end_src
+
+This should leave you again in the conflict state mentioned above.
+#+begin_example
+interactive rebase in progress; onto 716409e
+Last commands done (3 commands done):
+   pick ec39d14 add replacement for honey
+   pick e40def1 add link to table, add notes to recipe
+  (see more in file .git/rebase-merge/done)
+No commands remaining.
+You are currently rebasing branch 'vegan_2' on '716409e'.
+  (fix conflicts and then run "git rebase --continue")
+  (use "git rebase --skip" to skip this patch)
+  (use "git rebase --abort" to check out the original branch)
+
+Unmerged paths:
+  (use "git restore --staged <file>..." to unstage)
+  (use "git add <file>..." to mark resolution)
+	both modified:   README.md
+	both modified:   biscuits.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+#+end_example
+Now add some changes to, for example, ~README.md~:
+Add the following line at the end:
+#+begin_src markdown
+## Additional Notes
+I will get the Nobel Price for the following idea: ...
+#+end_src
+With this, ~git diff README.md~ yields
+#+begin_src diff
+diff --cc README.md
+index 4fa763f,68a50d7..0000000
+--- a/README.md
++++ b/README.md
+@@@ -1,7 -1,10 +1,17 @@@
+  # Overview
+++<<<<<<< HEAD
+ +A collection of gluten-free recipes
+++=======
++ A collection of vegan recipes
+++>>>>>>> e40def1 (add link to table, add notes to recipe)
+
+  ## Recipes
+  So far we have:
+ -1. Biscuits (see [here](biscuits.txt))
+ +1. Biscuits (see [here](biscuits.txt), based on using buckwheat flour)
+  2. Cinemon Stars (see [here](cinemon_stars.txt))
++
++ ## Common replacements
++ See this [table](substitutes.rst)
+++
+++## Additional Notes
+++I will get the Nobel Price for the following idea: ...
+#+end_src
+
+If you now type ~git rebase --abort~, then your Nobel Price winning idea is *gone*. *Without warning*.
+
+([[file:README.org::*SDL - Rebase Branches][back to main document]])
+
+# Local Variables:
+# mode: org
+# ispell-local-dictionary: "british"
+# eval: (flyspell-mode t)
+# eval: (flyspell-buffer)
+# End:

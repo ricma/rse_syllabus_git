@@ -1,0 +1,404 @@
+#+OPTIONS: <:nil d:nil timestamp:t ^:nil tags:nil toc:nil num:nil \n:t
+#+STARTUP: fninline inlineimages showall
+
+* SDL - Examining Merge CONFLICTs
+In this SDL we will bring ourselves into a /CONFLICT/
+situation. Before solving it, we will abort the merge and look at the
+problem from another side (giving the same result though).
+
+At the end we will be able to understand what the cryptic
+~<<<<<~, ~=======~, ~|||||||~, and ~>>>>>~ mean.
+
+** Progress the vegan branch
+Before we can get there, we need to add a some more content to our ~vegan~ branch:
+#+begin_src shell-script
+  git checkout vegan
+#+end_src
+Let us remove the egg in ~biscuits.txt~ in the recipe and be more specific about
+margarine and flour. Furthermore, add a link to our table to the ~README.md~.
+Our changes are such that ~git diff~ gives
+#+begin_src diff
+diff --git a/README.md b/README.md
+index a134858..68a50d7 100644
+--- a/README.md
++++ b/README.md
+@@ -1,7 +1,10 @@
+ # Overview
+-A collection of recipes
++A collection of vegan recipes
+
+ ## Recipes
+ So far we have:
+ 1. Biscuits (see [here](biscuits.txt))
+ 2. Cinemon Stars (see [here](cinemon_stars.txt))
++
++## Common replacements
++See this [table](substitutes.rst)
+diff --git a/biscuits.txt b/biscuits.txt
+index 50decd5..e10f1f0 100644
+--- a/biscuits.txt
++++ b/biscuits.txt
+@@ -1,10 +1,10 @@
+ # Ingredients
+-250g flour
+-125g margarine
++250g very fine flour
++125g margarine (do not use butter!)
+ 60g sugar
+ 3tsp vanilla extract
+ pinch of salt
+-1 egg.
++1/2 banana
+
+ # Steps
+ - Mix everything
+#+end_src
+
+Let us add this as (with a multi-line commit message)
+#+begin_src shell-script
+git commit -a -m 'add link to table, add notes to recipe
+
+Use banana instead of egg for biscuits.'
+#+end_src
+
+Our repository looks like
+#+begin_src shell-script
+git graph -n 5
+#+end_src
+#+begin_example
+ * e40def1 - (67 seconds ago) add link to table, add notes to recipe (HEAD -> vegan)
+ * ec39d14 - (5 hours ago) add replacement for honey
+ * 49e8505 - (6 hours ago) add table of replacements in vegan recipes (tag: v_0.1_vegan_replacement)
+ | *   716409e - (4 hours ago) Merge branch 'fix_typo' into gluten_free (gluten_free)
+ | |\
+ | | * 4a5c4eb - (4 hours ago) fix typo in README.md
+#+end_example
+
+** Creating a merge conflict
+We have two ways of bundling our ~gluten_free~ and ~vegan~ recipes
+together: We start at one of them an merge in the other.
+
+Let us first start at
+#+begin_src shell-script
+git checkout vegan
+#+end_src
+and
+#+begin_src shell-script
+git merge gluten_free
+#+end_src
+#+begin_example
+Auto-merging biscuits.txt
+CONFLICT (content): Merge conflict in biscuits.txt
+Auto-merging README.md
+CONFLICT (content): Merge conflict in README.md
+Automatic merge failed; fix conflicts and then commit the result.
+#+end_example
+
+If we call ~git status~, then we get
+#+begin_example
+On branch vegan
+You have unmerged paths.
+  (fix conflicts and run "git commit")
+  (use "git merge --abort" to abort the merge)
+
+Changes to be committed:
+        modified:   cinemon_stars.txt
+
+Unmerged paths:
+  (use "git add <file>..." to mark resolution)
+        both modified:   README.md
+        both modified:   biscuits.txt
+#+end_example
+
+The next step necessary is mentioned there: "Fix conflicts".  Before
+we do, we will have a look at all files. Then, we will abort this
+merge attempt, checkout the other branch and try to merge from there.
+
+In real life you would not do this. You would use one or the
+other. But here it will give us some insight into what is going on.
+
+** Examining the merge conflict
+
+Let us first state the complete content of ~biscuits.txt~:
+#+begin_src shell-script
+cat biscuits.txt
+#+end_src
+#+begin_src smerge
+# Ingredients
+<<<<<<< HEAD
+250g very fine flour
+125g margarine (do not use butter!)
+60g sugar
+=======
+150g buckwheat flour
+1/2 tsp baking powder
+110g butter
+110g sugar
+>>>>>>> gluten_free
+3tsp vanilla extract
+pinch of salt
+1/2 banana
+
+# Steps
+- Mix butter and sugar, then whisk in egg
+- add flour, baking powder, salt and stri until comes together
+- let rest for 30 min in fridge
+- roll out and cut into shape
+- Bake for 12 - 15 minutes (180 degrees)
+%
+#+end_src
+
+Here, three lines are important to note:
+1. *<<<<<<< HEAD*
+2. *=======*, and
+3. *>>>>>>> gluten_free*
+
+The lines between 1. and 2. are the state of the file as it was in the
+currently checked out branch ~vegan~ (here referred to as ~HEAD~).
+
+The lines between 2. and 3. are the state of the file as it is in the
+other branch, ~gluten_free~.
+
+Note that the correct merge might be to take one or the other /or/
+writing a completely new version which takes both branches into account.
+
+Before we do that, let us abort the merge:
+#+begin_src shell-script
+git merge --abort
+#+end_src
+
+** Adding more information to merges: three-way-merges
+We can add a bit more information to the conflict by setting this
+global configuration:
+#+begin_src shell-script
+  git config --global merge.conflictstyle diff3
+#+end_src
+which uses so called three-way-merges: Next to the two versions of the
+conflict it will also show a common ancestor which can help
+understanding what both branches tried to do prior to the merge.
+
+Let's see it in action:
+#+begin_src shell-script
+  git merge gluten_free
+#+end_src
+Now the content of ~biscuits.txt~ is
+#+begin_src diff
+# Ingredients
+<<<<<<< HEAD
+250g very fine flour
+125g margarine (do not use butter!)
+60g sugar
+||||||| 7d4a511
+250g flour
+125g margarine
+60g sugar
+=======
+150g buckwheat flour
+1/2 tsp baking powder
+110g butter
+110g sugar
+>>>>>>> gluten_free
+3tsp vanilla extract
+pinch of salt
+1/2 banana
+
+# Steps
+- Mix butter and sugar, then whisk in egg
+- add flour, baking powder, salt and stri until comes together
+- let rest for 30 min in fridge
+- roll out and cut into shape
+- Bake for 12 - 15 minutes (180 degrees)
+#+end_src
+
+Now, there are four lines indicating conflicts
+1. *<<<<<<< HEAD*
+2. *||||||| 7d4a511*
+3. *=======*, and
+4. *>>>>>>> gluten_free*
+
+The part between 2. and 3. now is the version of the file at the
+moment when both histories departed (commit ~7d4a511~).
+
+** A note on conflicts and automatically resolved issues
+It can go a bit unnoticed: But git tried to be helpful and did resolve
+some of the errors for you. You can see this by calling
+#+begin_src 
+  git diff
+#+end_src
+#+begin_src diff
+diff --cc README.md
+index 68a50d7,4fa763f..0000000
+--- a/README.md
++++ b/README.md
+@@@ -1,10 -1,7 +1,16 @@@
+  # Overview
+++<<<<<<< HEAD
+ +A collection of vegan recipes
+++||||||| 7d4a511
+++A collection of recipes
+++=======
++ A collection of gluten-free recipes
+++>>>>>>> gluten_free
+
+  ## Recipes
+  So far we have:
+- 1. Biscuits (see [here](biscuits.txt))
++ 1. Biscuits (see [here](biscuits.txt), based on using buckwheat flour)
+  2. Cinemon Stars (see [here](cinemon_stars.txt))
+ +
+ +## Common replacements
+ +See this [table](substitutes.rst)
+diff --cc biscuits.txt
+index e10f1f0,f16e658..0000000
+--- a/biscuits.txt
++++ b/biscuits.txt
+@@@ -1,13 -1,15 +1,25 @@@
+  # Ingredients
+++<<<<<<< HEAD
+ +250g very fine flour
+ +125g margarine (do not use butter!)
+ +60g sugar
+++||||||| 7d4a511
+++250g flour
+++125g margarine
+++60g sugar
+++=======
++ 150g buckwheat flour
++ 1/2 tsp baking powder
++ 110g butter
++ 110g sugar
+++>>>>>>> gluten_free
+  3tsp vanilla extract
+  pinch of salt
+- 1 egg.
++ 1/2 banana
+
+  # Steps
+- - Mix everything
++ - Mix butter and sugar, then whisk in egg
++ - add flour, baking powder, salt and stri until comes together
+  - let rest for 30 min in fridge
+  - roll out and cut into shape
+- - Bake for 10 - 12 minutes (200 degrees)
++ - Bake for 12 - 15 minutes (180 degrees)
+#+end_src
+
+Note that there are line not indicated as a conflict. But whether they
+are what *YOU* think is the correct version to be used is something
+*YOU* (and your colleagues) have to decide!
+
+** Investigate the merge from the other side
+Let us again abort the merge with ~git merge --abort~ and investigate
+the problem from the other side. Note that this is not necessary in
+normal operations - we just want to explain the meaning of the
+conflict markers in more detail:
+#+begin_src shell-script
+  git merge --abort
+  git checkout gluten_free
+  git merge vegan
+#+end_src
+#+begin_example
+Auto-merging biscuits.txt
+CONFLICT (content): Merge conflict in biscuits.txt
+Auto-merging README.md
+CONFLICT (content): Merge conflict in README.md
+Automatic merge failed; fix conflicts and then commit the result.
+#+end_example
+
+Now we have this ~git status~:
+#+begin_example
+On branch gluten_free
+You have unmerged paths.
+  (fix conflicts and run "git commit")
+  (use "git merge --abort" to abort the merge)
+
+Changes to be committed:
+        new file:   substitutes.rst
+
+Unmerged paths:
+  (use "git add <file>..." to mark resolution)
+        both modified:   README.md
+        both modified:   biscuits.txt
+#+end_example
+Because we merged in ~vegan~, we now have a new file inserted by the
+merge.
+
+The difference now shows (~git diff~):
+#+begin_src diff
+diff --cc README.md
+index 4fa763f,68a50d7..0000000
+--- a/README.md
++++ b/README.md
+@@@ -1,7 -1,10 +1,16 @@@
+  # Overview
+++<<<<<<< HEAD
+ +A collection of gluten-free recipes
+++||||||| 7d4a511
+++A collection of recipes
+++=======
++ A collection of vegan recipes
+++>>>>>>> vegan
+
+  ## Recipes
+  So far we have:
+ -1. Biscuits (see [here](biscuits.txt))
+ +1. Biscuits (see [here](biscuits.txt), based on using buckwheat flour)
+  2. Cinemon Stars (see [here](cinemon_stars.txt))
++
++ ## Common replacements
++ See this [table](substitutes.rst)
+diff --cc biscuits.txt
+index f16e658,e10f1f0..0000000
+--- a/biscuits.txt
++++ b/biscuits.txt
+@@@ -1,15 -1,13 +1,25 @@@
+  # Ingredients
+++<<<<<<< HEAD
+ +150g buckwheat flour
+ +1/2 tsp baking powder
+ +110g butter
+ +110g sugar
+++||||||| 7d4a511
+++250g flour
+++125g margarine
+++60g sugar
+++=======
++ 250g very fine flour
++ 125g margarine (do not use butter!)
++ 60g sugar
+++>>>>>>> vegan
+  3tsp vanilla extract
+  pinch of salt
+- 1 egg.
++ 1/2 banana
+
+  # Steps
+- - Mix everything
++ - Mix butter and sugar, then whisk in egg
++ - add flour, baking powder, salt and stri until comes together
+  - let rest for 30 min in fridge
+  - roll out and cut into shape
+- - Bake for 10 - 12 minutes (200 degrees)
++ - Bake for 12 - 15 minutes (180 degrees)
+#+end_src
+
+At this point we can ~git merge --abort~ again or continue with the
+next SDL to resolve the conflict.
+
+** Your Task                                                           :task:
+Play around with the above situation. Don't be afraid of getting into
+conflicts. You can always get out again by ~git merge --abort~.
+
+You only have to be careful in the following sense: If you call ~git
+merge~ and start adding changes, those changes will be lost when you
+abort. Git can only protect things you committed. Before this, you
+might loose what you have just done.
+
+([[file:README.org::*SDL - Merge Conflicts][back to main document]])
+
+# Local Variables:
+# mode: org
+# ispell-local-dictionary: "british"
+# eval: (flyspell-mode t)
+# eval: (flyspell-buffer)
+# End:

@@ -1,0 +1,184 @@
+#+OPTIONS: <:nil d:nil timestamp:t ^:nil tags:nil toc:nil num:nil \n:t
+#+STARTUP: fninline inlineimages showall
+
+* SDL - Examining single commits in more detail and Find Changes
+This sub-task will introduce ~git show~ to show what a certain commit
+changed. We will also introduce a way to search for certain changes
+throughout the whole history.
+
+** Show what changed in a certain commit
+In order to see what changed in a certain commit we could either
+invoke ~gitk~ and click on it or pick the somewhat cryptic number
+reported to us by ~git log~ and call. This number is called the /hash
+of the commit/. If we pick one here, we might enter (note that you
+have to use different ones in your case!)
+#+begin_src shell-script
+git show ad7f952e647766763a5989264a6e8316f6a5a832
+#+end_src
+#+begin_example
+commit ad7f952e647766763a5989264a6e8316f6a5a832
+Author: Martin Richter <martin.richter@nottingham.ac.uk>
+Date:   Mon Jan 10 18:42:46 2022 +0000
+
+    add recipe overview to README.md
+
+#+end_example
+#+begin_src diff
+diff --git a/README.md b/README.md
+index 2a9e5c1..a134858 100644
+--- a/README.md
++++ b/README.md
+@@ -1 +1,7 @@
++# Overview
+ A collection of recipes
++
++## Recipes
++So far we have:
++1. Biscuits (see [here](biscuits.txt))
++2. Cinemon Stars (see [here](cinemon_stars.txt))
+#+end_src
+(Note: Like before: spelling mistake 'cinemon' instead of 'cinnamon' done
+intentionally, we will fix it later)
+
+Note that you don't have to specify the whole hash. It only has to be
+unique enough. So in our case, it would suffice to call ~git show
+ad7f~ to get the same output. A predecessor of a commit can be
+indicated by =git show ad7f~=, its predecessor with =git show ad7f~~=
+or =git show ad7f~2=.
+
+** Finding Commits which introduced a certain Change
+When you work on a repository with others for a while you sometimes
+want to find a commit which either added or removed a certain
+change. Remember: the files in your folder are just the actual state
+of your source code or recipe book. But during its history there have
+been many more things! Thanks to git these are not lost.
+
+To show all commits which added or removed a certain phrase, do (note
+that we also add ~--patch~ to see the change here as well)
+#+begin_src shell-script
+git log --patch -S flour
+#+end_src
+#+begin_example
+commit 957e0f77904ea7b129ef5281fc740ee45330434f
+Author: Martin Richter <martin.richter@nottingham.ac.uk>
+Date:   Mon Jan 10 13:42:33 2022 +0000
+
+    add biscuit recipe
+
+#+end_example
+#+begin_src diff
+diff --git a/biscuits.txt b/biscuits.txt
+new file mode 100644
+index 0000000..9beca6a
+--- /dev/null
++++ b/biscuits.txt
+@@ -0,0 +1,4 @@
++Ingredients: 250g flour, 125g margarine, 60g sugar, 3tsp vanilla extract, pinch of salt, 1 egg.
++
++Mix everything, let rest for 30 min in fridge, roll out and cut into shape.
++Bake for 10 - 12 minutes (200 degrees)
+#+end_src
+
+This ~-S~ only shows when the total number of occurrences changed but not other changes (for example if flour was moved within the text file). If
+you want to see all additions and deletions, you can use ~-G~:
+#+begin_src shell-script
+git log --patch -G flour
+#+end_src
+#+begin_example
+commit bd180d6e425c57180453e5cf33303445110be978
+Author: Martin Richter <martin.richter@nottingham.ac.uk>
+Date:   Mon Jan 10 19:00:49 2022 +0000
+
+    restructure biscuit recipe
+
+#+end_example
+#+begin_src diff
+diff --git a/biscuits.txt b/biscuits.txt
+index 9beca6a..50decd5 100644
+--- a/biscuits.txt
++++ b/biscuits.txt
+@@ -1,4 +1,13 @@
+-Ingredients: 250g flour, 125g margarine, 60g sugar, 3tsp vanilla extract, pinch of salt, 1 egg.
++# Ingredients
++250g flour
++125g margarine
++60g sugar
++3tsp vanilla extract
++pinch of salt
++1 egg.
+
+-Mix everything, let rest for 30 min in fridge, roll out and cut into shape.
+-Bake for 10 - 12 minutes (200 degrees)
++# Steps
++- Mix everything
++- let rest for 30 min in fridge
++- roll out and cut into shape
++- Bake for 10 - 12 minutes (200 degrees)
+#+end_src
+#+begin_example
+
+commit 957e0f77904ea7b129ef5281fc740ee45330434f
+Author: Martin Richter <martin.richter@nottingham.ac.uk>
+Date:   Mon Jan 10 13:42:33 2022 +0000
+
+    add biscuit recipe
+
+#+end_example
+#+begin_src diff
+diff --git a/biscuits.txt b/biscuits.txt
+new file mode 100644
+index 0000000..9beca6a
+--- /dev/null
++++ b/biscuits.txt
+@@ -0,0 +1,4 @@
++Ingredients: 250g flour, 125g margarine, 60g sugar, 3tsp vanilla extract, pinch of salt, 1 egg.
++
++Mix everything, let rest for 30 min in fridge, roll out and cut into shape.
++Bake for 10 - 12 minutes (200 degrees)
+#+end_src
+
+** Find who is responsible for a line of code
+
+If you are working with others, sometimes it is helpful to know whom to ask about a certain line of code:
+#+begin_src shell-script
+git blame ./README.md
+#+end_src
+#+begin_example
+ad7f952e (Martin Richter 2022-01-10 18:42:46 +0000 1) # Overview
+^efa0975 (Martin Richter 2022-01-10 12:59:22 +0000 2) A collection of recipes
+ad7f952e (Martin Richter 2022-01-10 18:42:46 +0000 3)
+ad7f952e (Martin Richter 2022-01-10 18:42:46 +0000 4) ## Recipes
+ad7f952e (Martin Richter 2022-01-10 18:42:46 +0000 5) So far we have:
+ad7f952e (Martin Richter 2022-01-10 18:42:46 +0000 6) 1. Biscuits (see [here](biscuits.txt))
+ad7f952e (Martin Richter 2022-01-10 18:42:46 +0000 7) 2. Cinemon Stars (see [here](cinemon_stars.txt))
+#+end_example
+In our case it is only one author so far but we do get information about _when_ a
+certain change was made and we can look up the log message for that, for
+example:
+#+begin_src shell-script
+git log efa0975
+#+end_src
+#+begin_example
+commit efa097554b0626439735d4cfb1e7002831e77e95
+Author: Martin Richter <martin.richter@nottingham.ac.uk>
+Date:   Mon Jan 10 12:59:22 2022 +0000
+
+    initial commit for recipes
+#+end_example
+
+** Your Task                                                           :task:
+Examine your repository. Have a look at the first and second
+commit. Also examine the most recent one (by either using its hash or
+by using the name ~HEAD~).
+
+Also search for certain changes using ~git log -S~ and ~git log
+-G~. Can you combine those with ~--oneline~ or ~--color-words~?
+
+([[file:README.org::*SDL - Changing Files and Examining the History of Changes][back to main document]])
+
+# Local Variables:
+# mode: org
+# ispell-local-dictionary: "british"
+# eval: (flyspell-mode t)
+# eval: (flyspell-buffer)
+# End:

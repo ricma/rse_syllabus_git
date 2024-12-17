@@ -189,3 +189,57 @@ A method to track chanes as you develop code
 
 #+RESULTS: branching_70_merge
 [[file:figures/main_branch_070.png]]
+
+* Distributed Git
+You might be working at
+- a desktop computer
+- and on a laptop
+- you might have a workstation available somewhere
+- or the HPC?
+
+And this is all just you, a single person.
+
+Additionally, of course: Collaborate with others!
+- Use a server to act as a central point
+- E.g. [[https://github.com]] or [[https://gitlab.com]]
+  (the latter can also be hosted for free)
+
+* Introduction to Git
+
+Browse to
+- the moodle page
+  [[https://moodle.nottingham.ac.uk/course/view.php?id=150881]]
+- Go to *Self-directed Learning Tasks*, will redirect you here:
+  [[https://github.com/ricma/rse_syllabus_git/blob/main/content/tasks_baking_recipes/README.org]]
+  #+begin_src python :exports results :results raw output
+import qrcode
+
+url = "https://github.com/ricma/rse_syllabus_git/blob/main/content/tasks_baking_recipes/README.org"
+img = qrcode.make(url, border=1, box_size=6, error_correction=0)
+
+filename = "./figures/qr_sdlts.png"
+img.save(filename)
+print(f"[[file:{filename}]]")
+  #+end_src
+
+  #+RESULTS:
+  [[file:./figures/qr_sdlts.png]]
+
+* Exercise 2 - Handling a Conflict in Real Code
+Choose your language
+- Python :: https://github.com/RichGraham/radius_python
+- Fortran :: https://github.com/RichGraham/radius_fortran
+- C / C++ :: https://github.com/RichGraham/radius_c
+- Matlab :: https://github.com/RichGraham/radius_matlab
+- R :: https://github.com/RichGraham/radius_r
+
+Download the repository above
+#+begin_src shell :noeval :exports code
+   git clone https://github.com/RichGraham/radius_<YOUR LANGUAGE>
+#+end_src
+
+- Read the ﬁle ~README.md~ (visiting the url in a browser gives nice formatting)
+- Explore the code and changes in each branch. Make sure you can
+  run the code in each branch
+- *Merge* the changes in =better-powers= and =proper-sqrt= as directed in the
+  ~README.md~. Make sure the merged code runs as expected.

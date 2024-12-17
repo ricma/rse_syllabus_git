@@ -1,0 +1,47 @@
+#+TITLE: Version Control Training
+#+AUTHOR: Richard Graham, Martin Richter
+
+* Schedule
+| 10:00 |       | Arrival and introduction     |
+|-------+-------+------------------------------|
+| 10:30 |       | Introduction to git          |
+|       | 10:30 | Creating a new repository    |
+|       | 10:50 | Changing files, view history |
+|       | 11:10 | Creating branches            |
+|       | 11:30 | Showing differences          |
+|       | 11:50 | Merging branches             |
+|       | 12:10 | Aborting a merge             |
+|       | 12:30 | Merge conflicts              |
+|-------+-------+------------------------------|
+| 13:00 |       | Lunch                        |
+|-------+-------+------------------------------|
+| 14:15 |       | Resolving a conflict in real |
+|-------+-------+------------------------------|
+| 15:00 |       | Making it all work together  |
+|       |       | (Unit tests, refactoring)    |
+|-------+-------+------------------------------|
+| 16:00 |       | Close                        |
+|-------+-------+------------------------------|
+
+* Version Control: Reasons to Use It
+# Title Slide
+
+* What is Version Control?
+A method to track chanes as you develop code
+
+- and why to use it?
+
+* Example of Branching
+
+#+begin_src ditaa :file figures/main_branch_00.svg :cmdline -r -T :exports results
+   +---------+
+   | cBLU    |
+   |         |
+   |    +----+
+   |    |cPNK|
+   |    |    |
+   +----+----+
+#+end_src
+
+#+RESULTS:
+[[file:figures/main_branch_00.svg]]

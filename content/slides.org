@@ -1,5 +1,34 @@
 #+TITLE: Version Control Training
+#+SUBTITLE: An Introduction to Git
 #+AUTHOR: Richard Graham, Martin Richter
+#+OPTIONS: H:1 toc:nil
+#+LATEX_CLASS: beamer
+#+BEAMER_THEME:
+
+# call (org-beamer-export-to-latex)
+# Note: The preamble should look like this:
+#+begin_src latex :exports none :noeval
+\documentclass[presentation, smaller, aspectratio=169]{beamer}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{minted}
+\author{Richard Graham, Martin Richter}
+\date{19/12/2024}
+\title{Version Control Training}
+\subtitle{An Introduction to Git}
+% \hypersetup{
+%  pdfauthor={Richard Graham, Martin Richter},
+%  pdftitle={Version Control Training},
+%  pdfkeywords={},
+%  pdfsubject={},
+%  pdfcreator={Emacs 29.3 (Org mode 9.7.11)},
+%  pdflang={English}}
+
+%  \usepackage[hyperindex=true, bookmarks=true, extension=pdf, colorlinks=true, pdfborder={0 0 0}, plainpages=false,hyperfootnotes=true, debug=false, draft=false, pagebackref=true, linktoc=all]{hyperref}
+
+\begin{document}
+#+end_src
+
 
 * Schedule
 | 10:00 |       | Arrival and introduction     |
@@ -26,15 +55,15 @@
 * Version Control: Reasons to Use It
 # Title Slide
 
-* What is Version Control?
-A method to track chanes as you develop code
+- What is Version Control?
 
-- and why to use it?
+  A method to track changes as you develop code
 
-* Example of Branching
-** Branching Example: Writing Paper (Draft)
+- ... and why to use it?
+
+* Branching Example: Writing Paper (Draft)
 #+name: branching_010_paper_draft
-#+begin_src ditaa :file figures/main_branch_010.png :cmdline -r -T :exports results
+#+begin_src ditaa :file figures/main_branch_010.png :cmdline -r -T :exports results :noeval
    main
    +-----------+   +-----------+   +-----------+
    | Commit A1 |-->| Commit A2 |-->| Commit A3 |
@@ -43,11 +72,12 @@ A method to track chanes as you develop code
 #+end_src
 
 #+RESULTS: branching_010_paper_draft
+#+attr_latex: :scale 0.3
 [[file:figures/main_branch_010.png]]
 
-** Branching Example: Submit Paper
+* Branching Example: Submit Paper
 #+name: branching_020_submit_paper
-#+begin_src ditaa :file figures/main_branch_020.png :cmdline -r -T :exports results
+#+begin_src ditaa :file figures/main_branch_020.png :cmdline -r -T :exports results :noeval
    main
    +-----------+   +-----------+   +-----------+
    | Commit A1 |-->| Commit A2 |-->| Commit A3 |
@@ -60,11 +90,12 @@ A method to track chanes as you develop code
 #+end_src
 
 #+RESULTS: branching_020_submit_paper
+#+attr_latex: :scale 0.3
 [[file:figures/main_branch_020.png]]
 
-** Branching Example: New Idea!
+* Branching Example: New Idea!
 #+name: branching_30_develop_new_idea
-#+begin_src ditaa :file figures/main_branch_030.png :cmdline -r -T :exports results
+#+begin_src ditaa :file figures/main_branch_030.png :cmdline -r -T :exports results :noeval
                                                         +-----------+   +-----------+   +-----------+
                                                     +-->| Commit B1 |-->| Commit B2 |-->| ????      |
                                                     |   | cRED      |   | cRED      |   | cRED      |
@@ -84,11 +115,12 @@ A method to track chanes as you develop code
 #+end_src
 
 #+RESULTS: branching_30_develop_new_idea
+#+attr_latex: :scale 0.3
 [[file:figures/main_branch_030.png]]
 
-** Branching Example: Referee Changes!
+* Branching Example: Referee Changes!
 #+name: branching_40_referee_changes
-#+begin_src ditaa :file figures/main_branch_040.png :cmdline -r -T :exports results
+#+begin_src ditaa :file figures/main_branch_040.png :cmdline -r -T :exports results :noeval
                                                         +-----------+   +-----------+   +-----------+
                                                     +-->| Commit B1 |-->| Commit B2 |-->| ????      |
                                                     |   | cRED      |   | cRED      |   | cRED      |
@@ -112,11 +144,12 @@ A method to track chanes as you develop code
 #+end_src
 
 #+RESULTS: branching_40_referee_changes
+#+attr_latex: :scale 0.3
 [[file:figures/main_branch_040.png]]
 
-** Branching Example: Paper Accepted
+* Branching Example: Paper Accepted
 #+name: branching_50_paper_accepted
-#+begin_src ditaa :file figures/main_branch_050.png :cmdline -r -T :exports results
+#+begin_src ditaa :file figures/main_branch_050.png :cmdline -r -T :exports results :noeval
                                                         +-----------+   +-----------+   +-----------+
                                                     +-->| Commit B1 |-->| Commit B2 |-->| ????      |
                                                     |   | cRED      |   | cRED      |   | cRED      |
@@ -140,11 +173,12 @@ A method to track chanes as you develop code
 #+end_src
 
 #+RESULTS: branching_50_paper_accepted
+#+attr_latex: :scale 0.3
 [[file:figures/main_branch_050.png]]
 
-** Branching Example: Feature Complete
+* Branching Example: Feature Complete
 #+name: branching_60_feature_complete
-#+begin_src ditaa :file figures/main_branch_060.png :cmdline -r -T :exports results
+#+begin_src ditaa :file figures/main_branch_060.png :cmdline -r -T :exports results :noeval
                                                         +-----------+   +-----------+   +-----------+
                                                     +-->| Commit B1 |-->| Commit B2 |-->| Commit B3 |
                                                     |   | cRED      |   | cRED      |   | cRED      |
@@ -164,11 +198,12 @@ A method to track chanes as you develop code
 #+end_src
 
 #+RESULTS: branching_60_feature_complete
+#+attr_latex: :scale 0.3
 [[file:figures/main_branch_060.png]]
 
-** Branching Example: Merge
+* Branching Example: Merge
 #+name: branching_70_merge
-#+begin_src ditaa :file figures/main_branch_070.png :cmdline -r -T :exports results
+#+begin_src ditaa :file figures/main_branch_070.png :cmdline -r -T :exports results :noeval
                                                         +-----------+   +-----------+   +-----------+
                                                     +-->| Commit B1 |-->| Commit B2 |-->| Commit B3 |
                                                     |   | cRED      |   | cRED      |   | cRED      |
@@ -188,6 +223,7 @@ A method to track chanes as you develop code
 #+end_src
 
 #+RESULTS: branching_70_merge
+#+attr_latex: :scale 0.3
 [[file:figures/main_branch_070.png]]
 
 * Distributed Git
@@ -211,7 +247,7 @@ Browse to
   [[https://moodle.nottingham.ac.uk/course/view.php?id=150881]]
 - Go to *Self-directed Learning Tasks*, will redirect you here:
   [[https://github.com/ricma/rse_syllabus_git/blob/main/content/tasks_baking_recipes/README.org]]
-  #+begin_src python :exports results :results raw output
+  #+begin_src python :exports results :results raw output :noeval
 import qrcode
 
 url = "https://github.com/ricma/rse_syllabus_git/blob/main/content/tasks_baking_recipes/README.org"
@@ -223,6 +259,7 @@ print(f"[[file:{filename}]]")
   #+end_src
 
   #+RESULTS:
+  #+attr_latex: :width 0.3\columnwidth
   [[file:./figures/qr_sdlts.png]]
 
 * Exercise 2 - Handling a Conflict in Real Code

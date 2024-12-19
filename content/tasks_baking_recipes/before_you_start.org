@@ -19,7 +19,7 @@ If you start git, it will give you a command line like shown [[fig:git_bash_wind
   #+end_src
 - set your email address
   #+begin_src shell :noeval
-  git config --global user.name "YOUR EMAIL ADDRESS"
+  git config --global user.email "YOUR EMAIL ADDRESS"
   #+end_src
   Both will be needed later
 - set the default editor when you are asked to write commit messages

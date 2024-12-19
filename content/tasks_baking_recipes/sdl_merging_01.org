@@ -10,9 +10,9 @@ We will then use ~git merge~ to feed our fix back in.
 ** Finding the bug                                                     :cmds:
 If you remember the bug was that I mistyped "based" as "basd". Let's
 find the commit:
-#+begin_quote
+#+begin_src shell-script
 git log --oneline --all -G basd
-#+end_quote
+#+end_src
 #+begin_example
 34f83d7 (gluten_free) update README for gluten-free recipes
 #+end_example

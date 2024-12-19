@@ -10,8 +10,22 @@ It mentions several download and install options. For example, if you
 are on /Windows/ but cannot install software, you might want to try the portable version here:
 https://git-scm.com/download/win (version ~v2.34.1~ at the time of writing).
 
-If you download this and unpack it, then there is a ~PortableGit/git-bash-exe~.
-If you start this, it will give you a command line like shown [[fig:git_bash_windows_01][below]] in which you can
+If you download this and unpack it, then there is either a ~PortableGit/git-bash-exe~ or you install it locally.
+
+If you start git, it will give you a command line like shown [[fig:git_bash_windows_01][below]] in which you can
+- set your user name
+  #+begin_src shell :noeval
+  git config --global user.name "YOUR NAME"
+  #+end_src
+- set your email address
+  #+begin_src shell :noeval
+  git config --global user.name "YOUR EMAIL ADDRESS"
+  #+end_src
+  Both will be needed later
+- set the default editor when you are asked to write commit messages
+  #+begin_src shell :noeval
+  git config --global core.editor notepad
+  #+end_src
 
 #+name: fig:git_bash_windows_01
 #+caption: Screenshot of a ~bash~ shell on /Windows/ for
